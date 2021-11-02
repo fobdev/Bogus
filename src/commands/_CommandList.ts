@@ -6,5 +6,17 @@ import { Clear } from "./admin/clear";
 import { Kick } from "./admin/kick";
 import { RenameServer } from "./admin/renameserver";
 import { Ban } from "./admin/ban";
+import { Invite } from "./bot/invite";
+import { Music } from "./music/music";
 
-export const CommandList: Command[] = [HelloWorld, Ping, Help, Clear, Kick, RenameServer, Ban];
+export const CommandList: Command[] = [
+    HelloWorld,
+    Ping,
+    Help,
+    Clear,
+    Kick,
+    RenameServer,
+    Ban,
+    Invite,
+    Music,
+];
