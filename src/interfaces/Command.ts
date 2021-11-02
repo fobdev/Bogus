@@ -1,6 +1,6 @@
 import { Client, Message } from "discord.js";
 
-export interface CommandInt {
+export interface Command {
     name: string;
     description: string;
     run: (client: Client, message: Message) => any;
