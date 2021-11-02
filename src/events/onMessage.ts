@@ -14,10 +14,10 @@ export const onMessage = async (client: Client, message: Message) => {
     for (const Command of CommandList) {
         Command.name.forEach(async (element) => {
             const filterSingle = Command.name.filter(
-                (val) => val === content.substring(prefix.length)
-            )[0];
+                (val) => val === content.split(" ")[0].substring(prefix.length)
+            );
 
-            if (element === filterSingle) return await Command.run(client, message, args);
+            if (element === filterSingle[0]) return await Command.run(client, message, args);
         });
     }
 
