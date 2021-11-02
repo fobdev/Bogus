@@ -1,6 +1,6 @@
-import { CommandInt } from "../../interfaces/CommandInt";
+import { Command } from "../../interfaces/Command";
 
-export const HelloWorld: CommandInt = {
+export const HelloWorld: Command = {
     name: "hello",
     description: "Triggers a hello world!",
     run: async (client, message) => {
