@@ -10,13 +10,18 @@ import { Invite } from "./bot/invite";
 import { Music } from "./music/music";
 
 export const CommandList: Command[] = [
+    // Admin
     HelloWorld,
-    Ping,
-    Help,
-    Clear,
     Kick,
-    RenameServer,
     Ban,
+    Clear,
+    RenameServer,
+
+    // Bot
+    Ping,
     Invite,
+    Help,
+
+    // Music
     Music,
 ];
