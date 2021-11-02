@@ -5,7 +5,7 @@ import { Response } from "../../models";
 export const RenameServer: Command = {
     name: "renameserver",
     description: "Renames the server (admin).",
-    run: async (client, message) => {
+    run: async (client, message, args) => {
         let { content, member, author, guild, channel } = message;
         if (!member?.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) {
             return channel.send({
@@ -19,7 +19,9 @@ export const RenameServer: Command = {
             });
         }
 
-        let newname = content.split(" ").slice(1).join(" ");
+        let newname = "";
+        if (args?.length! > 0) newname = args!.join(" ");
+        else return channel.send("Please input a new name for the server.");
 
         return guild
             ?.setName(newname)

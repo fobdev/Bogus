@@ -5,15 +5,17 @@ import { Response } from "../../models";
 export const Clear: Command = {
     name: "clear",
     description: "Clear a specific amount of messages from the channel",
-    run: async (client, message) => {
-        let { channel, content } = message;
-        const amount: number = parseInt(content.split(" ").slice(1).toString());
+    run: async (client, message, args) => {
+        let { channel } = message;
+        let amount: number;
+
+        if (args?.length! > 0) amount = parseInt(args![0]);
+        else return channel.send("Please input a valid number");
 
         // requirements
         if (channel.type == "DM") return;
         if (!message.member?.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES))
             return channel.send("The user does not have permission to delete messages.");
-        if (isNaN(amount) || !amount) return channel.send("Please input a valid number");
         if (amount > 100)
             return channel.send({
                 embeds: [
@@ -43,11 +45,10 @@ export const Clear: Command = {
             "SUCCESS"
         );
 
-        if (amount_deleted != amount) {
+        if (amount_deleted != amount)
             return_embed.setFooter(
                 "Note: messages older than 14 days can't be deleted by the bot."
             );
-        }
 
         return channel.send({
             embeds: [return_embed],

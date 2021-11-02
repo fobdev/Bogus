@@ -4,16 +4,15 @@ import { Response } from "../../models";
 export const Invite: Command = {
     name: "invite",
     description: "Generate a invite URL for the bot",
-    run: async (client, message) => {
-        let { channel, content } = message;
-        const arg: string = content.split(" ").slice(1).toString();
+    run: async (client, message, args) => {
+        let { channel } = message;
 
         let res = (link: string) =>
             Response("Add me to another servers!", `Link: ${link}`, "SUCCESS").setThumbnail(
                 client.user?.avatarURL()!
             );
 
-        if (arg === "simple") {
+        if (args![0] === "simple") {
             return channel.send({
                 embeds: [
                     res(
