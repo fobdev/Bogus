@@ -26,11 +26,16 @@ export const Clear: Command = {
             });
 
         // deletes the command message then bulk delete.
-        await message.delete();
         let amount_deleted: number = 0;
-        await channel.bulkDelete(amount, true).then(async (message) => {
-            amount_deleted = message.size;
-        });
+        try {
+            await message.delete();
+            await channel.bulkDelete(amount, true).then(async (message) => {
+                amount_deleted = message.size;
+            });
+        } catch (error) {
+            console.error(error);
+            return channel.send("I don't have permissions to delete messages in this server.");
+        }
 
         let return_embed = Response(
             "Messages were deleted from the text channel.",
