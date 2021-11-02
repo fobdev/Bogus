@@ -1,7 +1,7 @@
-import { CommandInt } from "../../interfaces/CommandInt";
-import { MessageEmbed } from "discord.js";
+import { Command } from "../../interfaces";
+import { Response } from "../../models";
 
-export const Ban: CommandInt = {
+export const Ban: Command = {
     name: "ban",
     description: "Bans a user from the server",
     run: async (client, message) => {
@@ -10,10 +10,11 @@ export const Ban: CommandInt = {
         if (!member?.permissions.has("BAN_MEMBERS")) {
             return channel.send({
                 embeds: [
-                    new MessageEmbed()
-                        .setTitle("Permission Denied")
-                        .setDescription("The user does not have permission to kick members.")
-                        .setColor("RED"),
+                    Response(
+                        "Permission Denied",
+                        "The user does not have permission to kick members.",
+                        "FAIL"
+                    ),
                 ],
             });
         }
@@ -23,10 +24,11 @@ export const Ban: CommandInt = {
         if (!ban_member) {
             return channel.send({
                 embeds: [
-                    new MessageEmbed()
-                        .setTitle("Error running the command")
-                        .setDescription("You need to tag a user to be banned!")
-                        .setColor("RED"),
+                    Response(
+                        "Error running the command",
+                        "You need to tag a user to be banned!",
+                        "FAIL"
+                    ),
                 ],
             });
         }
@@ -38,12 +40,11 @@ export const Ban: CommandInt = {
             await ban_member.ban();
             return channel.send({
                 embeds: [
-                    new MessageEmbed()
-                        .setTitle("User banned!")
-                        .setDescription(
-                            `**${author.tag}** banned **${ban_member.user.tag}** from the server.`
-                        )
-                        .setColor("GREEN"),
+                    Response(
+                        "User banned!",
+                        `**${author.tag}** banned **${ban_member.user.tag}** from the server.`,
+                        "SUCCESS"
+                    ),
                 ],
             });
         }
@@ -60,13 +61,11 @@ export const Ban: CommandInt = {
             await ban_member.ban({ reason: ban_reason.toString() });
             return channel.send({
                 embeds: [
-                    new MessageEmbed()
-                        .setTitle("User banned!")
-                        .setDescription(
-                            `**${author.tag}** banned **${ban_member.user.tag}** from the server`
-                        )
-                        .addField("Reason: ", ban_reason.toString())
-                        .setColor("GREEN"),
+                    Response(
+                        "User banned!",
+                        `**${author.tag}** banned **${ban_member.user.tag}** from the server`,
+                        "SUCCESS"
+                    ),
                 ],
             });
         }
@@ -75,13 +74,12 @@ export const Ban: CommandInt = {
         if (ban_days > 7 || ban_days < 0) {
             return channel.send({
                 embeds: [
-                    new MessageEmbed()
-                        .setTitle("Error executing the command")
-                        .setDescription(
-                            "You can't ban someone for more than 7 days" +
-                                "\nBut you can ban someone for a **indefinite amount of time using 0 in the days**"
-                        )
-                        .setColor("RED"),
+                    Response(
+                        "Error executing the command",
+                        "You can't ban someone for more than 7 days" +
+                            "\nBut you can ban someone for a **indefinite amount of time using 0 in the days**",
+                        "FAIL"
+                    ),
                 ],
             });
         }
@@ -91,14 +89,13 @@ export const Ban: CommandInt = {
 
         return channel.send({
             embeds: [
-                new MessageEmbed()
-                    .setTitle("User banned!")
-                    .setDescription(
-                        `**${author.tag}** banned **${ban_member.user.tag}** from the server`
-                    )
+                Response(
+                    "User banned!",
+                    `**${author.tag}** banned **${ban_member.user.tag}** from the server`,
+                    "SUCCESS"
+                )
                     .addField("Reason: ", ban_reason.join(" "), true)
-                    .addField("Days: ", ban_days.toString(), true)
-                    .setColor("GREEN"),
+                    .addField("Days: ", ban_days.toString(), true),
             ],
         });
     },

@@ -1,7 +1,8 @@
-import { MessageEmbed, Permissions } from "discord.js";
-import { CommandInt } from "../../interfaces/CommandInt";
+import { Permissions } from "discord.js";
+import { Command } from "../../interfaces";
+import { Response } from "../../models";
 
-export const Clear: CommandInt = {
+export const Clear: Command = {
     name: "clear",
     description: "Clear a specific amount of messages from the channel",
     run: async (client, message) => {
@@ -16,12 +17,11 @@ export const Clear: CommandInt = {
         if (amount > 100)
             return channel.send({
                 embeds: [
-                    new MessageEmbed()
-                        .setTitle("Error deleting messages.")
-                        .setDescription(
-                            "You can only delete a **maximum of 100 messages** at a time."
-                        )
-                        .setColor("RED"),
+                    Response(
+                        "Error deleting messages.",
+                        "You can only delete a **maximum of 100 messages** at a time.",
+                        "FAIL"
+                    ),
                 ],
             });
 
@@ -32,12 +32,11 @@ export const Clear: CommandInt = {
             amount_deleted = message.size;
         });
 
-        let return_embed = new MessageEmbed()
-            .setTitle("Messages were deleted from the text channel.")
-            .setDescription(
-                `**${amount_deleted} messages** deleted by **${message.author.tag}**`
-            )
-            .setColor("GREEN");
+        let return_embed = Response(
+            "Messages were deleted from the text channel.",
+            `**${amount_deleted} messages** deleted by **${message.author.tag}**`,
+            "SUCCESS"
+        );
 
         if (amount_deleted != amount) {
             return_embed.setFooter(

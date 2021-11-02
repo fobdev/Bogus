@@ -1,7 +1,8 @@
-import { MessageEmbed, Permissions } from "discord.js";
-import { CommandInt } from "../../interfaces/CommandInt";
+import { Permissions } from "discord.js";
+import { Command } from "../../interfaces";
+import { Response } from "../../models";
 
-export const RenameServer: CommandInt = {
+export const RenameServer: Command = {
     name: "renameserver",
     description: "Renames the server (admin).",
     run: async (client, message) => {
@@ -9,12 +10,11 @@ export const RenameServer: CommandInt = {
         if (!member?.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) {
             return channel.send({
                 embeds: [
-                    new MessageEmbed()
-                        .setTitle("Permission denied.")
-                        .setDescription(
-                            "The user does not have permission to manage the server name."
-                        )
-                        .setColor("RED"),
+                    Response(
+                        "Permission denied.",
+                        "The user does not have permission to manage the server name.",
+                        "FAIL"
+                    ),
                 ],
             });
         }
@@ -23,25 +23,26 @@ export const RenameServer: CommandInt = {
 
         return guild
             ?.setName(newname)
-            .then((updated) => {
+            .then(() => {
                 channel.send({
                     embeds: [
-                        new MessageEmbed()
-                            .setTitle("The server name has changed!")
-                            .setDescription(
-                                `**${author.tag}** changed the name of the server to **${newname}**`
-                            )
-                            .setColor("GREEN"),
+                        Response(
+                            "The server name has changed!",
+                            `**${author.tag}** changed the name of the server to **${newname}**`,
+                            "SUCCESS"
+                        ),
                     ],
                 });
             })
             .catch((err) => {
+                console.error(err);
                 return channel.send({
                     embeds: [
-                        new MessageEmbed()
-                            .setTitle("An error occured trying to change the name")
-                            .setDescription("Try using another name.")
-                            .setColor("RED"),
+                        Response(
+                            "An error occured trying to change the name",
+                            "Try using another name.",
+                            "FAIL"
+                        ),
                     ],
                 });
             });

@@ -1,7 +1,7 @@
-import { MessageEmbed } from "discord.js";
-import { CommandInt } from "../../interfaces/CommandInt";
+import { Command } from "../../interfaces";
+import { Response } from "../../models";
 
-export const Kick: CommandInt = {
+export const Kick: Command = {
     name: "kick",
     description: "Kick a user from the server.",
     run: async (client, message) => {
@@ -9,10 +9,11 @@ export const Kick: CommandInt = {
         if (!member?.permissions.has("KICK_MEMBERS")) {
             return channel.send({
                 embeds: [
-                    new MessageEmbed()
-                        .setTitle("Permission Denied")
-                        .setDescription("The user does not have permission to kick members.")
-                        .setColor("RED"),
+                    Response(
+                        "Permission Denied",
+                        "The user does not have permission to kick members.",
+                        "FAIL"
+                    ),
                 ],
             });
         }
@@ -22,10 +23,11 @@ export const Kick: CommandInt = {
         if (!kick_member) {
             return channel.send({
                 embeds: [
-                    new MessageEmbed()
-                        .setTitle("Error running the command")
-                        .setDescription("You need to tag a user to be kicked!")
-                        .setColor("RED"),
+                    Response(
+                        "Error running the command",
+                        "You need to tag a user to be kicked!",
+                        "FAIL"
+                    ),
                 ],
             });
         }
@@ -34,23 +36,16 @@ export const Kick: CommandInt = {
             await kick_member?.kick();
             return channel.send({
                 embeds: [
-                    new MessageEmbed()
-                        .setTitle("Member kicked from the server")
-                        .setDescription(
-                            `**<@${author.tag}>** kicked **<@${kick_member?.user.id}>** from the server.`
-                        )
-                        .setThumbnail(kick_member?.user.displayAvatarURL({ dynamic: true })!)
-                        .setColor("ORANGE"),
+                    Response(
+                        "Member kicked from the server",
+                        `**<@${author.tag}>** kicked **<@${kick_member?.user.id}>** from the server.`,
+                        "WARN"
+                    ).setThumbnail(kick_member?.user.displayAvatarURL({ dynamic: true })!),
                 ],
             });
         } catch (e) {
             return channel.send({
-                embeds: [
-                    new MessageEmbed()
-                        .setTitle("Error")
-                        .setDescription("An error occurred trying to kick the user.")
-                        .setColor("RED"),
-                ],
+                embeds: [Response("Error", "An error occurred trying to kick the user.", "FAIL")],
             });
         }
     },
