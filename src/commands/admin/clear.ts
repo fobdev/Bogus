@@ -3,7 +3,7 @@ import { Command } from "../../interfaces";
 import { Response } from "../../models";
 
 export const Clear: Command = {
-    name: ["clear"],
+    name: ["clear", "cl"],
     description: "Clear a specific amount of messages from the channel",
     run: async (client, message, args) => {
         let { channel } = message;
