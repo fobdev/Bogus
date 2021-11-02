@@ -2,7 +2,7 @@ import { Command } from "../../interfaces";
 import { Response } from "../../models";
 
 export const Ban: Command = {
-    name: "ban",
+    name: ["ban"],
     description: "Bans a user from the server",
     run: async (client, message) => {
         let { content, channel, author, member, mentions } = message;

@@ -2,7 +2,7 @@ import { Command } from "../../interfaces";
 import { Response } from "../../models";
 
 export const Kick: Command = {
-    name: "kick",
+    name: ["kick"],
     description: "Kick a user from the server.",
     run: async (client, message) => {
         let { channel, author, member } = message;

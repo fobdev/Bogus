@@ -2,7 +2,7 @@ import { Command } from "../../interfaces";
 import { Response } from "../../models";
 
 export const Invite: Command = {
-    name: "invite",
+    name: ["invite"],
     description: "Generate a invite URL for the bot",
     run: async (client, message, args) => {
         let { channel } = message;
