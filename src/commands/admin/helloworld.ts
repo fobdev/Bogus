@@ -2,9 +2,8 @@ import { CommandInt } from "../../interfaces/CommandInt";
 
 export const HelloWorld: CommandInt = {
     name: "hello",
-    description: "Triigers a hello world!",
+    description: "Triggers a hello world!",
     run: async (client, message) => {
-        const { author, channel, content } = message;
-        let text = content.split(" ").slice(1).join(" ");
+        return message.channel.send("Hi!");
     },
 };
