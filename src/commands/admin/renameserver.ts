@@ -3,10 +3,10 @@ import { Command } from "../../interfaces";
 import { Response } from "../../models";
 
 export const RenameServer: Command = {
-    name: ["renameserver"],
+    name: ["renameserver", "rs"],
     description: "Renames the server (admin).",
     run: async (client, message, args) => {
-        let { content, member, author, guild, channel } = message;
+        let { member, author, guild, channel } = message;
         if (!member?.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) {
             return channel.send({
                 embeds: [
