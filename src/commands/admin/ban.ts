@@ -35,9 +35,10 @@ export const Ban: Command = {
         }
 
         let reason = args!.slice(1);
-        if (!reason) {
+        if (reason.length === 0) {
             try {
                 await ban_member.ban();
+                console.log("[BAN]: A user was successfully banned from the server.");
                 return channel.send({
                     embeds: [
                         Response(
@@ -48,12 +49,13 @@ export const Ban: Command = {
                     ],
                 });
             } catch (e) {
+                console.error(`[BAN]: Error banning a user: ${e.message}.`);
                 return onError(message, e);
             }
         }
-
         try {
             await ban_member.ban({ reason: reason.join(" ") });
+            console.log("[BAN]: A user was successfully banned from the server.");
             return channel.send({
                 embeds: [
                     Response(
@@ -64,6 +66,7 @@ export const Ban: Command = {
                 ],
             });
         } catch (e: any) {
+            console.error(`[BAN]: Error banning a user: ${e.message}.`);
             return onError(message, e);
         }
     },
