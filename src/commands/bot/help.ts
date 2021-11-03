@@ -2,6 +2,27 @@ import { Command } from "../../interfaces";
 import { Response } from "../../models";
 import { CommandList } from "../_CommandList";
 import botconfig from "../../botconfig.json";
+import fs from "fs";
+import util from "util";
+
+// FS to get the outside dependencies
+const readdir = util.promisify(fs.readdir);
+const getCommands = async (folder: string) => {
+    let commandsArray: Array<string> = [];
+
+    try {
+        await readdir(`./src/commands/${folder}/`).then((files) => {
+            if (files.length === 0) throw new Error("Nothing was found inside the directory");
+            files.forEach((file) => {
+                commandsArray.push(file.slice(0, file.length - 3));
+            });
+        });
+    } catch (error) {
+        console.error(error);
+    }
+
+    return commandsArray;
+};
 
 export const Help: Command = {
     name: ["help"],
@@ -49,16 +70,25 @@ export const Help: Command = {
                     });
             }
         else {
-            let commandArray: Array<string> = [];
-            for (const Command of CommandList) commandArray.push(Command.name[0]);
-
             return channel.send({
                 embeds: [
                     Response(
                         `${client.user?.username.toUpperCase()} Commands (alpha)`,
                         `This is a complete list of all the commands available from ${client.user?.username}`,
                         "SUCCESS"
-                    ).addField("Commands", "```" + `[${commandArray.join("] \n[")}]` + "```"),
+                    )
+                        .addField(
+                            "ADMIN Commands",
+                            "``" + `[${(await getCommands("admin")).join("]`` ``[")}]` + "``"
+                        )
+                        .addField(
+                            "BOT Commands",
+                            "``" + `[${(await getCommands("bot")).join("]`` ``[")}]` + "``"
+                        )
+                        .addField(
+                            "MUSIC Commands",
+                            "``" + `[${(await getCommands("music")).join("]`` ``[")}]` + "``"
+                        ),
                 ],
             });
         }
