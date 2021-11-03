@@ -48,5 +48,21 @@ export const Help: Command = {
                         ],
                     });
             }
+        else {
+            let commandArray: Array<string> = [];
+            for (const Command of CommandList) commandArray.push(Command.name[0]);
+
+            // channel.send(`[${commandArray.join("] \n[")}]`);
+
+            return channel.send({
+                embeds: [
+                    Response(
+                        `${client.user?.username.toUpperCase()} Commands`,
+                        `This is a complete list of all the commands available from ${client.user?.username}`,
+                        "SUCCESS"
+                    ).addField("Commands", "```" + `[${commandArray.join("] \n[")}]` + "```"),
+                ],
+            });
+        }
     },
 };
