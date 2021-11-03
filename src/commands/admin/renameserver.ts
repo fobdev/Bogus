@@ -4,7 +4,8 @@ import { Response } from "../../models";
 
 export const RenameServer: Command = {
     name: ["renameserver", "rs"],
-    description: "Renames the server (admin).",
+    arguments: ["new name"],
+    description: "Renames the server (admin only).",
     run: async (client, message, args) => {
         let { member, author, guild, channel } = message;
         if (!member?.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) {
@@ -19,34 +20,32 @@ export const RenameServer: Command = {
             });
         }
 
-        let newname = "";
+        let newname: string = "";
         if (args?.length! > 0) newname = args!.join(" ");
         else return channel.send("Please input a new name for the server.");
 
-        return guild
-            ?.setName(newname)
-            .then(() => {
-                channel.send({
-                    embeds: [
-                        Response(
-                            "The server name has changed!",
-                            `**${author.tag}** changed the name of the server to **${newname}**`,
-                            "SUCCESS"
-                        ),
-                    ],
-                });
-            })
-            .catch((err) => {
-                console.error(err);
-                return channel.send({
-                    embeds: [
-                        Response(
-                            "An error occured trying to change the name",
-                            "Try using another name.",
-                            "FAIL"
-                        ),
-                    ],
-                });
+        try {
+            await guild?.setName(newname);
+            return channel.send({
+                embeds: [
+                    Response(
+                        "The server name has changed!",
+                        `**${author.tag}** changed the name of the server to **${newname}**`,
+                        "SUCCESS"
+                    ),
+                ],
             });
+        } catch (e: any) {
+            console.error(e.message);
+            return channel.send({
+                embeds: [
+                    Response(
+                        "An error occured trying to change the name",
+                        `Error: ${e.message}`,
+                        "FAIL"
+                    ),
+                ],
+            });
+        }
     },
 };
