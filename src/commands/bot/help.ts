@@ -4,10 +4,12 @@ import { CommandList } from "../_CommandList";
 import botconfig from "../../botconfig.json";
 import fs from "fs";
 import util from "util";
+import { MessageEmbed } from "discord.js";
 
 // FS to get the outside dependencies
 const readdir = util.promisify(fs.readdir);
-const getCommands = async (folder: string) => {
+
+const getCommands = async (embed: MessageEmbed, folder: string) => {
     let commandsArray: Array<string> = [];
 
     try {
@@ -21,7 +23,10 @@ const getCommands = async (folder: string) => {
         console.error(error);
     }
 
-    return commandsArray;
+    return embed.addField(
+        `${folder.toUpperCase()} Commands`,
+        "``[" + commandsArray.join("]`` ``[") + "]``"
+    );
 };
 
 export const Help: Command = {
@@ -70,26 +75,22 @@ export const Help: Command = {
                     });
             }
         else {
+            let generatedResponse = Response(
+                `${client.user?.username.toUpperCase()} Commands (alpha)`,
+                `This is a complete list of all the commands available from ${client.user?.username}`,
+                "SUCCESS"
+            )
+                .setFooter(
+                    `You can also use ${botconfig.prefix}help [command] to see help from a specific command.`
+                )
+                .setThumbnail(client.user?.avatarURL()!);
+
+            await getCommands(generatedResponse, "admin");
+            await getCommands(generatedResponse, "bot");
+            await getCommands(generatedResponse, "music");
+
             return channel.send({
-                embeds: [
-                    Response(
-                        `${client.user?.username.toUpperCase()} Commands (alpha)`,
-                        `This is a complete list of all the commands available from ${client.user?.username}`,
-                        "SUCCESS"
-                    )
-                        .addField(
-                            "ADMIN Commands",
-                            "``" + `[${(await getCommands("admin")).join("]`` ``[")}]` + "``"
-                        )
-                        .addField(
-                            "BOT Commands",
-                            "``" + `[${(await getCommands("bot")).join("]`` ``[")}]` + "``"
-                        )
-                        .addField(
-                            "MUSIC Commands",
-                            "``" + `[${(await getCommands("music")).join("]`` ``[")}]` + "``"
-                        ),
-                ],
+                embeds: [generatedResponse],
             });
         }
     },
