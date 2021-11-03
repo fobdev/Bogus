@@ -37,6 +37,7 @@ export const RenameServer: Command = {
                 ],
             });
         } catch (e: any) {
+            console.error(`[RENAMESERVER] Error trying to rename the server: ${e.message}`);
             return onError(message, e);
         }
     },

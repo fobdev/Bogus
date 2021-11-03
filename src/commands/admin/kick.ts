@@ -35,6 +35,7 @@ export const Kick: Command = {
 
         try {
             await kick_member?.kick();
+            console.log("[KICK]: A user was successfully kicked from the server.");
             return channel.send({
                 embeds: [
                     Response(
@@ -45,6 +46,7 @@ export const Kick: Command = {
                 ],
             });
         } catch (e: any) {
+            console.error(`[KICK]: Error kicking a user: ${e.message}.`);
             return onError(message, e);
         }
     },
