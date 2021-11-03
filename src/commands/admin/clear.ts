@@ -73,7 +73,7 @@ export const Clear: Command = {
                         msg.delete();
                     })
                     .catch(() => {
-                        console.log("button collector deleted");
+                        console.log("[COLLECTOR]: Button Collector Deleted");
                     });
             });
     },
