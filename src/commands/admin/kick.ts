@@ -39,7 +39,7 @@ export const Kick: Command = {
                 embeds: [
                     Response(
                         "Member kicked from the server",
-                        `**<@${author.tag}>** kicked **<@${kick_member?.user.id}>** from the server.`,
+                        `**<@${author.id}>** kicked **<@${kick_member?.user.id}>** from the server.`,
                         "WARN"
                     ).setThumbnail(kick_member?.user.displayAvatarURL({ dynamic: true })!),
                 ],
