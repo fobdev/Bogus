@@ -68,9 +68,13 @@ export const Clear: Command = {
                 msg.awaitMessageComponent({
                     componentType: "BUTTON",
                     filter: (filter: ButtonInteraction) => filter.customId === "delete-message",
-                }).then(() => {
-                    msg.delete();
-                });
+                })
+                    .then(() => {
+                        msg.delete();
+                    })
+                    .catch(() => {
+                        console.log("button collector deleted");
+                    });
             });
     },
 };
