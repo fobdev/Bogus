@@ -8,7 +8,6 @@ import util from "util";
 
 // FS to get the outside dependencies
 const readdir = util.promisify(fs.readdir);
-
 const getCommandsFrom = async (folder: string, embed: MessageEmbed) => {
     let commandsArray: Array<string> = [];
 
@@ -16,7 +15,7 @@ const getCommandsFrom = async (folder: string, embed: MessageEmbed) => {
         await readdir(`./src/commands/${folder}/`).then((files) => {
             if (files.length === 0) throw new Error("Nothing was found inside the directory");
             files.forEach((file) => {
-                commandsArray.push(file.slice(0, file.length - 3));
+                if (file !== "index.ts") commandsArray.push(file.slice(0, file.length - 3));
             });
         });
     } catch (error) {
