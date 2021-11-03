@@ -1,15 +1,15 @@
+import { MessageEmbed } from "discord.js";
 import { Command } from "../../interfaces";
 import { Response } from "../../models";
 import { CommandList } from "../_CommandList";
 import botconfig from "../../botconfig.json";
 import fs from "fs";
 import util from "util";
-import { MessageEmbed } from "discord.js";
 
 // FS to get the outside dependencies
 const readdir = util.promisify(fs.readdir);
 
-const getCommands = async (embed: MessageEmbed, folder: string) => {
+const getCommandsFrom = async (folder: string, embed: MessageEmbed) => {
     let commandsArray: Array<string> = [];
 
     try {
@@ -85,9 +85,9 @@ export const Help: Command = {
                 )
                 .setThumbnail(client.user?.avatarURL()!);
 
-            await getCommands(generatedResponse, "admin");
-            await getCommands(generatedResponse, "bot");
-            await getCommands(generatedResponse, "music");
+            await getCommandsFrom("admin", generatedResponse);
+            await getCommandsFrom("bot", generatedResponse);
+            await getCommandsFrom("music", generatedResponse);
 
             return channel.send({
                 embeds: [generatedResponse],
