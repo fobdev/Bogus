@@ -1,5 +1,6 @@
 import { Command } from "../../interfaces";
 import { Response } from "../../models";
+import botconfig from "../../botconfig.json";
 
 export const Invite: Command = {
     name: ["invite"],
@@ -8,7 +9,7 @@ export const Invite: Command = {
         let { channel } = message;
 
         let res = (link: string) =>
-            Response("Add me to another servers!", `Link: ${link}`, "SUCCESS").setThumbnail(
+            Response("Add me to another servers!", `${link}`, "SUCCESS").setThumbnail(
                 client.user?.avatarURL()!
             );
 
@@ -32,7 +33,10 @@ export const Invite: Command = {
                         })
                     ).addField(
                         "By adding me via this link, I will have Administrator Permissions.",
-                        "```>invite simple``` For a link without Admin permissions."
+                        "```" +
+                            `${botconfig.prefix}invite simple` +
+                            "```" +
+                            " For a link without Admin permissions."
                     ),
                 ],
             });

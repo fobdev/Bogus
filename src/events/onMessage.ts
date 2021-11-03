@@ -1,8 +1,9 @@
 import { Client, Message } from "discord.js";
 import { CommandList } from "../commands/_CommandList";
+import botconfig from "../botconfig.json";
 
 export const onMessage = async (client: Client, message: Message) => {
-    const prefix = ">";
+    const prefix = botconfig.prefix;
 
     let { content } = message;
 

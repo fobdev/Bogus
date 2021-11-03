@@ -1,6 +1,7 @@
 import { Command } from "../../interfaces";
 import { Response } from "../../models";
 import { CommandList } from "../_CommandList";
+import botconfig from "../../botconfig.json";
 
 export const Help: Command = {
     name: ["help"],
@@ -16,20 +17,22 @@ export const Help: Command = {
                     Command.name.forEach((element, index) => {
                         if (Command.arguments?.length! > 0) {
                             if (Command.arguments!.find((opt) => opt === "?")) {
-                                finalString += "```" + `>${element}\n` + "```";
+                                finalString += "```" + `${botconfig.prefix}${element}\n` + "```";
 
                                 finalString +=
                                     "```" +
-                                    `>${element} [${Command.arguments
+                                    `${botconfig.prefix}${element} [${Command.arguments
                                         ?.slice(1)
                                         .join("] or [")}]\n` +
                                     "```";
                             } else
                                 finalString +=
                                     "```" +
-                                    `>${element} [${Command.arguments?.join("] or [")}]\n` +
+                                    `${botconfig.prefix}${element} [${Command.arguments?.join(
+                                        "] or ["
+                                    )}]\n` +
                                     "```";
-                        } else finalString += "```" + `>${element}\n` + "```";
+                        } else finalString += "```" + `${botconfig.prefix}${element}\n` + "```";
                     });
                     return finalString;
                 };
