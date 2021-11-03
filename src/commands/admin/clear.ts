@@ -4,6 +4,7 @@ import { Response } from "../../models";
 
 export const Clear: Command = {
     name: ["clear", "cl"],
+    arguments: ["amount"],
     description: "Clear a specific amount of messages from the channel",
     run: async (client, message, args) => {
         let { channel } = message;
