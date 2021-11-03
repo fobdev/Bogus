@@ -73,24 +73,23 @@ export const Help: Command = {
                         ],
                     });
             }
-        else {
-            let generatedResponse = Response(
-                `${client.user?.username.toUpperCase()} Commands (alpha)`,
-                `This is a complete list of all the commands available from ${client.user?.username}`,
-                "SUCCESS"
+
+        let generatedResponse = Response(
+            `${client.user?.username.toUpperCase()} Commands (alpha)`,
+            `This is a complete list of all the commands available from ${client.user?.username}`,
+            "SUCCESS"
+        )
+            .setFooter(
+                `You can also use ${botconfig.prefix}help [command] to see help from a specific command.`
             )
-                .setFooter(
-                    `You can also use ${botconfig.prefix}help [command] to see help from a specific command.`
-                )
-                .setThumbnail(client.user?.avatarURL()!);
+            .setThumbnail(client.user?.avatarURL()!);
 
-            await getCommandsFrom("admin", generatedResponse);
-            await getCommandsFrom("bot", generatedResponse);
-            await getCommandsFrom("music", generatedResponse);
+        await getCommandsFrom("admin", generatedResponse);
+        await getCommandsFrom("bot", generatedResponse);
+        await getCommandsFrom("music", generatedResponse);
 
-            return channel.send({
-                embeds: [generatedResponse],
-            });
-        }
+        return channel.send({
+            embeds: [generatedResponse],
+        });
     },
 };
