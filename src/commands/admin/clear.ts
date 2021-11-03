@@ -32,7 +32,7 @@ export const Clear: Command = {
         // deletes the command message then bulk delete.
         let amount_deleted: number = 0;
         try {
-            await message.delete();
+            message.delete();
             await channel.bulkDelete(amount, true).then(async (message) => {
                 amount_deleted = message.size;
             });
