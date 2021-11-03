@@ -3,6 +3,7 @@ import { Response } from "../../models";
 
 export const Kick: Command = {
     name: ["kick"],
+    arguments: ["member"],
     description: "Kick a user from the server.",
     run: async (client, message) => {
         let { channel, author, member } = message;
@@ -20,7 +21,7 @@ export const Kick: Command = {
 
         let kick_member = message.mentions.members?.first();
 
-        if (!kick_member) {
+        if (!kick_member)
             return channel.send({
                 embeds: [
                     Response(
@@ -30,7 +31,6 @@ export const Kick: Command = {
                     ),
                 ],
             });
-        }
 
         try {
             await kick_member?.kick();
@@ -43,9 +43,11 @@ export const Kick: Command = {
                     ).setThumbnail(kick_member?.user.displayAvatarURL({ dynamic: true })!),
                 ],
             });
-        } catch (e) {
+        } catch (e: any) {
             return channel.send({
-                embeds: [Response("Error", "An error occurred trying to kick the user.", "FAIL")],
+                embeds: [
+                    Response("Error occured trying to kick member", `Error: ${e.message}`, "FAIL"),
+                ],
             });
         }
     },
