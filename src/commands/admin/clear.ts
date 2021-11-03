@@ -37,7 +37,7 @@ export const Clear: Command = {
                 amount_deleted = message.size;
             });
         } catch (e: any) {
-            console.error(e);
+            console.error(`[CLEAR] Error deleting messages: ${e.message}`);
             return onError(message, e);
         }
 
