@@ -4,6 +4,7 @@ import { CommandList } from "../_CommandList";
 
 export const Help: Command = {
     name: ["help"],
+    arguments: ["?", "command"],
     description: "Display all the available commands.",
     run: async (client, message, args) => {
         let { channel } = message;
@@ -12,13 +13,23 @@ export const Help: Command = {
             for (const Command of CommandList) {
                 let usageHelper = () => {
                     let finalString: string = "";
-                    Command.name.forEach((element) => {
-                        if (Command.arguments?.length! > 0)
-                            finalString +=
-                                "```" +
-                                `>${element} [${Command.arguments?.join("] or [")}]\n` +
-                                "```";
-                        else finalString += "```" + `>${element}\n` + "```";
+                    Command.name.forEach((element, index) => {
+                        if (Command.arguments?.length! > 0) {
+                            if (Command.arguments!.find((opt) => opt === "?")) {
+                                finalString += "```" + `>${element}\n` + "```";
+
+                                finalString +=
+                                    "```" +
+                                    `>${element} [${Command.arguments
+                                        ?.slice(1)
+                                        .join("] or [")}]\n` +
+                                    "```";
+                            } else
+                                finalString +=
+                                    "```" +
+                                    `>${element} [${Command.arguments?.join("] or [")}]\n` +
+                                    "```";
+                        } else finalString += "```" + `>${element}\n` + "```";
                     });
                     return finalString;
                 };
