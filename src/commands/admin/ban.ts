@@ -5,7 +5,7 @@ export const Ban: Command = {
     name: ["ban"],
     arguments: ["member"],
     description: "Bans a user from the server",
-    run: async (client, message) => {
+    run: async (client, message, args) => {
         let { content, channel, author, member, mentions } = message;
 
         if (!member?.permissions.has("BAN_MEMBERS")) {
@@ -13,7 +13,7 @@ export const Ban: Command = {
                 embeds: [
                     Response(
                         "Permission Denied",
-                        "The user does not have permission to kick members.",
+                        "The member does not have permission to kick members.",
                         "FAIL"
                     ),
                 ],
@@ -27,7 +27,7 @@ export const Ban: Command = {
                 embeds: [
                     Response(
                         "Error running the command",
-                        "You need to tag a user to be banned!",
+                        "You need to tag a member to be banned!",
                         "FAIL"
                     ),
                 ],
@@ -35,9 +35,9 @@ export const Ban: Command = {
         }
 
         // separate all the string from the function call
-        let args = content.split(" ").slice(2);
+        let reason = args!.slice(1);
 
-        if (!args) {
+        if (!reason) {
             await ban_member.ban();
             return channel.send({
                 embeds: [
@@ -50,43 +50,8 @@ export const Ban: Command = {
             });
         }
 
-        // set the reason to a default of after the ban days
-        let ban_days = parseInt(args[0]);
-        let ban_reason = args.slice(1, args.length);
-
-        // check if there is a number after the user
-        if (isNaN(ban_days)) {
-            ban_reason = args;
-
-            // if the reason is the whole args, then there is no day selected (default 0).
-            await ban_member.ban({ reason: ban_reason.toString() });
-            return channel.send({
-                embeds: [
-                    Response(
-                        "User banned!",
-                        `**${author.tag}** banned **${ban_member.user.tag}** from the server`,
-                        "SUCCESS"
-                    ),
-                ],
-            });
-        }
-
-        // now checking the possibility of having a reason and a ban_days
-        if (ban_days > 7 || ban_days < 0) {
-            return channel.send({
-                embeds: [
-                    Response(
-                        "Error executing the command",
-                        "You can't ban someone for more than 7 days" +
-                            "\nBut you can ban someone for a **indefinite amount of time using 0 in the days**",
-                        "FAIL"
-                    ),
-                ],
-            });
-        }
-
         // finally, if there is a reason and a ban_days, do the whole function.
-        await ban_member.ban({ reason: ban_reason.join(" "), days: ban_days });
+        await ban_member.ban({ reason: reason.join(" ") });
 
         return channel.send({
             embeds: [
@@ -94,9 +59,7 @@ export const Ban: Command = {
                     "User banned!",
                     `**${author.tag}** banned **${ban_member.user.tag}** from the server`,
                     "SUCCESS"
-                )
-                    .addField("Reason: ", ban_reason.join(" "), true)
-                    .addField("Days: ", ban_days.toString(), true),
+                ).addField("Reason: ", reason.join(" "), true),
             ],
         });
     },
