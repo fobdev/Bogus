@@ -8,7 +8,7 @@ import * as MusicCommands from "./music";
 let getCollection = (collection: any) => {
     let commandsArray: Array<Command> = [];
 
-    forEach(AdminCommands, (command) => {
+    forEach(collection, (command) => {
         commandsArray.push(command);
     });
 
