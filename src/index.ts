@@ -1,6 +1,5 @@
 import { Client, Intents } from "discord.js";
-import { onMessage } from "./events/onMessage";
-import { onReady } from "./events/onReady";
+import { onMessage, onReady } from "./events";
 
 (async () => {
     const client = new Client({
