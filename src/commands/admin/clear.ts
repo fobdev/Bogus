@@ -1,4 +1,4 @@
-import { Permissions } from "discord.js";
+import { ButtonInteraction, MessageActionRow, MessageButton, Permissions } from "discord.js";
 import { onError } from "../../events";
 import { Command } from "../../interfaces";
 import { Response } from "../../models";
@@ -52,8 +52,25 @@ export const Clear: Command = {
                 "Note: messages older than 14 days can't be deleted by the bot."
             );
 
-        return channel.send({
-            embeds: [return_embed],
-        });
+        return channel
+            .send({
+                embeds: [return_embed],
+                components: [
+                    new MessageActionRow().addComponents(
+                        new MessageButton()
+                            .setCustomId("delete-message")
+                            .setLabel("Delete this message")
+                            .setStyle("SECONDARY")
+                    ),
+                ],
+            })
+            .then((msg) => {
+                msg.awaitMessageComponent({
+                    componentType: "BUTTON",
+                    filter: (filter: ButtonInteraction) => filter.customId === "delete-message",
+                }).then(() => {
+                    msg.delete();
+                });
+            });
     },
 };
