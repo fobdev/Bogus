@@ -1,5 +1,6 @@
 import { Client, Intents } from "discord.js";
 import { onMessage } from "./events/onMessage";
+import { onReady } from "./events/onReady";
 
 (async () => {
     const client = new Client({
@@ -7,7 +8,7 @@ import { onMessage } from "./events/onMessage";
     });
 
     // calls when the client starts
-    client.on("ready", async () => console.log("Client is Online!"));
+    client.on("ready", async () => await onReady());
 
     // calls when a new message is sent in any channel
     client.on("messageCreate", async (message) => await onMessage(client, message));
