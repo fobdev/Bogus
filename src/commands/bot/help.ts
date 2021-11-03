@@ -1,4 +1,5 @@
 import { Command } from "../../interfaces";
+import { Response } from "../../models";
 import { CommandList } from "../_CommandList";
 
 export const Help: Command = {
@@ -7,11 +8,31 @@ export const Help: Command = {
     run: async (client, message, args) => {
         let { channel } = message;
 
-        if (args?.length! <= 0)
-            return channel.send("Please input a command from which you need help.");
+        if (args?.length! > 0)
+            for (const Command of CommandList) {
+                let usageHelper = () => {
+                    let finalString: string = "";
+                    Command.name.forEach((element) => {
+                        if (Command.arguments?.length! > 0)
+                            finalString +=
+                                "```" +
+                                `>${element} [${Command.arguments?.join("] or [")}]\n` +
+                                "```";
+                        else finalString += "```" + `>${element}\n` + "```";
+                    });
+                    return finalString;
+                };
 
-        for (const Command of CommandList)
-            if (Command.name.find((element) => element === args![0]))
-                return channel.send(Command.description);
+                if (Command.name.find((element) => element === args![0]))
+                    return channel.send({
+                        embeds: [
+                            Response(
+                                Command.name[0].toUpperCase(),
+                                Command.description,
+                                "OTHER"
+                            ).addField("Usage", usageHelper()),
+                        ],
+                    });
+            }
     },
 };
