@@ -1,4 +1,5 @@
 import { Permissions } from "discord.js";
+import { onError } from "../../events";
 import { Command } from "../../interfaces";
 import { Response } from "../../models";
 
@@ -36,16 +37,7 @@ export const RenameServer: Command = {
                 ],
             });
         } catch (e: any) {
-            console.error(e.message);
-            return channel.send({
-                embeds: [
-                    Response(
-                        "An error occured trying to change the name",
-                        `Error: ${e.message}`,
-                        "FAIL"
-                    ),
-                ],
-            });
+            return onError(message, e);
         }
     },
 };

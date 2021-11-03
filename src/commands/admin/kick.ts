@@ -1,5 +1,6 @@
 import { Command } from "../../interfaces";
 import { Response } from "../../models";
+import { onError } from "../../events";
 
 export const Kick: Command = {
     name: ["kick"],
@@ -44,11 +45,7 @@ export const Kick: Command = {
                 ],
             });
         } catch (e: any) {
-            return channel.send({
-                embeds: [
-                    Response("Error occured trying to kick member", `Error: ${e.message}`, "FAIL"),
-                ],
-            });
+            return onError(message, e);
         }
     },
 };

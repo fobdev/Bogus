@@ -1,4 +1,5 @@
 import { Permissions } from "discord.js";
+import { onError } from "../../events";
 import { Command } from "../../interfaces";
 import { Response } from "../../models";
 
@@ -35,9 +36,9 @@ export const Clear: Command = {
             await channel.bulkDelete(amount, true).then(async (message) => {
                 amount_deleted = message.size;
             });
-        } catch (error) {
-            console.error(error);
-            return channel.send("I don't have permissions to delete messages in this server.");
+        } catch (e: any) {
+            console.error(e);
+            return onError(message, e);
         }
 
         let return_embed = Response(
