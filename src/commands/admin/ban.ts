@@ -34,7 +34,6 @@ export const Ban: Command = {
             });
         }
 
-        // separate all the string from the function call
         let reason = args!.slice(1);
 
         if (!reason) {
@@ -50,7 +49,6 @@ export const Ban: Command = {
             });
         }
 
-        // finally, if there is a reason and a ban_days, do the whole function.
         await ban_member.ban({ reason: reason.join(" ") });
 
         return channel.send({
