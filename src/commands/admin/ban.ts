@@ -48,7 +48,7 @@ export const Ban: Command = {
                         ),
                     ],
                 });
-            } catch (e) {
+            } catch (e: any) {
                 console.error(`[BAN]: Error banning a user: ${e.message}.`);
                 return onError(message, e);
             }
