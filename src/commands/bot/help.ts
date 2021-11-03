@@ -14,7 +14,7 @@ export const Help: Command = {
             for (const Command of CommandList) {
                 let usageHelper = () => {
                     let finalString: string = "";
-                    Command.name.forEach((element, index) => {
+                    Command.name.forEach((element) => {
                         if (Command.arguments?.length! > 0) {
                             if (Command.arguments!.find((opt) => opt === "?")) {
                                 finalString += "```" + `${botconfig.prefix}${element}\n` + "```";
