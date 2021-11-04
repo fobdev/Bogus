@@ -22,21 +22,38 @@ export const Music: Command = {
                 ],
             });
 
+        if (!message.member?.voice.channel)
+            return channel.send({
+                embeds: [Response("Error", "You need to enter a voice channel first.", "WARN")],
+            });
+
         const userInput = args!.join(" ");
 
-        // Player Commands
+        /** Player Commands */
+
+        // Skip to next track
         if (args![0] === "skip" || args![0] === "s") {
-            if (!queue) return channel.send("There is no queue in this server.");
+            const skippingQueue = player?.getQueue(guild!.id);
+            if (!skippingQueue || !skippingQueue.playing)
+                return channel.send({
+                    embeds: [
+                        Response(
+                            "Nothing is being played.",
+                            "You need to play something first.",
+                            "WARN"
+                        ),
+                    ],
+                });
 
-            const success = queue.skip();
-
-            if (success && queue.tracks.length > 0)
+            let success;
+            success = skippingQueue!.skip();
+            if (success && skippingQueue.tracks.length > 0)
                 return channel.send({
                     embeds: [
                         Response(
                             success ? "Track Skipped" : "Error Skipping Track",
                             success
-                                ? `Now loading: **${queue.tracks[0].title}**...`
+                                ? `Now loading: **${skippingQueue.tracks[0].title}**...`
                                 : "Error trying to skip track",
                             success ? "SUCCESS" : "FAIL"
                         ),
@@ -45,15 +62,19 @@ export const Music: Command = {
             else return;
         }
 
+        // List all tracks remaining
         if (args![0] === "queue" || args![0] === "q") {
-            if (queue && queue.tracks.length > 0) {
-                let jq = queue.toJSON();
+            const listingQueue = player?.getQueue(guild!.id);
+            if (listingQueue && listingQueue.tracks.length > 0) {
+                let jq = listingQueue.toJSON();
                 let jqt: Array<string> = [];
 
                 let jqtracks = jq.tracks.forEach((track, index) => {
                     return jqt.push(
                         `**[ ${index + 1 <= 9 ? `0${index + 1}` : `${index + 1}`} ]** - **${
-                            track.title
+                            track.title.length > 40
+                                ? `${track.title.slice(0, 40)}...`
+                                : `${track.title}`
                         }** - ${track.duration}`
                     );
                 });
@@ -61,7 +82,7 @@ export const Music: Command = {
                 return channel.send({
                     embeds: [
                         Response(
-                            `Queue of **${queue.guild.name}**`,
+                            `Queue of **${listingQueue.guild.name}**`,
                             `${jqt.join("\n")}`,
                             "OTHER",
                             "PURPLE"
@@ -72,15 +93,18 @@ export const Music: Command = {
             return channel.send("There is no queue in this server.");
         }
 
-        if (args![0] === "leave" || args![0] === "l")
-            if (!queue || !queue.playing)
+        // Leave voice channel
+        if (args![0] === "leave" || args![0] === "l") {
+            const leavingQueue = player?.getQueue(guild!.id);
+            if (!leavingQueue || !leavingQueue.playing)
                 return channel.send("I'm not even playing, what do you want from me D:");
             else {
                 channel.send("Left the voice channel.");
-                return queue.destroy();
+                return leavingQueue.destroy();
             }
+        }
 
-        // Video Search.
+        // Video Search
         const searchResult = await player!
             .search(userInput, { requestedBy: message.author })
             .catch((e) => console.error("Search error:", e));
