@@ -5,7 +5,25 @@ import { Response } from "../models";
 export const onPlayer = async (player: Player) => {
     player.on("trackStart", (queue, track) => {
         // @ts-ignore
-        return queue.metadata?.channel.send(`Now Playing: **${track.title}** (${track.duration})`);
+        return queue.metadata?.channel.send({
+            embeds: [
+                Response(
+                    `:musical_note: Now Playing: **${track.title}**`,
+                    `Duration: ${track.duration}\Author: ${track.author}\nAdded by: ${track.requestedBy}`,
+                    "OTHER",
+                    "PURPLE"
+                )
+                    .setThumbnail(track.thumbnail)
+                    .setURL(track.url)
+                    .setFooter(
+                        `Next track: ${
+                            queue.tracks.length > 0
+                                ? `${queue.tracks[0].title} by ${queue.tracks[0].author}`
+                                : "none"
+                        }`
+                    ),
+            ],
+        });
     });
 
     player.on("trackAdd", (queue: Queue, track: Track) => {
