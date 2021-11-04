@@ -3,14 +3,20 @@ import { Channel, Message } from "discord.js";
 import { Response } from "../models";
 
 export const onPlayer = async (player: Player) => {
-    player.on("trackStart", function (queue, track) {
+    player.on("trackStart", (queue, track) => {
         // @ts-ignore
-        return queue.metadata?.channel.send(`Now Playing: **${track.title}**`);
+        return queue.metadata?.channel.send(`Now Playing: **${track.title}** (${track.duration})`);
+    });
+
+    player.on("trackEnd", (queue, track) => {
+        if (queue.tracks.length > 0)
+            // @ts-ignore
+            return queue.metadata?.channel.send(`Now loading: **${queue.tracks[0].title}**...`);
     });
 
     player.on("trackAdd", (queue: Queue, track: Track) => {
         // @ts-ignore
-        return queue.metadata?.channel.send(`**${track.title}** added to the queue.`);
+        return queue.metadata?.channel.send(`Added to the queue: **${track}** (${track.duration})`);
     });
 
     player.on("error", (queue: Queue, error) => {
@@ -28,11 +34,6 @@ export const onPlayer = async (player: Player) => {
         });
     });
 
-    player.on("botDisconnect", (queue: Queue) => {
-        // @ts-ignore
-        return queue.metadata?.channel.send("Bye!");
-    });
-
     player.on("channelEmpty", (queue: Queue) => {
         // @ts-ignore
         return queue.metadata?.channel.send({
@@ -43,7 +44,7 @@ export const onPlayer = async (player: Player) => {
     player.on("queueEnd", (queue: Queue) => {
         // @ts-ignore
         return queue.metadata?.channel.send({
-            embeds: [Response("Queue over!", "Leaving voice channel", "SUCCESS")],
+            embeds: [Response("I'm done.", "Leaving voice channel", "SUCCESS")],
         });
     });
 };
