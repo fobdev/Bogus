@@ -8,12 +8,6 @@ export const onPlayer = async (player: Player) => {
         return queue.metadata?.channel.send(`Now Playing: **${track.title}** (${track.duration})`);
     });
 
-    player.on("trackEnd", (queue, track) => {
-        if (queue.tracks.length > 0)
-            // @ts-ignore
-            return queue.metadata?.channel.send(`Now loading: **${queue.tracks[0].title}**...`);
-    });
-
     player.on("trackAdd", (queue: Queue, track: Track) => {
         // @ts-ignore
         return queue.metadata?.channel.send(`Added to the queue: **${track}** (${track.duration})`);

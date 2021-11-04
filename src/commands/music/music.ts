@@ -29,21 +29,21 @@ export const Music: Command = {
             if (!queue || !queue.playing)
                 return channel.send("No music is being played right now.");
 
-            const currentTrack = queue.current;
             const success = queue.skip();
 
-            if (success)
+            if (success && queue.tracks.length > 0)
                 return channel.send({
                     embeds: [
                         Response(
                             success ? "Track Skipped" : "Error Skipping Track",
                             success
-                                ? `Track ${currentTrack} Skipped`
+                                ? `Now loading: **${queue.tracks[0].title}**...`
                                 : "Error trying to skip track",
                             success ? "SUCCESS" : "FAIL"
                         ),
                     ],
                 });
+            else return;
         }
 
         if (args![0] === "queue" || args![0] === "q")
