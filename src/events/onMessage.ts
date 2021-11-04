@@ -1,8 +1,9 @@
 import { Client, Message } from "discord.js";
 import { CommandList } from "../commands/_CommandList";
 import botconfig from "../botconfig.json";
+import { Player } from "discord-player";
 
-export const onMessage = async (client: Client, message: Message) => {
+export const onMessage = async (client: Client, player: Player, message: Message) => {
     const prefix = botconfig.prefix;
 
     let { content } = message;
@@ -18,7 +19,8 @@ export const onMessage = async (client: Client, message: Message) => {
                 (val) => val === content.split(" ")[0].substring(prefix.length)
             );
 
-            if (element === filterSingle[0]) return await Command.run(client, message, args);
+            if (element === filterSingle[0])
+                return await Command.run(client, message, args, player);
         });
     }
 
