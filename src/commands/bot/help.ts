@@ -48,13 +48,13 @@ export const Help: Command = {
                                     "```" +
                                     `${botconfig.prefix}${element} [${Command.arguments
                                         ?.slice(1)
-                                        .join("] or [")}]\n` +
+                                        .join("], [")}]\n` +
                                     "```";
                             } else
                                 finalString +=
                                     "```" +
                                     `${botconfig.prefix}${element} [${Command.arguments?.join(
-                                        "] or ["
+                                        "], ["
                                     )}]\n` +
                                     "```";
                         } else finalString += "```" + `${botconfig.prefix}${element}\n` + "```";
