@@ -40,7 +40,7 @@ export const Music: Command = {
                             success
                                 ? `Track ${currentTrack} Skipped`
                                 : "Error trying to skip track",
-                            "FAIL"
+                            success ? "SUCCESS" : "FAIL"
                         ),
                     ],
                 });
@@ -54,6 +54,7 @@ export const Music: Command = {
             if (!queue || !queue.playing)
                 return channel.send("I'm not even playing, what do you want from me D:");
             else {
+                channel.send("Left the voice channel.");
                 return queue.destroy();
             }
 
