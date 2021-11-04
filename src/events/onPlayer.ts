@@ -23,20 +23,6 @@ export const onPlayer = async (player: Player) => {
                         }`
                     ),
             ],
-            components: [
-                new MessageActionRow().addComponents(
-                    new MessageButton()
-                        .setCustomId("button-stop")
-                        .setLabel("STOP")
-                        .setStyle("SECONDARY")
-                        .setEmoji("🛑"),
-                    new MessageButton()
-                        .setCustomId("button-skip")
-                        .setLabel("SKIP TRACK")
-                        .setStyle("SECONDARY")
-                        .setEmoji("➡️")
-                ),
-            ],
         });
     });
 
