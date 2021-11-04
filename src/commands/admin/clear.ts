@@ -70,7 +70,7 @@ export const Clear: Command = {
                     filter: (filter: ButtonInteraction) => filter.customId === "delete-message",
                 })
                     .then(() => {
-                        msg.delete();
+                        msg.delete().catch((e) => console.error(`${e}: Error deleting message`));
                     })
                     .catch(() => {
                         console.log("[COLLECTOR]: Button Collector Deleted");
