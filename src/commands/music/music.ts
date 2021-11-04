@@ -26,8 +26,7 @@ export const Music: Command = {
 
         // Player Commands
         if (args![0] === "skip" || args![0] === "s") {
-            if (!queue || !queue.playing)
-                return channel.send("No music is being played right now.");
+            if (!queue) return channel.send("There is no queue in this server.");
 
             const success = queue.skip();
 
@@ -46,9 +45,32 @@ export const Music: Command = {
             else return;
         }
 
-        if (args![0] === "queue" || args![0] === "q")
-            if (queue && queue.tracks.length > 0) return channel.send(queue.toString());
-            else return channel.send("There is nothing in the queue.");
+        if (args![0] === "queue" || args![0] === "q") {
+            if (queue && queue.tracks.length > 0) {
+                let jq = queue.toJSON();
+                let jqt: Array<string> = [];
+
+                let jqtracks = jq.tracks.forEach((track, index) => {
+                    return jqt.push(
+                        `**[ ${index + 1 <= 9 ? `0${index + 1}` : `${index + 1}`} ]** - **${
+                            track.title
+                        }** - ${track.duration}`
+                    );
+                });
+
+                return channel.send({
+                    embeds: [
+                        Response(
+                            `Queue of **${queue.guild.name}**`,
+                            `${jqt.join("\n")}`,
+                            "OTHER",
+                            "PURPLE"
+                        ),
+                    ],
+                });
+            }
+            return channel.send("There is no queue in this server.");
+        }
 
         if (args![0] === "leave" || args![0] === "l")
             if (!queue || !queue.playing)
