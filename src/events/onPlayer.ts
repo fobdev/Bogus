@@ -20,8 +20,8 @@ export const onPlayer = async (player: Player) => {
         return queue.metadata?.channel.send({
             embeds: [
                 Response(
-                    "Error",
-                    "An YouTube error occurred, please make your request again.",
+                    "Error 403",
+                    "This error is not your fault, **Just do your request again, should be fine.**",
                     "FAIL"
                 ),
             ],
