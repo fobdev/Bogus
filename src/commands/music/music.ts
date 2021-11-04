@@ -1,14 +1,7 @@
 import { Command } from "../../interfaces";
 import { Response } from "../../models";
 import { Queue } from "discord-player";
-import {
-    BaseMessageComponentOptions,
-    ButtonInteraction,
-    MessageActionRow,
-    MessageButton,
-    MessageOptions,
-    MessagePayload,
-} from "discord.js";
+import { MessageActionRow, MessageButton, MessageOptions } from "discord.js";
 import ms from "ms";
 
 let queue: Queue;
@@ -115,15 +108,18 @@ export const Music: Command = {
                     embeds: [responseQueue],
                 };
 
+                const randPrev = Math.random();
+                const randNext = Math.random();
+
                 if (queueStringArray.length > pageSize)
                     sendObject.components = [
                         new MessageActionRow().addComponents(
                             new MessageButton()
-                                .setCustomId("previous")
+                                .setCustomId(randPrev.toString())
                                 .setLabel("Scroll Up")
                                 .setStyle("SECONDARY"),
                             new MessageButton()
-                                .setCustomId("next")
+                                .setCustomId(randNext.toString())
                                 .setLabel("Scroll Down")
                                 .setStyle("SECONDARY")
                         ),
@@ -132,13 +128,18 @@ export const Music: Command = {
                 return channel.send(sendObject).then((msg) => {
                     client.on("interactionCreate", async (interaction) => {
                         if (interaction.isButton()) {
-                            await interaction.deferUpdate();
                             switch (interaction.customId) {
-                                case "next":
-                                    if (page < 1 + queueStringArray.length / pageSize) page++;
+                                case randNext.toString():
+                                    {
+                                        await interaction.deferUpdate();
+                                        if (page < 1 + queueStringArray.length / pageSize) page++;
+                                    }
                                     break;
-                                case "previous":
-                                    if (page !== 0) page--;
+                                case randPrev.toString():
+                                    {
+                                        await interaction.deferUpdate();
+                                        if (page !== 0) page--;
+                                    }
                                     break;
                                 default:
                                     break;
