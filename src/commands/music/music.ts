@@ -1,6 +1,15 @@
 import { Command } from "../../interfaces";
 import { Response } from "../../models";
 import { Queue } from "discord-player";
+import {
+    BaseMessageComponentOptions,
+    ButtonInteraction,
+    MessageActionRow,
+    MessageButton,
+    MessageOptions,
+    MessagePayload,
+} from "discord.js";
+import ms from "ms";
 
 let queue: Queue;
 export const Music: Command = {
@@ -66,28 +75,107 @@ export const Music: Command = {
         if (args![0] === "queue" || args![0] === "q") {
             const listingQueue = player?.getQueue(guild!.id);
             if (listingQueue && listingQueue.tracks.length > 0) {
-                let jq = listingQueue.toJSON();
-                let jqt: Array<string> = [];
-
-                let jqtracks = jq.tracks.forEach((track, index) => {
-                    return jqt.push(
-                        `**[ ${index + 1 <= 9 ? `0${index + 1}` : `${index + 1}`} ]** - **${
-                            track.title.length > 40
-                                ? `${track.title.slice(0, 40)}...`
+                let jsonQueue = listingQueue.toJSON();
+                let queueStringArray: Array<string> = [];
+                const titleMaxSize = 30;
+                jsonQueue.tracks.forEach((track, index) => {
+                    return queueStringArray.push(
+                        `[${index + 1 <= 9 ? `0${index + 1}` : `${index + 1}`}] ${
+                            track.title.length > titleMaxSize
+                                ? `${track.title.slice(0, titleMaxSize)}...`
                                 : `${track.title}`
-                        }** - ${track.duration}`
+                        } - ${track.duration}`
                     );
                 });
 
-                return channel.send({
-                    embeds: [
-                        Response(
-                            `Queue of **${listingQueue.guild.name}**`,
-                            `${jqt.join("\n")}`,
-                            "OTHER",
-                            "PURPLE"
+                const pageSize = 15;
+                let page = 0;
+                let responseQueue = Response(
+                    `Queue of **${listingQueue.guild.name}**`,
+                    "",
+                    "OTHER",
+                    "PURPLE"
+                )
+                    .setFooter(`Total queue time: ${ms(listingQueue.totalTime, { long: true })}`)
+                    .setThumbnail(listingQueue.tracks[0].thumbnail)
+                    .addField(
+                        "Coming next:",
+                        "```" +
+                            `[${listingQueue.tracks[0].title}] by ${listingQueue.tracks[0].author} - ${listingQueue.tracks[0].duration}` +
+                            "```"
+                    )
+                    .addField(
+                        "Tracks:",
+                        "```md\n" +
+                            `${queueStringArray.slice(1, pageSize + page).join("\n")}` +
+                            "```"
+                    );
+
+                let sendObject: MessageOptions = {
+                    embeds: [responseQueue],
+                };
+
+                if (queueStringArray.length > pageSize)
+                    sendObject.components = [
+                        new MessageActionRow().addComponents(
+                            new MessageButton()
+                                .setCustomId("previous")
+                                .setLabel("Scroll Up")
+                                .setStyle("SECONDARY"),
+                            new MessageButton()
+                                .setCustomId("next")
+                                .setLabel("Scroll Down")
+                                .setStyle("SECONDARY")
                         ),
-                    ],
+                    ];
+
+                return channel.send(sendObject).then((msg) => {
+                    client.on("interactionCreate", async (interaction) => {
+                        if (interaction.isButton()) {
+                            await interaction.deferUpdate();
+                            switch (interaction.customId) {
+                                case "next":
+                                    if (page < 1 + queueStringArray.length / pageSize) page++;
+                                    break;
+                                case "previous":
+                                    if (page !== 0) page--;
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                            let responseQueue = Response(
+                                `Queue of **${listingQueue.guild.name}**`,
+                                "",
+                                "OTHER",
+                                "PURPLE"
+                            )
+                                .setFooter(
+                                    `Total queue time: ${ms(listingQueue.totalTime, {
+                                        long: true,
+                                    })}`
+                                )
+                                .setThumbnail(listingQueue.tracks[0].thumbnail)
+                                .addField(
+                                    "Coming next:",
+                                    "```" +
+                                        `[${listingQueue.tracks[0].title}] by ${listingQueue.tracks[0].author} - ${listingQueue.tracks[0].duration}` +
+                                        "```"
+                                )
+                                .addField(
+                                    "Tracks:",
+                                    "```md\n" +
+                                        `${queueStringArray
+                                            .slice(1 + page * 5, pageSize + page * 5)
+                                            .join("\n")}` +
+                                        "```"
+                                );
+
+                            msg.edit({
+                                embeds: [responseQueue],
+                            });
+                        }
+                    });
                 });
             }
             return channel.send("There is no queue in this server.");
