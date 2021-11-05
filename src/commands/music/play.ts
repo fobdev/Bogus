@@ -48,6 +48,11 @@ export const Play: Command = {
                 highWaterMark: 1 << 25,
                 liveBuffer: 4000,
                 dlChunkSize: 0,
+                requestOptions: {
+                    headers: {
+                        cookie: process.env.YOUTUBE_COOKIE,
+                    },
+                },
             },
             bufferingTimeout: 5000,
         });
