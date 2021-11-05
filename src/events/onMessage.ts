@@ -20,15 +20,16 @@ export const onMessage = async (client: Client, player: Player, message: Message
             );
 
             if (element === filterSingle[0]) {
+                console.log(`\n[${message.content}] command used`);
+                console.group();
+                console.log(`User: [${message.author.tag}]`);
+                console.log(`Serv: [${message.guild?.name}]`);
                 console.log(
-                    `${"-".repeat(process.stdout.columns / 5)}\n[${
-                        message.content
-                    }] was used\nUser: ${message.author.tag}\nGuild: ${
-                        message.guild?.name
-                    }\nTime: ${new Date().toLocaleTimeString(
+                    `Time: [${new Date().toLocaleTimeString(
                         "pt-BR"
-                    )} at ${new Date().toLocaleDateString("pt-BR")}`
+                    )} at ${new Date().toLocaleDateString("pt-BR")}]`
                 );
+                console.groupEnd();
 
                 return await Command.run(client, message, args, player);
             }
