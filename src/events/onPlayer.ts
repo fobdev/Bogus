@@ -34,17 +34,30 @@ export const onPlayer = async (player: Player) => {
     });
 
     player.on("trackAdd", async (queue: Queue, track: Track) => {
+        const trackPosition = queue.getTrackPosition(track);
+
         // @ts-ignore
         return await queue.metadata?.channel.send({
             embeds: [
                 Response(
-                    `${track.title} added to the queue.`,
-                    `Added by: ${track.requestedBy}`,
+                    `[${track.title}] added to the queue ${
+                        trackPosition === 0 ? `and playing next` : `at position [${trackPosition}]`
+                    }`,
+                    `${
+                        trackPosition === 0
+                            ? "You can use ``" +
+                              `${botconfig.prefix}skip` +
+                              "`` to play the track right now."
+                            : "You can use ``" +
+                              `${botconfig.prefix}jump ${trackPosition}` +
+                              "`` to play the track right now."
+                    }`,
                     "OTHER",
                     "PURPLE"
                 )
-                    .setThumbnail(track.thumbnail)
-                    .addField("Duration:", track.duration),
+                    .addField("Duration:", track.duration, true)
+                    .addField("Added by: ", `${track.requestedBy}`, true)
+                    .setThumbnail(track.thumbnail),
             ],
         });
     });
