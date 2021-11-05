@@ -39,9 +39,8 @@ export const Jump: Command = {
                 Response(
                     `Jumped to track number ${jumpInput} in the queue.`,
                     `Now loading **${jumpingQueue.tracks[0].title}**...`,
-                    "OTHER",
-                    "PURPLE"
-                ).setThumbnail(jumpingQueue.tracks[0].thumbnail),
+                    "SUCCESS"
+                ),
             ],
         });
     },
