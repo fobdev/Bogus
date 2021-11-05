@@ -19,7 +19,6 @@ export const Leave: Command = {
                 ],
             });
         else {
-            channel.send("Left the voice channel.");
             return leavingQueue.destroy();
         }
     },
