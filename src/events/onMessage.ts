@@ -1,7 +1,7 @@
 import { Client, Message } from "discord.js";
 import { CommandList } from "../commands/_CommandList";
-import botconfig from "../botconfig.json";
 import { Player } from "discord-player";
+import botconfig from "../botconfig.json";
 
 export const onMessage = async (client: Client, player: Player, message: Message) => {
     const prefix = botconfig.prefix;
@@ -19,10 +19,19 @@ export const onMessage = async (client: Client, player: Player, message: Message
                 (val) => val === content.split(" ")[0].substring(prefix.length)
             );
 
-            if (element === filterSingle[0])
+            if (element === filterSingle[0]) {
+                console.log(
+                    `${"-".repeat(process.stdout.columns / 5)}\n[${
+                        message.content
+                    }] was used\nUser: ${message.author.tag}\nGuild: ${
+                        message.guild?.name
+                    }\nTime: ${new Date().toLocaleTimeString(
+                        "pt-BR"
+                    )} at ${new Date().toLocaleDateString("pt-BR")}`
+                );
+
                 return await Command.run(client, message, args, player);
+            }
         });
     }
-
-    return console.log(`${message.author.tag} just said [${message.content}]`);
 };
