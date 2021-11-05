@@ -3,7 +3,7 @@ import { Response } from "../../models";
 import botconfig from "../../botconfig.json";
 
 export const Jump: Command = {
-    name: ["jump"],
+    name: ["jump", "j"],
     arguments: ["number"],
     description: "Jump to a specific track in the queue",
     run: async (client, message, args, player) => {
