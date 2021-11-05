@@ -94,7 +94,7 @@ export const Queue: Command = {
                                 }
                                 break;
                             default:
-                                break;
+                                return;
                         }
 
                         let responseQueue = Response(
