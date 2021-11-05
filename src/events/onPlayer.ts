@@ -66,7 +66,13 @@ export const onPlayer = async (player: Player) => {
     });
 
     player.on("error", async (queue: Queue, error) => {
-        console.log(error.message);
+        // attempt to play again
+        if (error.message.includes("403")) {
+            console.error(`${error.message} | Attempting to play again`);
+            await queue.play(queue.tracks[0]);
+        }
+
+        return console.error(error.message);
     });
 
     player.on("channelEmpty", async (queue: Queue) => {
