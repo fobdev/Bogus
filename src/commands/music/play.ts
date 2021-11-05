@@ -2,7 +2,6 @@ import { Command } from "../../interfaces";
 import { Response } from "../../models";
 import { Queue } from "discord-player";
 
-let queue: Queue;
 export const Play: Command = {
     name: ["play", "p"],
     arguments: ["search", "Youtube / Spotify / SoundCloud"],
@@ -40,7 +39,7 @@ export const Play: Command = {
             });
 
         // Queue creation
-        queue = player!.createQueue(guild!, {
+        const queue: Queue = player!.createQueue(guild!, {
             metadata: {
                 channel: channel,
             },
