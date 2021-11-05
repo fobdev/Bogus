@@ -75,8 +75,11 @@ export const Help: Command = {
             }
 
         let generatedResponse = Response(
-            `${client.user?.username.toUpperCase()} Commands (alpha)`,
-            `This is a complete list of all the commands available from ${client.user?.username}`,
+            `${client.user?.username.toUpperCase()} Commands List (beta)`,
+            `This is a complete list of all the commands available from ${client.user?.username}\n` +
+                "**Commands can be accessed using the prefix ``" +
+                botconfig.prefix +
+                "``**",
             "SUCCESS"
         )
             .setFooter(
