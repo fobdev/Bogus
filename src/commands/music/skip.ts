@@ -3,10 +3,10 @@ import { Response } from "../../models";
 
 export const Skip: Command = {
     name: ["skip", "s"],
-    description: "Skip the current track.",
+    arguments: ["?", "amount"],
+    description: "Skip the current track to the next track or to a specific track in the queue.",
     run: async (client, message, args, player) => {
         const { guild, channel } = message;
-
         const skippingQueue = player?.getQueue(guild!.id);
         if (!skippingQueue)
             return channel.send({
@@ -18,6 +18,44 @@ export const Skip: Command = {
                     ),
                 ],
             });
+
+        if (args![0]) {
+            try {
+                const skipAmount = parseInt(args![0]) - 1;
+                if (skipAmount < skippingQueue.tracks.length && skipAmount > 0) {
+                    skippingQueue?.skipTo(skipAmount);
+                    return channel.send({
+                        embeds: [
+                            Response(
+                                `Skipped to track number ${skipAmount} in the queue.`,
+                                `Now Loading **${skippingQueue?.tracks[0].title}**...`,
+                                "SUCCESS"
+                            ),
+                        ],
+                    });
+                }
+
+                return channel.send({
+                    embeds: [
+                        Response(
+                            `Error using Skip command.`,
+                            `You need to input a valid number.`,
+                            "FAIL"
+                        ),
+                    ],
+                });
+            } catch (e: any) {
+                return channel.send({
+                    embeds: [
+                        Response(
+                            `An error occurred trying to skip.`,
+                            `Error: ${e.message}`,
+                            "FAIL"
+                        ),
+                    ],
+                });
+            }
+        }
 
         let success;
         success = skippingQueue!.skip();
