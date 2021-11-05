@@ -1,14 +1,14 @@
 import { Command } from "../../interfaces";
 import { Response } from "../../models";
 
-export const SkipCommand: Command = {
+export const Skip: Command = {
     name: ["skip", "s"],
     description: "Skip the current track.",
     run: async (client, message, args, player) => {
         const { guild, channel } = message;
 
         const skippingQueue = player?.getQueue(guild!.id);
-        if (!skippingQueue || !skippingQueue.playing)
+        if (!skippingQueue)
             return channel.send({
                 embeds: [
                     Response(
