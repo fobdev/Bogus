@@ -5,3 +5,4 @@ export * from "./queue";
 export * from "./shuffle";
 export * from "./nowplaying";
 export * from "./jump";
+export * from "./playnext";
