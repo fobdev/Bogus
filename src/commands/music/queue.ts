@@ -102,9 +102,12 @@ export const Queue: Command = {
                             .setFooter(
                                 `Queue size: ${
                                     queueStringArray.length
-                                } tracks | Total queue time: ${ms(listingQueue.totalTime, {
-                                    long: true,
-                                })}`
+                                } tracks | Total queue time: ${ms(
+                                    listingQueue.totalTime ? listingQueue.totalTime : 0,
+                                    {
+                                        long: true,
+                                    }
+                                )}`
                             )
                             .setThumbnail(listingQueue.tracks[0].thumbnail)
                             .addField(
