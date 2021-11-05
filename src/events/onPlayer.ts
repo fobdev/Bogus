@@ -70,8 +70,7 @@ export const onPlayer = async (player: Player) => {
         console.error(error.message);
 
         if (error.message.includes("403")) {
-            console.error(`${error.message} | Skipping to next track to maintain bot active.`);
-            return queue.skip();
+            return queue.destroy(true);
         }
     });
 
