@@ -1,4 +1,5 @@
 import { Command } from "../../interfaces";
+import { Response } from "../../models";
 
 export const LeaveCommand: Command = {
     name: ["leave", "l"],
@@ -8,7 +9,15 @@ export const LeaveCommand: Command = {
 
         const leavingQueue = player?.getQueue(guild!.id);
         if (!leavingQueue || !leavingQueue.playing)
-            return channel.send("I'm not playing anything, leave me alone.");
+            return channel.send({
+                embeds: [
+                    Response(
+                        "Not connected to any voice channel",
+                        "Connect me to a voice channel first.",
+                        "WARN"
+                    ),
+                ],
+            });
         else {
             channel.send("Left the voice channel.");
             return leavingQueue.destroy();

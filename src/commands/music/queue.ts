@@ -3,6 +3,7 @@ import { Response } from "../../models";
 import ms from "ms";
 import { MessageActionRow, MessageButton } from "discord.js";
 import { MessageOptions } from "discord.js";
+import botconfig from "../../botconfig.json";
 
 export const QueueCommand: Command = {
     name: ["queue", "q"],
@@ -121,6 +122,16 @@ export const QueueCommand: Command = {
                 });
             });
         }
-        return channel.send("There is no queue in this server.");
+        return channel.send({
+            embeds: [
+                Response(
+                    "No queue in the server",
+                    "Try using``" +
+                        botconfig.prefix +
+                        "play`` with a Spotify or Youtube playlist to easily create a queue for this server.",
+                    "WARN"
+                ),
+            ],
+        });
     },
 };
