@@ -13,9 +13,11 @@ export const Queue: Command = {
 
         const listingQueue = player?.getQueue(guild!.id);
         if (listingQueue && listingQueue.tracks.length > 0) {
-            let jsonQueue = listingQueue.toJSON();
-            let queueStringArray: Array<string> = [];
+            const nextInQueue = listingQueue.tracks[0];
+            const jsonQueue = listingQueue.toJSON();
             const titleMaxSize = 30;
+
+            let queueStringArray: Array<string> = [];
             jsonQueue.tracks.forEach((track, index) => {
                 return queueStringArray.push(
                     `[${index + 1 <= 9 ? `0${index + 1}` : `${index + 1}`}] ${
@@ -40,14 +42,16 @@ export const Queue: Command = {
                         { long: true }
                     )}`
                 )
-                .setThumbnail(listingQueue.tracks[0].thumbnail)
+                .setThumbnail(nextInQueue.thumbnail)
                 .addField(
                     "Coming next:",
                     "```" +
-                        `[${listingQueue.tracks[0].title}] by ${listingQueue.tracks[0].author} - ${listingQueue.tracks[0].duration}` +
+                        `[${nextInQueue.title}] by ${nextInQueue.author} - ${nextInQueue.duration}` +
                         "```"
-                )
-                .addField(
+                );
+
+            if (queueStringArray.length > 2)
+                responseQueue.addField(
                     "Tracks:",
                     "```md\n" + `${queueStringArray.slice(1, pageSize + page).join("\n")}` + "```"
                 );
@@ -109,11 +113,11 @@ export const Queue: Command = {
                                     }
                                 )}`
                             )
-                            .setThumbnail(listingQueue.tracks[0].thumbnail)
+                            .setThumbnail(nextInQueue.thumbnail)
                             .addField(
                                 "Coming next:",
                                 "```" +
-                                    `[${listingQueue.tracks[0].title}] by ${listingQueue.tracks[0].author} - ${listingQueue.tracks[0].duration}` +
+                                    `[${nextInQueue.title}] by ${nextInQueue.author} - ${nextInQueue.duration}` +
                                     "```"
                             )
                             .addField(
