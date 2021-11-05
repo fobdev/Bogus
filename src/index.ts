@@ -17,7 +17,7 @@ import { onPlayer } from "./events/onPlayer";
     onPlayer(player);
 
     // calls when the client starts
-    client.on("ready", async () => await onReady());
+    client.on("ready", async () => await onReady(client));
 
     // calls when a new message is sent in any channel
     client.on("messageCreate", async (message) => await onMessage(client, player, message));
