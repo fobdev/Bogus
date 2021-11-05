@@ -70,6 +70,17 @@ export const onPlayer = async (player: Player) => {
         console.error(error.message);
 
         if (error.message.includes("403")) {
+            // @ts-ignore
+            await queue.metadata?.channel.send({
+                embeds: [
+                    Response(
+                        "Error trying to play.",
+                        "**Error 403: Forbidden**\nThis is a problem with the YouTube player, please do your requests again.",
+                        "FAIL"
+                    ),
+                ],
+            });
+
             return queue.destroy(true);
         }
     });
