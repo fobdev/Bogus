@@ -67,12 +67,12 @@ export const onPlayer = async (player: Player) => {
 
     player.on("error", async (queue: Queue, error) => {
         // attempt to play again
+        console.error(error.message);
+
         if (error.message.includes("403")) {
             console.error(`${error.message} | Skipping to next track to maintain bot active.`);
-            queue.skip();
+            return queue.skip();
         }
-
-        return console.error(error.message);
     });
 
     player.on("channelEmpty", async (queue: Queue) => {
