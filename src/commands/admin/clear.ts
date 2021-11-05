@@ -1,4 +1,4 @@
-import { ButtonInteraction, MessageActionRow, MessageButton, Permissions } from "discord.js";
+import { MessageActionRow, MessageButton, Permissions } from "discord.js";
 import { onError } from "../../events";
 import { Command } from "../../interfaces";
 import { Response } from "../../models";
@@ -67,7 +67,7 @@ export const Clear: Command = {
             .then((msg) => {
                 msg.awaitMessageComponent({
                     componentType: "BUTTON",
-                    filter: (filter: ButtonInteraction) => filter.customId === "delete-message",
+                    filter: (filter) => filter.customId === "delete-message",
                 })
                     .then(() => {
                         msg.delete().catch((e) => console.error(`${e}: Error deleting message`));
