@@ -8,7 +8,7 @@ export const Leave: Command = {
         const { channel, guild } = message;
 
         const leavingQueue = player?.getQueue(guild!.id);
-        if (!leavingQueue || !leavingQueue.playing)
+        if (!leavingQueue)
             return channel.send({
                 embeds: [
                     Response(
