@@ -66,17 +66,7 @@ export const onPlayer = async (player: Player) => {
     });
 
     player.on("error", async (queue: Queue, error) => {
-        console.log(error);
-        // @ts-ignore
-        return await queue.metadata?.channel.send({
-            embeds: [
-                Response(
-                    "Error 403",
-                    "This error is not your fault, **Just do your request again, should be fine.**",
-                    "FAIL"
-                ),
-            ],
-        });
+        console.log(error.message);
     });
 
     player.on("channelEmpty", async (queue: Queue) => {
