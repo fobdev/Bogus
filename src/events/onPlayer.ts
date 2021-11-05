@@ -68,8 +68,8 @@ export const onPlayer = async (player: Player) => {
     player.on("error", async (queue: Queue, error) => {
         // attempt to play again
         if (error.message.includes("403")) {
-            console.error(`${error.message} | Attempting to play again`);
-            await queue.play(queue.tracks[0]);
+            console.error(`${error.message} | Skipping to next track to maintain bot active.`);
+            queue.skip();
         }
 
         return console.error(error.message);
