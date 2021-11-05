@@ -23,6 +23,7 @@ export const NowPlaying: Command = {
             });
 
         let currentTrack = nowPlayingQueue.nowPlaying();
+        let time = nowPlayingQueue.getPlayerTimestamp();
 
         return channel.send({
             embeds: [
@@ -35,7 +36,7 @@ export const NowPlaying: Command = {
                     "PURPLE"
                 )
                     .addField("Author:", currentTrack.author)
-                    .addField("Duration:", currentTrack.duration, true)
+                    .addField("Duration:", `(${time.current} / ${time.end})`, true)
                     .addField("Added by:", `${currentTrack.requestedBy}`, true)
 
                     .setThumbnail(currentTrack.thumbnail)
