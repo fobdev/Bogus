@@ -85,10 +85,11 @@ export const Help: Command = {
             .setFooter(
                 `You can also use ${botconfig.prefix}help [command] to see help from a specific command.`
             )
-            .setThumbnail(client.user?.avatarURL()!);
+            .setThumbnail(client.user?.avatarURL({ size: 2048 })!);
 
         await getCommandsFrom("admin", generatedResponse);
         await getCommandsFrom("bot", generatedResponse);
+        await getCommandsFrom("user", generatedResponse);
         await getCommandsFrom("music", generatedResponse);
 
         return channel.send({
