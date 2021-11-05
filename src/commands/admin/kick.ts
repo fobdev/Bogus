@@ -42,7 +42,7 @@ export const Kick: Command = {
                         "Member kicked from the server",
                         `**<@${author.id}>** kicked **<@${kick_member?.user.id}>** from the server.`,
                         "WARN"
-                    ).setThumbnail(kick_member?.user.displayAvatarURL({ dynamic: true })!),
+                    ).setThumbnail(kick_member?.user.displayAvatarURL({ size: 2048 })!),
                 ],
             });
         } catch (e: any) {

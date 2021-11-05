@@ -10,7 +10,7 @@ export const Invite: Command = {
 
         let res = (link: string) =>
             Response("Add me to another servers!", `${link}`, "SUCCESS").setThumbnail(
-                client.user?.avatarURL()!
+                client.user?.avatarURL({ size: 2048 })!
             );
 
         if (args![0] === "simple") {
