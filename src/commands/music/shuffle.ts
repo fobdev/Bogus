@@ -17,7 +17,7 @@ export const Shuffle: Command = {
                         "No queue in the server",
                         "Try using``" +
                             botconfig.prefix +
-                            "play`` with a Spotify or Youtube playlist to easily create a queue for this server.",
+                            "play`` with a Spotify or Youtube playlist to create a queue for this server.",
                         "WARN"
                     ),
                 ],
