@@ -19,7 +19,7 @@ export const Leave: Command = {
                 ],
             });
         else {
-            return leavingQueue.destroy();
+            return leavingQueue.destroy(true);
         }
     },
 };
