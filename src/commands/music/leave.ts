@@ -1,7 +1,7 @@
 import { Command } from "../../interfaces";
 import { Response } from "../../models";
 
-export const LeaveCommand: Command = {
+export const Leave: Command = {
     name: ["leave", "l"],
     description: "Leaves the voice channel and delete the server queue.",
     run: async (client, message, args, player) => {
