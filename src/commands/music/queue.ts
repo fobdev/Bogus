@@ -5,7 +5,7 @@ import { MessageActionRow, MessageButton } from "discord.js";
 import { MessageOptions } from "discord.js";
 import botconfig from "../../botconfig.json";
 
-export const QueueCommand: Command = {
+export const Queue: Command = {
     name: ["queue", "q"],
     description: "Display all the current tracks in the server queue.",
     run: async (client, message, args, player) => {
@@ -34,7 +34,12 @@ export const QueueCommand: Command = {
                 "OTHER",
                 "PURPLE"
             )
-                .setFooter(`Total queue time: ${ms(listingQueue.totalTime, { long: true })}`)
+                .setFooter(
+                    `Queue size: ${queueStringArray.length} tracks | Total queue time: ${ms(
+                        listingQueue.totalTime,
+                        { long: true }
+                    )}`
+                )
                 .setThumbnail(listingQueue.tracks[0].thumbnail)
                 .addField(
                     "Coming next:",
@@ -95,7 +100,9 @@ export const QueueCommand: Command = {
                             "PURPLE"
                         )
                             .setFooter(
-                                `Total queue time: ${ms(listingQueue.totalTime, {
+                                `Queue size: ${
+                                    queueStringArray.length
+                                } tracks | Total queue time: ${ms(listingQueue.totalTime, {
                                     long: true,
                                 })}`
                             )
