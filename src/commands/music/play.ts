@@ -44,12 +44,15 @@ export const Play: Command = {
             metadata: {
                 channel: channel,
             },
+            leaveOnEmptyCooldown: 10000,
             ytdlOptions: {
                 quality: "highestaudio",
-                highWaterMark: 1 << 25,
+                highWaterMark: 1024 * 1024 * 10,
                 liveBuffer: 4000,
                 dlChunkSize: 0,
                 requestOptions: {
+                    maxRetries: 5,
+                    maxReconnects: 5,
                     headers: {
                         cookie: process.env.YOUTUBE_COOKIE,
                     },
