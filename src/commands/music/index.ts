@@ -9,5 +9,5 @@ export * from "./playnext";
 export * from "./lyrics";
 export * from "./pause";
 export * from "./resume";
-export * from "./boost";
+export * from "./bassboost";
 export * from "./earrape";
