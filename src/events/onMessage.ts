@@ -5,6 +5,7 @@ import botconfig from "../botconfig.json";
 
 export const onMessage = async (client: Client, player: Player, message: Message) => {
     const prefix = botconfig.prefix;
+    let commandCount = 0;
 
     let { content } = message;
 
@@ -20,7 +21,8 @@ export const onMessage = async (client: Client, player: Player, message: Message
             );
 
             if (element === filterSingle[0]) {
-                console.log(`\n[${message.content}] command used`);
+                commandCount++;
+                console.log(`\n[${message.content}] command used (${commandCount} today)`);
                 console.group();
                 console.log(`User: [${message.author.tag}]`);
                 console.log(`Serv: [${message.guild?.name}]`);
