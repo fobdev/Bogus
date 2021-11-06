@@ -6,3 +6,4 @@ export * from "./shuffle";
 export * from "./nowplaying";
 export * from "./jump";
 export * from "./playnext";
+export * from "./lyrics";
