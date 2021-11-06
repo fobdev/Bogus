@@ -2,10 +2,10 @@ import { Client, Message } from "discord.js";
 import { CommandList } from "../commands/_CommandList";
 import { Player } from "discord-player";
 import botconfig from "../botconfig.json";
+let commandCount = 0;
 
 export const onMessage = async (client: Client, player: Player, message: Message) => {
     const prefix = botconfig.prefix;
-    let commandCount = 0;
 
     let { content } = message;
 
