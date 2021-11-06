@@ -23,8 +23,10 @@ export const Boost: Command = {
         return channel.send({
             embeds: [
                 Response(
-                    `Bass booster ${booster ? "disabled" : "enabled"}.`,
-                    `Use the command again to ${booster ? "enable" : "disable"} it.`,
+                    `Bass booster is ${booster ? "ending" : "starting"}.`,
+                    `This may take a second.\nUse the command again to ${
+                        booster ? "enable" : "disable"
+                    } it.`,
                     "OTHER",
                     "PURPLE"
                 ),

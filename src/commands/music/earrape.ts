@@ -22,8 +22,10 @@ export const Earrape: Command = {
         return channel.send({
             embeds: [
                 Response(
-                    `Earrape ${earrape ? "disabled" : "enabled"}.`,
-                    `Use the command again to ${earrape ? "enable" : "disable"} it.`,
+                    `Earrape is ${earrape ? "ending" : "starting"}.`,
+                    `This may take a second.\nUse the command again to ${
+                        earrape ? "enable" : "disable"
+                    } it.`,
                     "OTHER",
                     "PURPLE"
                 ),
