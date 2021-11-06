@@ -2,7 +2,7 @@ import { Command } from "../../interfaces";
 import { Response } from "../../models";
 
 export const Boost: Command = {
-    name: ["bassboost"],
+    name: ["bassboost", "bb"],
     description: "Toggle the bass boost filter",
     run: async (client, message, args, player) => {
         const { guild, channel } = message;
