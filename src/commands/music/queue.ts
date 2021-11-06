@@ -45,9 +45,7 @@ export const Queue: Command = {
                 .setThumbnail(nextInQueue.thumbnail)
                 .addField(
                     "Coming next:",
-                    "```" +
-                        `[${nextInQueue.title}] by ${nextInQueue.author} - ${nextInQueue.duration}` +
-                        "```"
+                    "```" + `[${nextInQueue.title}] - ${nextInQueue.duration}` + "```"
                 );
 
             if (queueStringArray.length > 1)
@@ -116,9 +114,7 @@ export const Queue: Command = {
                             .setThumbnail(nextInQueue.thumbnail)
                             .addField(
                                 "Coming next:",
-                                "```" +
-                                    `[${nextInQueue.title}] by ${nextInQueue.author} - ${nextInQueue.duration}` +
-                                    "```"
+                                "```" + `[${nextInQueue.title}] - ${nextInQueue.duration}` + "```"
                             )
                             .addField(
                                 "Tracks:",
