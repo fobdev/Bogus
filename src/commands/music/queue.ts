@@ -50,7 +50,7 @@ export const Queue: Command = {
                         "```"
                 );
 
-            if (queueStringArray.length > 2)
+            if (queueStringArray.length > 1)
                 responseQueue.addField(
                     "Tracks:",
                     "```md\n" + `${queueStringArray.slice(1, pageSize + page).join("\n")}` + "```"
