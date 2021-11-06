@@ -5,7 +5,8 @@ import { Queue } from "discord-player";
 export const Play: Command = {
     name: ["play", "p"],
     arguments: ["search", "Youtube / Spotify / SoundCloud"],
-    description: "Discord Bot Music",
+    description:
+        "Search for a track or playlist and then play it. Can be used with Spotify, YouTube and SoundCloud.",
     run: async (client, message, args, player) => {
         const { channel, member, guild } = message;
 
