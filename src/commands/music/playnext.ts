@@ -4,7 +4,7 @@ import botconfig from "../../botconfig.json";
 
 export const PlayNext: Command = {
     name: ["playnext", "pn"],
-    description: "",
+    description: "Search a track and play it as the next track in the queue.",
     run: async (client, message, args, player) => {
         const { guild, channel } = message;
         const insertingQueue = player?.getQueue(guild!.id);
