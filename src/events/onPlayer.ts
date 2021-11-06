@@ -5,31 +5,29 @@ import botconfig from "../botconfig.json";
 
 export const onPlayer = async (player: Player) => {
     player.on("trackStart", async (queue, track) => {
+        const responseEmbed = Response(
+            `:musical_note: Now Playing: **${track.title}**`,
+
+            // @ts-ignore
+            `Requested in ${queue.metadata?.channel}.`,
+            "OTHER",
+            "PURPLE"
+        )
+            .addField("Author:", track.author)
+            .addField("Duration:", track.duration, true)
+            .addField("Added by:", `${track.requestedBy}`, true)
+
+            .setThumbnail(track.thumbnail)
+            .setURL(track.url);
+
+        if (queue.tracks.length > 0)
+            responseEmbed.setFooter(
+                `Next track: ${queue.tracks[0].title} by ${queue.tracks[0].author}`
+            );
+
         // @ts-ignore
         return await queue.metadata?.channel.send({
-            embeds: [
-                Response(
-                    `:musical_note: Now Playing: **${track.title}**`,
-
-                    // @ts-ignore
-                    `Requested in ${queue.metadata?.channel}.`,
-                    "OTHER",
-                    "PURPLE"
-                )
-                    .addField("Author:", track.author)
-                    .addField("Duration:", track.duration, true)
-                    .addField("Added by:", `${track.requestedBy}`, true)
-
-                    .setThumbnail(track.thumbnail)
-                    .setURL(track.url)
-                    .setFooter(
-                        `Next track: ${
-                            queue.tracks.length > 0
-                                ? `${queue.tracks[0].title} by ${queue.tracks[0].author}`
-                                : "none"
-                        }`
-                    ),
-            ],
+            embeds: [responseEmbed],
         });
     });
 
