@@ -2,7 +2,7 @@ import { Command } from "../../interfaces";
 import { Response } from "../../models";
 
 export const Earrape: Command = {
-    name: ["earrape"],
+    name: ["earrape", "er"],
     description: "Toggles the earrape effect.",
     run: async (client, message, args, player) => {
         const { guild, channel } = message;
