@@ -13,7 +13,7 @@ export const Lyric: Command = {
         const singingQueue = player?.getQueue(guild!.id);
 
         if (args![0]) {
-            await lyricsClient
+            lyricsClient
                 .search(`${args!.join(" ")}`)
                 .then((search) => {
                     return channel.send({
@@ -41,7 +41,7 @@ export const Lyric: Command = {
                     embeds: [Response("Error", "There is nothing playing right now.", "FAIL")],
                 });
 
-            await lyricsClient
+            lyricsClient
                 .search(`${singingQueue.current.title} ${singingQueue.current.author}`)
                 .then((search) => {
                     return channel.send({
