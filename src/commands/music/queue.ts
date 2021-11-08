@@ -1,8 +1,8 @@
 import { Command } from "../../interfaces";
 import { Response } from "../../models";
-import ms from "ms";
 import { MessageActionRow, MessageButton } from "discord.js";
 import { MessageOptions } from "discord.js";
+import ms from "ms";
 import botconfig from "../../botconfig.json";
 
 export const Queue: Command = {
@@ -73,44 +73,59 @@ export const Queue: Command = {
                 ];
 
             return channel.send(sendObject).then((msg) => {
+                const buttonsCollector = msg.channel.createMessageComponentCollector({
+                    filter: (i) =>
+                        (i.customId === prevButton.customId ||
+                            i.customId === nextButton.customId) &&
+                        i.user.id === message.author.id,
+                    idle: ms("30s"),
+                });
+
+                buttonsCollector.on("end", () => {
+                    sendObject.components = [];
+                    sendObject.embeds![0].footer!.text = `Queue size: ${
+                        queueStringArray.length
+                    } tracks | Total queue time: ${ms(listingQueue.totalTime, { long: true })}`;
+                    msg.edit(sendObject);
+                });
+
+                buttonsCollector.on("collect", (interaction) => {
+                    interaction.deferUpdate();
+
                     let slicedArray = queueStringArray.slice(
                         page * scrollSize,
                         pageSize + page * scrollSize
                     );
-                            case randNext.toString():
-                                {
-                                    await interaction.deferUpdate();
-                                    if (page < 1 + queueStringArray.length / pageSize) page++;
-                                }
-                                break;
-                            case randPrev.toString():
-                                {
-                                    await interaction.deferUpdate();
-                                    if (page !== 0) page--;
-                                }
-                                break;
-                            default:
-                                return;
-                        }
 
-                        let responseQueue = Response(
-                            `Queue of **${listingQueue.guild.name}**`,
-                            "",
-                            "OTHER",
-                            "PURPLE"
-                        )
-                            .setFooter(
-                                `Queue size: ${
-                                    queueStringArray.length
-                                } tracks | Total queue time: ${ms(
-                                    listingQueue.totalTime ? listingQueue.totalTime : 0,
-                                    {
-                                        long: true,
-                                    }
-                                )}`
+                    switch (interaction.customId) {
+                        case prevButton.customId:
+                            if (page !== 0) page--;
+                            break;
+                        case nextButton.customId:
+                            if (
+                                !slicedArray[slicedArray.length - 1].startsWith(
+                                    `[${queueStringArray.length}]`
+                                )
                             )
-                            .setThumbnail(nextInQueue.thumbnail)
-                            .addField(
+                                page++;
+                            break;
+                        default:
+                            return;
+                    }
+
+                    msg.edit({
+                        embeds: [
+                            Response(
+                                responseQueue.title!,
+                                responseQueue.description!,
+                                "OTHER",
+                                "PURPLE"
+                            )
+                                .setThumbnail(responseQueue.thumbnail!.url)
+                                .addField(
+                                    responseQueue.fields[0]!.name,
+                                    responseQueue.fields[0]!.value
+                                )
                                 .addField(
                                     responseQueue.fields[1]!.name,
                                     "```\n" +
@@ -122,7 +137,10 @@ export const Queue: Command = {
                                             .join("\n")}` +
                                         "```"
                                 )
-                    }
+                                .setFooter(responseQueue.footer?.text!),
+                        ],
+                        components: [new MessageActionRow().addComponents(prevButton, nextButton)],
+                    });
                 });
             });
         }
