@@ -11,7 +11,13 @@ export const Resume: Command = {
 
         if (!resumingQueue || !resumingQueue.playing)
             return channel.send({
-                embeds: [Response("Error", "There is nothing playing right now.", "FAIL")],
+                embeds: [
+                    Response(
+                        "Nothing is playing right now.",
+                        "Please play something before using this command",
+                        "WARN"
+                    ),
+                ],
             });
 
         const resumed = resumingQueue.setPaused(false);
