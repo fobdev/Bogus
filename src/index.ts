@@ -12,7 +12,21 @@ import { onPlayer } from "./events/onPlayer";
         ],
     });
 
-    const player = new Player(client);
+    const player = new Player(client, {
+        ytdlOptions: {
+            quality: "highestaudio",
+            highWaterMark: 1024 * 1024 * 10,
+            liveBuffer: 4000,
+            dlChunkSize: 0,
+            requestOptions: {
+                maxRetries: 5,
+                maxReconnects: 5,
+                headers: {
+                    cookie: process.env.YOUTUBE_COOKIE,
+                },
+            },
+        },
+    });
 
     onPlayer(player);
 
