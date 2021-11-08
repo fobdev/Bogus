@@ -1,8 +1,8 @@
 import { Command } from "../../interfaces";
 import { Response } from "../../models";
-import ms from "ms";
 import { MessageActionRow, MessageButton } from "discord.js";
 import { MessageOptions } from "discord.js";
+import ms from "ms";
 import botconfig from "../../botconfig.json";
 
 export const Queue: Command = {
@@ -16,6 +16,7 @@ export const Queue: Command = {
             const nextInQueue = listingQueue.tracks[0];
             const jsonQueue = listingQueue.toJSON();
             const titleMaxSize = 30;
+            const scrollSize = 6;
 
             let queueStringArray: Array<string> = [];
             jsonQueue.tracks.forEach((track, index) => {
@@ -40,95 +41,106 @@ export const Queue: Command = {
                     `Queue size: ${queueStringArray.length} tracks | Total queue time: ${ms(
                         listingQueue.totalTime,
                         { long: true }
-                    )}`
+                    )}\nThe buttons in this message will be removed in 30s if without interactions.`
                 )
                 .setThumbnail(nextInQueue.thumbnail)
                 .addField(
                     "Coming next:",
                     "```" + `[${nextInQueue.title}] - ${nextInQueue.duration}` + "```"
-                );
-
-            if (queueStringArray.length > 1)
-                responseQueue.addField(
-                    "Tracks:",
-                    "```md\n" + `${queueStringArray.slice(1, pageSize + page).join("\n")}` + "```"
+                )
+                .addField(
+                    "Tracks",
+                    "```\n" + `${queueStringArray.slice(1, pageSize + page).join("\n")}` + "```"
                 );
 
             let sendObject: MessageOptions = {
                 embeds: [responseQueue],
             };
 
-            const randPrev = Math.random();
-            const randNext = Math.random();
+            const prevButton = new MessageButton()
+                .setCustomId(Math.random().toString())
+                .setLabel("Scroll Up")
+                .setStyle("SECONDARY");
+
+            const nextButton = new MessageButton()
+                .setCustomId(Math.random().toString())
+                .setLabel("Scroll Down")
+                .setStyle("SECONDARY");
 
             if (queueStringArray.length > pageSize)
                 sendObject.components = [
-                    new MessageActionRow().addComponents(
-                        new MessageButton()
-                            .setCustomId(randPrev.toString())
-                            .setLabel("Scroll Up")
-                            .setStyle("SECONDARY"),
-                        new MessageButton()
-                            .setCustomId(randNext.toString())
-                            .setLabel("Scroll Down")
-                            .setStyle("SECONDARY")
-                    ),
+                    new MessageActionRow().addComponents(prevButton, nextButton),
                 ];
 
             return channel.send(sendObject).then((msg) => {
-                client.on("interactionCreate", async (interaction) => {
-                    if (interaction.isButton()) {
-                        switch (interaction.customId) {
-                            case randNext.toString():
-                                {
-                                    await interaction.deferUpdate();
-                                    if (page < 1 + queueStringArray.length / pageSize) page++;
-                                }
-                                break;
-                            case randPrev.toString():
-                                {
-                                    await interaction.deferUpdate();
-                                    if (page !== 0) page--;
-                                }
-                                break;
-                            default:
-                                return;
-                        }
+                const buttonsCollector = msg.channel.createMessageComponentCollector({
+                    filter: (i) =>
+                        (i.customId === prevButton.customId ||
+                            i.customId === nextButton.customId) &&
+                        i.user.id === message.author.id,
+                    idle: ms("30s"),
+                });
 
-                        let responseQueue = Response(
-                            `Queue of **${listingQueue.guild.name}**`,
-                            "",
-                            "OTHER",
-                            "PURPLE"
-                        )
-                            .setFooter(
-                                `Queue size: ${
-                                    queueStringArray.length
-                                } tracks | Total queue time: ${ms(
-                                    listingQueue.totalTime ? listingQueue.totalTime : 0,
-                                    {
-                                        long: true,
-                                    }
-                                )}`
-                            )
-                            .setThumbnail(nextInQueue.thumbnail)
-                            .addField(
-                                "Coming next:",
-                                "```" + `[${nextInQueue.title}] - ${nextInQueue.duration}` + "```"
-                            )
-                            .addField(
-                                "Tracks:",
-                                "```md\n" +
-                                    `${queueStringArray
-                                        .slice(1 + page * 5, pageSize + page * 5)
-                                        .join("\n")}` +
-                                    "```"
-                            );
+                buttonsCollector.on("end", () => {
+                    sendObject.components = [];
+                    sendObject.embeds![0].footer!.text = `Queue size: ${
+                        queueStringArray.length
+                    } tracks | Total queue time: ${ms(listingQueue.totalTime, { long: true })}`;
+                    msg.edit(sendObject);
+                });
 
-                        msg.edit({
-                            embeds: [responseQueue],
-                        });
+                buttonsCollector.on("collect", (interaction) => {
+                    interaction.deferUpdate();
+
+                    let slicedArray = queueStringArray.slice(
+                        page * scrollSize,
+                        pageSize + page * scrollSize
+                    );
+
+                    switch (interaction.customId) {
+                        case prevButton.customId:
+                            if (page !== 0) page--;
+                            break;
+                        case nextButton.customId:
+                            if (
+                                !slicedArray[slicedArray.length - 1].startsWith(
+                                    `[${queueStringArray.length}]`
+                                )
+                            )
+                                page++;
+                            break;
+                        default:
+                            return;
                     }
+
+                    msg.edit({
+                        embeds: [
+                            Response(
+                                responseQueue.title!,
+                                responseQueue.description!,
+                                "OTHER",
+                                "PURPLE"
+                            )
+                                .setThumbnail(responseQueue.thumbnail!.url)
+                                .addField(
+                                    responseQueue.fields[0]!.name,
+                                    responseQueue.fields[0]!.value
+                                )
+                                .addField(
+                                    responseQueue.fields[1]!.name,
+                                    "```\n" +
+                                        `${queueStringArray
+                                            .slice(
+                                                1 + page * scrollSize,
+                                                pageSize + page * scrollSize
+                                            )
+                                            .join("\n")}` +
+                                        "```"
+                                )
+                                .setFooter(responseQueue.footer?.text!),
+                        ],
+                        components: [new MessageActionRow().addComponents(prevButton, nextButton)],
+                    });
                 });
             });
         }
