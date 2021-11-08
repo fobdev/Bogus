@@ -59,8 +59,15 @@ export const Queue: Command = {
                 embeds: [responseQueue],
             };
 
-            const randPrev = Math.random();
-            const randNext = Math.random();
+            const prevButton = new MessageButton()
+                .setCustomId(Math.random().toString())
+                .setLabel("Scroll Up")
+                .setStyle("SECONDARY");
+
+            const nextButton = new MessageButton()
+                .setCustomId(Math.random().toString())
+                .setLabel("Scroll Down")
+                .setStyle("SECONDARY");
 
             if (queueStringArray.length > pageSize)
                 sendObject.components = [
