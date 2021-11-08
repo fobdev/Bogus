@@ -29,7 +29,7 @@ export const Queue: Command = {
             });
 
             const pageSize = 15;
-            let page = 1;
+            let page = 0;
             let responseQueue = Response(
                 `Queue of **${listingQueue.guild.name}**`,
                 "",
