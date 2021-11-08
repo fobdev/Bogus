@@ -47,12 +47,10 @@ export const Queue: Command = {
                 .addField(
                     "Coming next:",
                     "```" + `[${nextInQueue.title}] - ${nextInQueue.duration}` + "```"
-                );
-
-            if (queueStringArray.length > 1)
-                responseQueue.addField(
-                    "Tracks:",
-                    "```md\n" + `${queueStringArray.slice(1, pageSize + page).join("\n")}` + "```"
+                )
+                .addField(
+                    "Tracks",
+                    "```\n" + `${queueStringArray.slice(1, pageSize + page).join("\n")}` + "```"
                 );
 
             let sendObject: MessageOptions = {
