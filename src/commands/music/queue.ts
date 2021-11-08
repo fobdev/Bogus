@@ -71,16 +71,7 @@ export const Queue: Command = {
 
             if (queueStringArray.length > pageSize)
                 sendObject.components = [
-                    new MessageActionRow().addComponents(
-                        new MessageButton()
-                            .setCustomId(randPrev.toString())
-                            .setLabel("Scroll Up")
-                            .setStyle("SECONDARY"),
-                        new MessageButton()
-                            .setCustomId(randNext.toString())
-                            .setLabel("Scroll Down")
-                            .setStyle("SECONDARY")
-                    ),
+                    new MessageActionRow().addComponents(prevButton, nextButton),
                 ];
 
             return channel.send(sendObject).then((msg) => {
