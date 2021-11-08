@@ -16,6 +16,7 @@ export const Queue: Command = {
             const nextInQueue = listingQueue.tracks[0];
             const jsonQueue = listingQueue.toJSON();
             const titleMaxSize = 30;
+            const scrollSize = 6;
 
             let queueStringArray: Array<string> = [];
             jsonQueue.tracks.forEach((track, index) => {
@@ -76,9 +77,10 @@ export const Queue: Command = {
                 ];
 
             return channel.send(sendObject).then((msg) => {
-                client.on("interactionCreate", async (interaction) => {
-                    if (interaction.isButton()) {
-                        switch (interaction.customId) {
+                    let slicedArray = queueStringArray.slice(
+                        page * scrollSize,
+                        pageSize + page * scrollSize
+                    );
                             case randNext.toString():
                                 {
                                     await interaction.deferUpdate();
@@ -113,21 +115,17 @@ export const Queue: Command = {
                             )
                             .setThumbnail(nextInQueue.thumbnail)
                             .addField(
-                                "Coming next:",
-                                "```" + `[${nextInQueue.title}] - ${nextInQueue.duration}` + "```"
-                            )
-                            .addField(
-                                "Tracks:",
-                                "```md\n" +
-                                    `${queueStringArray
-                                        .slice(1 + page * 5, pageSize + page * 5)
-                                        .join("\n")}` +
-                                    "```"
-                            );
-
-                        msg.edit({
-                            embeds: [responseQueue],
-                        });
+                                .addField(
+                                    responseQueue.fields[1]!.name,
+                                    "```\n" +
+                                        `${queueStringArray
+                                            .slice(
+                                                1 + page * scrollSize,
+                                                pageSize + page * scrollSize
+                                            )
+                                            .join("\n")}` +
+                                        "```"
+                                )
                     }
                 });
             });
