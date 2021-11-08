@@ -78,7 +78,7 @@ export const onPlayer = async (player: Player) => {
 
     player.on("error", async (queue: Queue, error) => {
         // attempt to play again
-        console.error(error.message);
+        console.error(error);
 
         if (error.message.includes("403")) {
             // @ts-ignore
