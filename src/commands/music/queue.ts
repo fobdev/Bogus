@@ -41,7 +41,7 @@ export const Queue: Command = {
                     `Queue size: ${queueStringArray.length} tracks | Total queue time: ${ms(
                         listingQueue.totalTime,
                         { long: true }
-                    )}`
+                    )}\nThe buttons in this message will be removed in 30s if without interactions.`
                 )
                 .setThumbnail(nextInQueue.thumbnail)
                 .addField(
