@@ -10,3 +10,4 @@ export * from "./lyrics";
 export * from "./pause";
 export * from "./resume";
 export * from "./back";
+export * from "./purge";
