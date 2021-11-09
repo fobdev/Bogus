@@ -20,9 +20,6 @@ import { Player } from "discord-player";
             requestOptions: {
                 maxRetries: 5,
                 maxReconnects: 5,
-                headers: {
-                    cookie: process.env.YOUTUBE_COOKIE,
-                },
             },
         },
     });
