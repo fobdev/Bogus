@@ -22,7 +22,7 @@ export const PlayNext: Command = {
                 ],
             });
 
-        const userInput = args![0];
+        const userInput = args!.join(" ");
 
         const searchResult = await player!
             .search(userInput, { requestedBy: message.author })
