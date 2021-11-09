@@ -1,7 +1,6 @@
 import { Client, Intents } from "discord.js";
-import { onMessage, onReady } from "./events";
+import { onGuildCreate, onPlayer, onMessage, onReady } from "./events";
 import { Player } from "discord-player";
-import { onPlayer } from "./events/onPlayer";
 
 (async () => {
     const client = new Client({
@@ -32,6 +31,8 @@ import { onPlayer } from "./events/onPlayer";
 
     // calls when the client starts
     client.on("ready", async () => await onReady(client));
+
+    client.on("guildCreate", async (guild) => await onGuildCreate(client, guild));
 
     // calls when a new message is sent in any channel
     client.on("messageCreate", async (message) => await onMessage(client, player, message));
