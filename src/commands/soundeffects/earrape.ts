@@ -3,7 +3,7 @@ import { Response } from "../../models";
 
 export const Earrape: Command = {
     name: ["earrape", "er"],
-    description: "Toggles the earrape effect.",
+    description: "Toggles the earrape filter.",
     run: async (client, message, args, player) => {
         const { guild, channel } = message;
         const explodingQueue = player?.getQueue(guild!.id);
