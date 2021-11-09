@@ -92,7 +92,7 @@ export const onPlayer = async (player: Player) => {
                 ],
             });
 
-            return queue.play(queue.current);
+            return queue.destroy(true);
         }
     });
 
