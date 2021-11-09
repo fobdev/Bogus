@@ -9,6 +9,4 @@ export * from "./playnext";
 export * from "./lyrics";
 export * from "./pause";
 export * from "./resume";
-export * from "./bassboost";
-export * from "./earrape";
 export * from "./back";

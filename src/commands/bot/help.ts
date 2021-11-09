@@ -91,6 +91,7 @@ export const Help: Command = {
         await getCommandsFrom("bot", generatedResponse);
         await getCommandsFrom("user", generatedResponse);
         await getCommandsFrom("music", generatedResponse);
+        await getCommandsFrom("soundeffects", generatedResponse);
 
         return channel.send({
             embeds: [generatedResponse],
