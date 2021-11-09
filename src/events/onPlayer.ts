@@ -32,17 +32,17 @@ export const onPlayer = async (player: Player) => {
     });
 
     player.on("trackAdd", async (queue: Queue, track: Track) => {
-        const trackPosition = queue.getTrackPosition(track);
+        const trackPosition = queue.getTrackPosition(track) + 1;
 
         // @ts-ignore
         return await queue.metadata?.channel.send({
             embeds: [
                 Response(
                     `[${track.title}] added to the queue ${
-                        trackPosition === 0 ? `and playing next` : `at position [${trackPosition}]`
+                        trackPosition === 1 ? `and playing next` : `at position [${trackPosition}]`
                     }`,
                     `${
-                        trackPosition === 0
+                        trackPosition === 1
                             ? "You can use ``" +
                               `${botconfig.prefix}skip` +
                               "`` to play the track right now."
