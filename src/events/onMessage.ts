@@ -1,11 +1,17 @@
 import { Client, Message } from "discord.js";
 import { CommandList } from "../commands/_CommandList";
 import { Player } from "discord-player";
-import botconfig from "../botconfig.json";
+import { PoolClient as PostgresClient } from "pg";
+import { getPrefix } from "../db";
 let commandCount = 0;
 
-export const onMessage = async (client: Client, player: Player, message: Message) => {
-    const prefix = botconfig.prefix;
+export const onMessage = async (
+    client: Client,
+    player: Player,
+    postgres: PostgresClient,
+    message: Message
+) => {
+    const prefix = (await getPrefix(postgres, message.guild!)).rows[0][0];
 
     let { content } = message;
 
@@ -33,7 +39,7 @@ export const onMessage = async (client: Client, player: Player, message: Message
                 );
                 console.groupEnd();
 
-                return await Command.run(client, message, args, player);
+                return await Command.run(prefix, client, message, args, player, postgres);
             }
         });
     }
