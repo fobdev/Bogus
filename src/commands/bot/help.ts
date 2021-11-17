@@ -2,7 +2,6 @@ import { MessageEmbed } from "discord.js";
 import { Command } from "../../interfaces";
 import { Response } from "../../models";
 import { CommandList } from "../_CommandList";
-import botconfig from "../../botconfig.json";
 import fs from "fs";
 import util from "util";
 
@@ -32,7 +31,7 @@ export const Help: Command = {
     name: ["help"],
     arguments: ["?", "command"],
     description: "Display all the available commands.",
-    run: async (client, message, args) => {
+    run: async (prefix, client, message, args) => {
         let { channel } = message;
 
         if (args?.length! > 0)
@@ -42,22 +41,20 @@ export const Help: Command = {
                     Command.name.forEach((element) => {
                         if (Command.arguments?.length! > 0) {
                             if (Command.arguments!.find((opt) => opt === "?")) {
-                                finalString += "```" + `${botconfig.prefix}${element}\n` + "```";
+                                finalString += "```" + `${prefix}${element}\n` + "```";
 
                                 finalString +=
                                     "```" +
-                                    `${botconfig.prefix}${element} [${Command.arguments
+                                    `${prefix}${element} [${Command.arguments
                                         ?.slice(1)
                                         .join("], [")}]\n` +
                                     "```";
                             } else
                                 finalString +=
                                     "```" +
-                                    `${botconfig.prefix}${element} [${Command.arguments?.join(
-                                        "], ["
-                                    )}]\n` +
+                                    `${prefix}${element} [${Command.arguments?.join("], [")}]\n` +
                                     "```";
-                        } else finalString += "```" + `${botconfig.prefix}${element}\n` + "```";
+                        } else finalString += "```" + `${prefix}${element}\n` + "```";
                     });
                     return finalString;
                 };
@@ -78,12 +75,12 @@ export const Help: Command = {
             `${client.user?.username.toUpperCase()} Commands List (beta)`,
             `This is a complete list of all the commands available from ${client.user?.username}\n` +
                 "**Commands can be accessed using the prefix ``" +
-                botconfig.prefix +
+                prefix +
                 "``**",
             "SUCCESS"
         )
             .setFooter(
-                `You can also use ${botconfig.prefix}help [command] to see help from a specific command.`
+                `You can also use ${prefix}help [command] to see help from a specific command.`
             )
             .setThumbnail(client.user?.avatarURL({ size: 2048 })!);
 
