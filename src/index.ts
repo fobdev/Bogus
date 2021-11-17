@@ -1,9 +1,10 @@
-import { Client, Intents } from "discord.js";
+import { Client as DiscordClient, Intents } from "discord.js";
+import { Player as PlayerClient } from "discord-player";
+import { Pool } from "pg";
 import { onGuildCreate, onPlayer, onMessage, onReady } from "./events";
-import { Player } from "discord-player";
 
 (async () => {
-    const client = new Client({
+    const client = new DiscordClient({
         intents: [
             Intents.FLAGS.GUILDS,
             Intents.FLAGS.GUILD_MESSAGES,
@@ -11,7 +12,7 @@ import { Player } from "discord-player";
         ],
     });
 
-    const player = new Player(client, {
+    const player = new PlayerClient(client, {
         ytdlOptions: {
             quality: "highestaudio",
             highWaterMark: 1024 * 1024 * 10,
@@ -24,7 +25,14 @@ import { Player } from "discord-player";
         },
     });
 
-    onPlayer(player);
+    const pool = new Pool({
+        connectionString: process.env.DATABASE_URL,
+        ssl: { rejectUnauthorized: false },
+    });
+
+    const postgres = await pool.connect();
+
+    onPlayer(postgres, player);
 
     // calls when the client starts
     client.on("ready", async () => await onReady(client));
@@ -32,7 +40,10 @@ import { Player } from "discord-player";
     client.on("guildCreate", async (guild) => await onGuildCreate(client, guild));
 
     // calls when a new message is sent in any channel
-    client.on("messageCreate", async (message) => await onMessage(client, player, message));
+    client.on(
+        "messageCreate",
+        async (message) => await onMessage(client, player, postgres, message)
+    );
 
     await client.login(process.env.BOT_TOKEN);
 })();
