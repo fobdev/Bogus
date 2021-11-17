@@ -3,12 +3,11 @@ import { Response } from "../../models";
 import { MessageActionRow, MessageButton } from "discord.js";
 import { MessageOptions } from "discord.js";
 import ms from "ms";
-import botconfig from "../../botconfig.json";
 
 export const Queue: Command = {
     name: ["queue", "q"],
     description: "Display all the current tracks in the server queue.",
-    run: async (client, message, args, player) => {
+    run: async (prefix, client, message, args, player) => {
         const { guild, channel } = message;
 
         const listingQueue = player?.getQueue(guild!.id);
@@ -149,7 +148,7 @@ export const Queue: Command = {
                 Response(
                     "No queue in the server",
                     "Try using``" +
-                        botconfig.prefix +
+                        prefix +
                         "play`` with a Spotify or Youtube playlist to create a queue for this server.",
                     "WARN"
                 ),

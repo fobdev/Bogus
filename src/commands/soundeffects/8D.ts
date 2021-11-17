@@ -4,7 +4,7 @@ import { Response } from "../../models";
 export const EightD: Command = {
     name: ["8d"],
     description: "Toggles the vaporwave filter.",
-    run: async (client, message, args, player) => {
+    run: async (prefix, client, message, args, player) => {
         const { guild, channel } = message;
         const karaokingQueue = player?.getQueue(guild!.id);
 

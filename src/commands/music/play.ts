@@ -7,7 +7,7 @@ export const Play: Command = {
     arguments: ["search", "Youtube / Spotify / SoundCloud"],
     description:
         "Search for a track or playlist and then play it. Can be used with Spotify, YouTube and SoundCloud.",
-    run: async (client, message, args, player) => {
+    run: async (prefix, client, message, args, player) => {
         const { channel, member, guild } = message;
 
         // Check if user is in the same voice channel as the bot

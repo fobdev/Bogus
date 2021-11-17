@@ -1,9 +1,8 @@
 import { Client } from "discord.js";
-import botconfig from "../botconfig.json";
 
 export const onReady = async (client: Client) => {
     const guilds = client.guilds.cache;
-    client.user?.setActivity(`${botconfig.prefix}help @ ${guilds.size} servers`, {
+    client.user?.setActivity(`>help @ ${guilds.size} servers`, {
         type: "LISTENING",
     });
 

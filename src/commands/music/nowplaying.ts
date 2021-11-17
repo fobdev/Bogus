@@ -1,11 +1,10 @@
 import { Command } from "../../interfaces";
 import { Response } from "../../models";
-import botconfig from "../../botconfig.json";
 
 export const NowPlaying: Command = {
     name: ["nowplaying", "np"],
     description: "Display the currently playing track.",
-    run: async (client, message, args, player) => {
+    run: async (prefix, client, message, args, player) => {
         const { guild, channel } = message;
         const nowPlayingQueue = player?.getQueue(guild!.id);
 
@@ -15,7 +14,7 @@ export const NowPlaying: Command = {
                     Response(
                         "Nothing is playing at the moment.",
                         "Use ``" +
-                            `${botconfig.prefix}play [link/playlist]` +
+                            `${prefix}play [link/playlist]` +
                             "`` to start playing something.",
                         "WARN"
                     ),

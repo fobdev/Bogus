@@ -4,7 +4,7 @@ import { Response } from "../../models";
 export const Vibrato: Command = {
     name: ["vibrato", "vb"],
     description: "Toggles the earrape filter.",
-    run: async (client, message, args, player) => {
+    run: async (prefix, client, message, args, player) => {
         const { guild, channel } = message;
         const vibratingQueue = player?.getQueue(guild!.id);
 

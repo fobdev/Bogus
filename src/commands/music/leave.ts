@@ -4,7 +4,7 @@ import { Response } from "../../models";
 export const Leave: Command = {
     name: ["leave", "l"],
     description: "Leaves the voice channel and delete the server queue.",
-    run: async (client, message, args, player) => {
+    run: async (prefix, client, message, args, player) => {
         const { channel, guild } = message;
 
         const leavingQueue = player?.getQueue(guild!.id);

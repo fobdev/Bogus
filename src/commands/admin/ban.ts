@@ -6,7 +6,7 @@ export const Ban: Command = {
     name: ["ban"],
     arguments: ["member"],
     description: "Bans a user from the server",
-    run: async (client, message, args) => {
+    run: async (prefix, client, message, args) => {
         let { channel, author, member, mentions } = message;
 
         if (!member?.permissions.has("BAN_MEMBERS")) {

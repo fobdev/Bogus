@@ -5,7 +5,7 @@ export const Skip: Command = {
     name: ["skip", "s"],
     arguments: ["?", "amount"],
     description: "Skip the current track to the next track or to a specific track in the queue.",
-    run: async (client, message, args, player) => {
+    run: async (prefix, client, message, args, player) => {
         const { guild, channel } = message;
         const skippingQueue = player?.getQueue(guild!.id);
         if (!skippingQueue)

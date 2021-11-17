@@ -4,7 +4,7 @@ import { Response } from "../../models";
 export const Vaporwave: Command = {
     name: ["vaporwave", "vw"],
     description: "Toggles the vaporwave filter.",
-    run: async (client, message, args, player) => {
+    run: async (prefix, client, message, args, player) => {
         const { guild, channel } = message;
         const vaporingQueue = player?.getQueue(guild!.id);
 

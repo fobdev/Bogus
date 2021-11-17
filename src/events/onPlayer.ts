@@ -1,9 +1,9 @@
 import { Player, Queue, Track } from "discord-player";
-import { Channel, Emoji, Message, MessageActionRow, MessageButton } from "discord.js";
+import { getPrefix } from "../db";
 import { Response } from "../models";
-import botconfig from "../botconfig.json";
+import { PoolClient } from "pg";
 
-export const onPlayer = async (player: Player) => {
+export const onPlayer = async (postgres: PoolClient, player: Player) => {
     player.on("trackStart", async (queue, track) => {
         const responseEmbed = Response(
             `:musical_note: Now Playing: **${track.title}**`,
@@ -32,6 +32,7 @@ export const onPlayer = async (player: Player) => {
     });
 
     player.on("trackAdd", async (queue: Queue, track: Track) => {
+        const prefix = getPrefix(postgres, queue.guild);
         const trackPosition = queue.getTrackPosition(track) + 1;
 
         // @ts-ignore
@@ -43,11 +44,9 @@ export const onPlayer = async (player: Player) => {
                     }`,
                     `${
                         trackPosition === 1
-                            ? "You can use ``" +
-                              `${botconfig.prefix}skip` +
-                              "`` to play the track right now."
+                            ? "You can use ``" + `${prefix}skip` + "`` to play the track right now."
                             : "You can use ``" +
-                              `${botconfig.prefix}jump ${trackPosition}` +
+                              `${prefix}jump ${trackPosition}` +
                               "`` to play the track right now."
                     }`,
                     "OTHER",
@@ -61,12 +60,14 @@ export const onPlayer = async (player: Player) => {
     });
 
     player.on("tracksAdd", async (queue, tracks) => {
+        const prefix = getPrefix(postgres, queue.guild);
+
         // @ts-ignore
         return await queue.metadata?.channel.send({
             embeds: [
                 Response(
                     `${tracks.length} tracks added to the queue.`,
-                    "Use ``" + `${botconfig.prefix}queue` + "`` to see the result.",
+                    "Use ``" + `${prefix}queue` + "`` to see the result.",
                     "OTHER",
                     "PURPLE"
                 )

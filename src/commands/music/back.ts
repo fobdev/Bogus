@@ -4,7 +4,7 @@ import { Response } from "../../models";
 export const Back: Command = {
     name: ["back"],
     description: "Play the last played track again.",
-    run: async (client, message, args, player) => {
+    run: async (prefix, client, message, args, player) => {
         const { guild, channel } = message;
         const backingQueue = player?.getQueue(guild!.id);
 

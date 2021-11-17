@@ -1,11 +1,10 @@
-import { PlayerSubscription } from "@discordjs/voice";
 import { Command } from "../../interfaces";
 import { Response } from "../../models";
 
 export const Resume: Command = {
     name: ["resume"],
     description: "Resumes a paused track.",
-    run: async (client, message, args, player) => {
+    run: async (prefix, client, message, args, player) => {
         const { guild, channel } = message;
         const resumingQueue = player?.getQueue(guild!.id);
 

@@ -4,7 +4,7 @@ import { Response } from "../../models";
 export const Boost: Command = {
     name: ["bassboost", "bb"],
     description: "Toggle the bassboost filter",
-    run: async (client, message, args, player) => {
+    run: async (prefix, client, message, args, player) => {
         const { guild, channel } = message;
         const boostingQueue = player?.getQueue(guild!.id);
 

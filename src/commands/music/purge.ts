@@ -4,7 +4,7 @@ import { Response } from "../../models";
 export const Purge: Command = {
     name: ["purge", "pg"],
     description: "Purges the current queue.",
-    run: async (client, message, args, player) => {
+    run: async (prefix, client, message, args, player) => {
         const { guild, channel } = message;
         const purgingQueue = player?.getQueue(guild!.id);
 

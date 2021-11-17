@@ -3,13 +3,12 @@ import { Response } from "../../models";
 import { Lyrics } from "@discord-player/extractor";
 import { Util } from "discord.js";
 import { Queue } from "../../../node_modules/discord-player/dist";
-import botconfig from "../../botconfig.json";
 
 export const Lyric: Command = {
     name: ["lyrics", "ly"],
     arguments: ["?", "search"],
     description: "Display the lyrics of the current song, or search for the lyrics of a song.",
-    run: async (client, message, args, player) => {
+    run: async (prefix, client, message, args, player) => {
         const { guild, channel } = message;
         const lyricsClient = Lyrics.init();
         const singingQueue = player?.getQueue(guild!.id);
@@ -24,7 +23,7 @@ export const Lyric: Command = {
                         "PURPLE"
                     )
                         .setFooter(
-                            `If this was not what you're looking for, try using ${botconfig.prefix}lyrics [search]`
+                            `If this was not what you're looking for, try using ${prefix}lyrics [search]`
                         )
                         .setThumbnail(search.thumbnail),
                 ],
@@ -62,7 +61,7 @@ export const Lyric: Command = {
                                 `You request could not find any lyrics.`,
                                 "WARN"
                             ).setFooter(
-                                `You can also use ${botconfig.prefix}lyrics [search] to search for a specific song.`
+                                `You can also use ${prefix}lyrics [search] to search for a specific song.`
                             ),
                         ],
                     });
@@ -87,7 +86,7 @@ export const Lyric: Command = {
                                 )
                                     .setThumbnail(search.thumbnail)
                                     .setFooter(
-                                        `If this was not what you're looking for, try using ${botconfig.prefix}lyrics [search]`
+                                        `If this was not what you're looking for, try using ${prefix}lyrics [search]`
                                     ),
                             ],
                         });
@@ -103,7 +102,7 @@ export const Lyric: Command = {
                                 `You request could not find any lyrics.`,
                                 "WARN"
                             ).setFooter(
-                                `You can also use ${botconfig.prefix}lyrics [search] to search for a specific song.`
+                                `You can also use ${prefix}lyrics [search] to search for a specific song.`
                             ),
                         ],
                     });

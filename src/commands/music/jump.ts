@@ -1,12 +1,11 @@
 import { Command } from "../../interfaces";
 import { Response } from "../../models";
-import botconfig from "../../botconfig.json";
 
 export const Jump: Command = {
     name: ["jump", "j"],
     arguments: ["number"],
     description: "Jump to a specific track in the queue",
-    run: async (client, message, args, player) => {
+    run: async (prefix, client, message, args, player) => {
         const { guild, channel } = message;
 
         let jumpingQueue = player?.getQueue(guild!.id);
@@ -17,7 +16,7 @@ export const Jump: Command = {
                     Response(
                         "No queue in the server",
                         "Try using``" +
-                            botconfig.prefix +
+                            prefix +
                             "play`` with a Spotify or Youtube playlist to create a queue for this server.",
                         "WARN"
                     ),

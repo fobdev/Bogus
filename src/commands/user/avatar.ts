@@ -5,7 +5,7 @@ export const Avatar: Command = {
     name: ["avatar", "pfp"],
     arguments: ["?", "user"],
     description: "Display the user or the mentioned user avatar.",
-    run: async (client, message, args) => {
+    run: async (prefix, client, message, args) => {
         const { channel, author } = message;
         let mentioned = message.mentions.members?.first();
 

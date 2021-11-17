@@ -6,7 +6,7 @@ export const Kick: Command = {
     name: ["kick"],
     arguments: ["member"],
     description: "Kick a user from the server.",
-    run: async (client, message) => {
+    run: async (prefix, client, message) => {
         let { channel, author, member } = message;
         if (!member?.permissions.has("KICK_MEMBERS")) {
             return channel.send({

@@ -1,11 +1,10 @@
 import { Command } from "../../interfaces";
 import { Response } from "../../models";
-import botconfig from "../../botconfig.json";
 
 export const Invite: Command = {
     name: ["invite"],
     description: "Generate a invite URL for the bot",
-    run: async (client, message, args) => {
+    run: async (prefix, client, message, args) => {
         let { channel } = message;
 
         let res = (link: string) =>
@@ -34,7 +33,7 @@ export const Invite: Command = {
                     ).addField(
                         "By adding me via this link, I will have Administrator Permissions.",
                         "```" +
-                            `${botconfig.prefix}invite simple` +
+                            `${prefix}invite simple` +
                             "```" +
                             " For a link without Admin permissions."
                     ),

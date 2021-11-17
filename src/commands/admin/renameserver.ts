@@ -7,7 +7,7 @@ export const RenameServer: Command = {
     name: ["renameserver", "rs"],
     arguments: ["new name"],
     description: "Renames the server (admin only).",
-    run: async (client, message, args) => {
+    run: async (prefix, client, message, args) => {
         let { member, author, guild, channel } = message;
         if (!member?.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) {
             return channel.send({

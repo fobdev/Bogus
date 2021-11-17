@@ -1,11 +1,10 @@
 import { Command } from "../../interfaces";
 import { Response } from "../../models";
-import botconfig from "../../botconfig.json";
 
 export const PlayNext: Command = {
     name: ["playnext", "pn"],
     description: "Search a track and play it as the next track in the queue.",
-    run: async (client, message, args, player) => {
+    run: async (prefix, client, message, args, player) => {
         const { guild, channel } = message;
         const insertingQueue = player?.getQueue(guild!.id);
 
@@ -15,7 +14,7 @@ export const PlayNext: Command = {
                     Response(
                         `Please first create a queue before using this command.`,
                         "You can create a queue using ``" +
-                            `${botconfig.prefix}play [Youtube / Spotify playlist or video]` +
+                            `${prefix}play [Youtube / Spotify playlist or video]` +
                             "``",
                         "FAIL"
                     ),

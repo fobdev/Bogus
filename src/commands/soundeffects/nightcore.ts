@@ -4,7 +4,7 @@ import { Response } from "../../models";
 export const Nightcore: Command = {
     name: ["nightcore", "nc"],
     description: "Toggles the nightcore filter.",
-    run: async (client, message, args, player) => {
+    run: async (prefix, client, message, args, player) => {
         const { guild, channel } = message;
         const squeakingQueue = player?.getQueue(guild!.id);
 
