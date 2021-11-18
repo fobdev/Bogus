@@ -39,6 +39,7 @@ const writeAndDelete = (
 
 export const Couple: Command = {
     name: ["couple"],
+    arguments: ["user 1", "user 1] [user 2"],
     description: "Connect the profile picture of two users.",
     run: async (prefix, client, message, args) => {
         const { channel, author, mentions } = message;
