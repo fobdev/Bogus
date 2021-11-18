@@ -1,6 +1,14 @@
 import { Guild } from "discord.js";
 import { PoolClient as PostgresClient } from "pg";
 
+export const createGuild = (postgres: PostgresClient, guild: Guild) => {
+    return postgres.query(`INSERT INTO guilds(id, prefix, locale) VALUES (${guild.id}, '>', 'en')`);
+};
+
+export const deleteGuild = (postgres: PostgresClient, guild: Guild) => {
+    return postgres.query(`DELETE FROM guilds WHERE id=${guild.id}`);
+};
+
 export const getPrefix = (postgres: PostgresClient, guild: Guild) => {
     return postgres.query({
         rowMode: "array",
