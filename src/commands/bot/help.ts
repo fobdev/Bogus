@@ -2,11 +2,9 @@ import { MessageEmbed } from "discord.js";
 import { Command } from "../../interfaces";
 import { Response } from "../../models";
 import { CommandList } from "../_CommandList";
-import fs from "fs";
-import util from "util";
+import { readdir } from "fs/promises";
 
 // FS to get the outside dependencies
-const readdir = util.promisify(fs.readdir);
 const getCommandsFrom = async (folder: string, embed: MessageEmbed) => {
     let commandsArray: Array<string> = [];
 
