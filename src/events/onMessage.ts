@@ -11,14 +11,18 @@ export const onMessage = async (
     postgres: PostgresClient,
     message: Message
 ) => {
+    let { content, author, channel } = message;
+
     const prefix = (await getPrefix(postgres, message.guild!)).rows[0][0];
 
-    let { content } = message;
+    // prefix help for when forgetting it
+    if (prefix !== ">" && content.startsWith(">prefix"))
+        await channel.send(`The prefix for this server is [**${prefix}**]`);
 
     const args = content.split(" ").slice(1);
 
-    if (!message.content.startsWith(prefix)) return;
-    if (message.author.bot) return;
+    if (!content.startsWith(prefix)) return;
+    if (author.bot) return;
 
     for (const Command of CommandList) {
         Command.name.forEach(async (element) => {
