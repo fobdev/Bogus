@@ -8,7 +8,6 @@ export const Prefix: Command = {
     description: "Changes the bot prefix for this server.",
     run: async (prefix, client, message, args, player, postgres) => {
         const { member, channel, guild } = message;
-
         if (!member?.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) {
             return channel.send({
                 embeds: [
@@ -37,7 +36,7 @@ export const Prefix: Command = {
             embeds: [
                 Response(
                     `${guild?.name} prefix changed.`,
-                    `The new prefix of the guild is now ${args![0]}`,
+                    `The new prefix of the server is [**${args![0]}**]`,
                     "SUCCESS"
                 ),
             ],
