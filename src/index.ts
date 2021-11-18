@@ -1,7 +1,7 @@
 import { Client as DiscordClient, Intents } from "discord.js";
 import { Player as PlayerClient } from "discord-player";
 import { Pool } from "pg";
-import { onGuildCreate, onPlayer, onMessage, onReady } from "./events";
+import { onGuildDelete, onGuildCreate, onPlayer, onMessage, onReady } from "./events";
 
 (async () => {
     const client = new DiscordClient({
@@ -37,7 +37,9 @@ import { onGuildCreate, onPlayer, onMessage, onReady } from "./events";
     // calls when the client starts
     client.on("ready", async () => await onReady(client));
 
-    client.on("guildCreate", async (guild) => await onGuildCreate(client, guild));
+    client.on("guildCreate", async (guild) => await onGuildCreate(client, postgres, guild));
+
+    client.on("guildDelete", async (guild) => await onGuildDelete(client, postgres, guild));
 
     // calls when a new message is sent in any channel
     client.on(
