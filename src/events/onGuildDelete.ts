@@ -10,8 +10,11 @@ export const onGuildDelete = async (
     const guilds = client.guilds.cache;
 
     await deleteGuild(postgres, guild);
-
     console.log(`${guild.name} removed from the database.`);
+
+    client.user?.setActivity(`>help @ ${guilds.size} servers`, {
+        type: "LISTENING",
+    });
 
     return console.table(guilds.map((guild) => guild.name));
 };
