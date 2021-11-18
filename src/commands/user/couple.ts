@@ -1,8 +1,41 @@
 import { Command } from "../../interfaces";
 import { Response } from "../../models/";
-import { MessageAttachment } from "discord.js";
+import {
+    DMChannel,
+    MessageAttachment,
+    NewsChannel,
+    PartialDMChannel,
+    TextChannel,
+    ThreadChannel,
+    User,
+} from "discord.js";
 import { unlink } from "fs/promises";
 import mergeimg from "merge-img";
+
+const writeAndDelete = (
+    channel: TextChannel | PartialDMChannel | DMChannel | NewsChannel | ThreadChannel,
+    image: any,
+    filename: string,
+    user1: User | undefined,
+    user2: User | undefined
+) => {
+    image.write(filename, async () => {
+        // write
+        await channel.send({
+            embeds: [
+                Response(`${user1!.username} :heart: ${user2!.username}`, "", "SUCCESS").setImage(
+                    `attachment://${filename}`
+                ),
+            ],
+            files: [new MessageAttachment(`./${filename}`)],
+        });
+
+        // delete
+        return unlink(`./${filename}`).catch((err) => {
+            if (err) return console.log(`[FILE ERROR] Error in deleting file ${filename}: ${err}`);
+        });
+    });
+};
 
 export const Couple: Command = {
     name: ["couple"],
@@ -11,44 +44,32 @@ export const Couple: Command = {
         const { channel, author, mentions } = message;
         const fname = `couple_${message.id}.png`;
 
-        const user1 = mentions.members?.first();
-        const user2 = mentions.members?.last();
-
-        if (!user1 && !user2)
+        if (!args![0])
             return channel.send({
                 embeds: [Response("Error", "Please quote at least one user.", "FAIL")],
             });
 
+        const user1 = mentions.members?.toJSON()[0];
+        const user2 = mentions.members?.toJSON()[1];
+
+        if (!user2)
+            try {
+                return await mergeimg([
+                    author.displayAvatarURL({ format: "jpg", size: 256 }),
+                    user1!.displayAvatarURL({ format: "jpg", size: 256 }),
+                ]).then((img) => {
+                    writeAndDelete(channel, img, fname, author, user1?.user);
+                });
+            } catch (error) {
+                console.error(error);
+            }
+
         try {
-            await mergeimg([
+            return await mergeimg([
                 user1!.displayAvatarURL({ format: "jpg", size: 256 }),
                 user2!.displayAvatarURL({ format: "jpg", size: 256 }),
             ]).then(async (img) => {
-                console.log(
-                    `[FILE CREATE] Couple image generated sucessfully as [${fname}] locally.`
-                );
-
-                img.write(fname, async () => {
-                    // write
-                    await channel.send({
-                        embeds: [
-                            Response(
-                                `${user1?.displayName} :heart: ${user2?.displayName}`,
-                                "",
-                                "SUCCESS"
-                            ).setImage(`attachment://${fname}`),
-                        ],
-                        files: [new MessageAttachment(`./${fname}`)],
-                    });
-
-                    // delete
-                    return unlink(`./${fname}`).catch((err) => {
-                        if (err)
-                            return console.log(
-                                `[FILE ERROR] Error in deleting file ${fname}: ${err}`
-                            );
-                    });
-                });
+                writeAndDelete(channel, img, fname, user1?.user, user2?.user);
             });
         } catch (error) {
             console.error(error);
