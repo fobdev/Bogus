@@ -42,61 +42,72 @@ export const ImageSearch: Command = {
                 return;
             }
 
-            const sendObject: MessageOptions = {
-                components: [new MessageActionRow().addComponents(prevButton, nextButton)],
-                embeds: [
-                    Response(
-                        `Results for ${args?.join(" ")} ( ${iterator + 1} / ${images.length} )`,
-                        "",
-                        "SUCCESS"
-                    ).setImage(images[iterator].url),
-                ],
-            };
+            return channel
+                .send({
+                    components: [new MessageActionRow().addComponents(prevButton, nextButton)],
+                    embeds: [
+                        Response(
+                            `Results for ${args?.join(" ")} ( ${iterator + 1} / ${images.length} )`,
+                            "",
+                            "SUCCESS"
+                        ).setImage(images[iterator].url),
+                    ],
+                })
+                .then((msg) => {
+                    const buttonsCollector = msg.channel.createMessageComponentCollector({
+                        filter: (i) =>
+                            (i.customId === prevButton.customId ||
+                                i.customId === nextButton.customId) &&
+                            i.user.id === message.author.id,
+                        idle: ms("30s"),
+                    });
 
-            return channel.send(sendObject).then((msg) => {
-                const buttonsCollector = msg.channel.createMessageComponentCollector({
-                    filter: (i) =>
-                        (i.customId === prevButton.customId ||
-                            i.customId === nextButton.customId) &&
-                        i.user.id === message.author.id,
-                    idle: ms("30s"),
-                });
+                    buttonsCollector.on("end", () => {
+                        msg.edit({
+                            embeds: [
+                                Response(
+                                    `Results for ${args?.join(" ")} ( ${iterator + 1} / ${
+                                        images.length
+                                    } )`,
+                                    "",
+                                    "SUCCESS"
+                                ).setImage(images[iterator].url),
+                            ],
+                        });
+                    });
 
-                buttonsCollector.on("end", () => {
-                    sendObject.components = [];
-                    msg.edit(sendObject);
-                });
+                    buttonsCollector.on("collect", (interaction) => {
+                        interaction.deferUpdate();
 
-                buttonsCollector.on("collect", (interaction) => {
-                    interaction.deferUpdate();
+                        switch (interaction.customId) {
+                            case prevButton.customId:
+                                iterator--;
+                                if (iterator < 0) iterator = images.length - 1;
+                                break;
+                            case nextButton.customId:
+                                iterator++;
+                                if (iterator > images.length - 1) iterator = 0;
+                                break;
+                            default:
+                                return;
+                        }
 
-                    switch (interaction.customId) {
-                        case prevButton.customId:
-                            iterator--;
-                            if (iterator < 0) iterator = images.length - 1;
-                            break;
-                        case nextButton.customId:
-                            iterator++;
-                            if (iterator > images.length - 1) iterator = 0;
-                            break;
-                        default:
-                            return;
-                    }
-
-                    msg.edit({
-                        components: [new MessageActionRow().addComponents(prevButton, nextButton)],
-                        embeds: [
-                            Response(
-                                `Results for ${args?.join(" ")} ( ${iterator + 1} / ${
-                                    images.length
-                                } )`,
-                                "",
-                                "SUCCESS"
-                            ).setImage(images[iterator].url),
-                        ],
+                        msg.edit({
+                            components: [
+                                new MessageActionRow().addComponents(prevButton, nextButton),
+                            ],
+                            embeds: [
+                                Response(
+                                    `Results for ${args?.join(" ")} ( ${iterator + 1} / ${
+                                        images.length
+                                    } )`,
+                                    "",
+                                    "SUCCESS"
+                                ).setImage(images[iterator].url),
+                            ],
+                        });
                     });
                 });
-            });
         });
     },
 };
