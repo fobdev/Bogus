@@ -85,6 +85,7 @@ export const Help: Command = {
         await getCommandsFrom("admin", generatedResponse);
         await getCommandsFrom("bot", generatedResponse);
         await getCommandsFrom("user", generatedResponse);
+        await getCommandsFrom("fun", generatedResponse);
         await getCommandsFrom("music", generatedResponse);
         await getCommandsFrom("soundeffects", generatedResponse);
 

@@ -3,6 +3,7 @@ import { forEach } from "lodash";
 
 import * as AdminCommands from "./admin";
 import * as BotCommands from "./bot";
+import * as FunCommands from "./fun";
 import * as MusicCommands from "./music";
 import * as UserCommands from "./user";
 import * as SoundEffectsCommands from "./soundeffects";
@@ -22,6 +23,7 @@ export const CommandList: Array<Command> = [];
 (async () => {
     CommandList.push(...getCollection(AdminCommands));
     CommandList.push(...getCollection(BotCommands));
+    CommandList.push(...getCollection(FunCommands));
     CommandList.push(...getCollection(MusicCommands));
     CommandList.push(...getCollection(UserCommands));
     CommandList.push(...getCollection(SoundEffectsCommands));
