@@ -11,7 +11,8 @@ export const onMessage = async (
     postgres: PostgresClient,
     message: Message
 ) => {
-    let { content, author, channel } = message;
+    let { author, channel } = message;
+    const content = message.content.toLowerCase();
 
     const prefix = (await getPrefix(postgres, message.guild!)).rows[0][0];
 
