@@ -53,8 +53,8 @@ export const Meme: Command = {
 
         ctx.drawImage(image, 0, 0, width, height);
 
-        await Canvas.registerFont("./Impact.ttf", { family: "Sans-Serif" });
-        await Canvas.registerFont("./NotoSansJP-Bold.otf", { family: "Sans-Serif" });
+        await Canvas.registerFont("./src/fonts/Impact.ttf", { family: "Sans-Serif" });
+        await Canvas.registerFont("./src/fonts/NotoSansJP-Bold.otf", { family: "Sans-Serif" });
 
         ctx.font = `bold ${width! / 10}px ${input.match(japanese) ? "NotoSansJP-Bold" : "Impact"}`;
         ctx.textAlign = "center";
