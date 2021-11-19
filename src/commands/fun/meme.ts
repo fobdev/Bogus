@@ -32,9 +32,7 @@ export const Meme: Command = {
 
         ctx.drawImage(image, 0, 0, width, height);
 
-        ctx.font = "bold 150px Impact";
-        if (ctx.measureText(input).width > width) ctx.font = "bold 100px Impact";
-
+        ctx.font = `bold ${width / 10}px Impact`;
         ctx.textAlign = "center";
 
         // Top Text
