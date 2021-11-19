@@ -1,6 +1,7 @@
 import { Command } from "../../interfaces";
 import { Response } from "../../models";
 import { Queue } from "discord-player";
+import playdl from "play-dl";
 
 export const Play: Command = {
     name: ["play", "p"],
