@@ -1,7 +1,7 @@
 import { Command } from "../../interfaces";
 import { Response } from "../../models";
-import { Queue } from "discord-player";
-import playdl from "play-dl";
+import { QueryType, Queue } from "discord-player";
+import * as playdl from "play-dl";
 
 export const Play: Command = {
     name: ["play", "p"],
@@ -32,9 +32,12 @@ export const Play: Command = {
 
         // Video Search
         const searchResult = await player!
-            .search(userInput, { requestedBy: message.author })
+            .search(userInput, {
+                requestedBy: message.author,
+            })
             .catch((e) => console.error("Search error:", e));
 
+        console.log(searchResult);
         if (!searchResult || !searchResult.tracks.length)
             return channel.send({
                 embeds: [Response("Search error", "Sorry, nothing was found", "FAIL")],
@@ -44,6 +47,9 @@ export const Play: Command = {
         const queue: Queue = player!.createQueue(guild!, {
             metadata: {
                 channel: channel,
+            },
+            async onBeforeCreateStream(track, source, _queue) {
+                return (await playdl.stream(track.url)).stream;
             },
         });
 
