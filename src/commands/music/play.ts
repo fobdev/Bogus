@@ -1,6 +1,6 @@
 import { Command } from "../../interfaces";
 import { Response } from "../../models";
-import { QueryType, Queue } from "discord-player";
+import { Queue } from "discord-player";
 import * as playdl from "play-dl";
 
 export const Play: Command = {
@@ -37,7 +37,6 @@ export const Play: Command = {
             })
             .catch((e) => console.error("Search error:", e));
 
-        console.log(searchResult);
         if (!searchResult || !searchResult.tracks.length)
             return channel.send({
                 embeds: [Response("Search error", "Sorry, nothing was found", "FAIL")],
