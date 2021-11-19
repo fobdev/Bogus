@@ -1,3 +1,4 @@
+import { MessageAttachment } from "discord.js";
 import { Command } from "../../interfaces";
 import { Response } from "../../models";
 
@@ -9,20 +10,17 @@ export const Avatar: Command = {
         const { channel, author } = message;
         let mentioned = message.mentions.members?.first();
 
-        if (!mentioned)
+        if (!mentioned) {
             return channel.send({
-                embeds: [
-                    Response(`Avatar of ${author.tag}`, "", "SUCCESS").setImage(
-                        author.displayAvatarURL({ size: 2048 })
-                    ),
+                files: [
+                    new MessageAttachment(author.displayAvatarURL({ size: 2048, format: "gif" })),
                 ],
             });
+        }
 
         return channel.send({
-            embeds: [
-                Response(`Avatar of ${mentioned.user.tag}`, "", "SUCCESS").setImage(
-                    mentioned.displayAvatarURL({ size: 2048 })
-                ),
+            files: [
+                new MessageAttachment(mentioned.displayAvatarURL({ size: 2048, format: "gif" })),
             ],
         });
     },
