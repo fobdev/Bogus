@@ -6,6 +6,7 @@ import ms from "ms";
 
 export const ImageSearch: Command = {
     name: ["image"],
+    arguments: ["query"],
     description: "Search for images using the Google API",
     run: async (prefix, client, message, args) => {
         const { channel } = message;
