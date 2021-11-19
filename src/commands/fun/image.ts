@@ -73,6 +73,7 @@ export const ImageSearch: Command = {
                                     "SUCCESS"
                                 ).setImage(images[iterator].url),
                             ],
+                            components: [],
                         });
                     });
 
