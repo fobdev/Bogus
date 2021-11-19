@@ -25,9 +25,12 @@ export const Meme: Command = {
         const width = attachment.map((element) => element.width)[0]!;
         const height = attachment.map((element) => element.height)[0]!;
 
+        const japanese: RegExp =
+            /[\u3000-\u303f\u3040-\u309f\u30a0-\u30ff\uff00-\uff9f\u4e00-\u9faf\u3400-\u4dbf]/;
+
         const canvas = createCanvas(width, height);
         const ctx = canvas.getContext("2d");
-        await Canvas.registerFont("./Impact.ttf", { family: "Sans-Serif" });
+
         let image;
 
         try {
@@ -40,7 +43,10 @@ export const Meme: Command = {
 
         ctx.drawImage(image, 0, 0, width, height);
 
-        ctx.font = `bold ${width / 10}px Impact`;
+        await Canvas.registerFont("./Impact.ttf", { family: "Sans-Serif" });
+        await Canvas.registerFont("./NotoSansJP-Bold.otf", { family: "Sans-Serif" });
+
+        ctx.font = `bold ${width / 10}px ${input.match(japanese) ? "NotoSansJP-Bold" : "Impact"}`;
         ctx.textAlign = "center";
 
         // Top Text
