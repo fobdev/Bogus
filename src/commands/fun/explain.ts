@@ -26,6 +26,7 @@ export const Explain: Command = {
         await Jimp.read(source)
             .then((image) => {
                 loadedImage = image;
+                if (caption!.length > 150) return Jimp.loadFont(Jimp.FONT_SANS_64_BLACK);
                 return Jimp.loadFont(Jimp.FONT_SANS_128_BLACK);
             })
             .then((font) => {
@@ -44,7 +45,6 @@ export const Explain: Command = {
 
                 return loadedImage.print(font, 100, 50, caption, 1200);
             })
-
             .then((image) => {
                 return image.write(outsource, async () => {
                     return channel
