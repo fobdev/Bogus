@@ -32,6 +32,16 @@ export const ImageSearch: Command = {
 
         await searchClient.search(args!.join(" ")).then((images) => {
             let iterator = 0;
+
+            if (images.length === 0) {
+                channel.send({
+                    embeds: [
+                        Response("Nothing was found.", "Try searching for something else.", "WARN"),
+                    ],
+                });
+                return;
+            }
+
             const sendObject: MessageOptions = {
                 components: [new MessageActionRow().addComponents(prevButton, nextButton)],
                 embeds: [
