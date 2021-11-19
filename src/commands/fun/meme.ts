@@ -32,7 +32,7 @@ export const Meme: Command = {
 
         ctx.drawImage(image, 0, 0, width, height);
 
-        ctx.font = "bold 200px Impact";
+        ctx.font = "bold 150px Impact";
         ctx.textAlign = "center";
 
         // Top Text
