@@ -5,7 +5,8 @@ import { Command } from "../../interfaces";
 
 export const Meme: Command = {
     name: ["meme"],
-    description: "Make any image a meme.",
+    arguments: ["text", "top text / bottom text"],
+    description: "Make a meme out of a image, use '/' to make bottom texts.",
     run: async (prefix, client, message, args) => {
         const { channel } = message;
         let attachment;
