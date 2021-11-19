@@ -8,8 +8,8 @@ export const Avatar: Command = {
     description: "Display the user or the mentioned user avatar.",
     run: async (prefix, client, message, args) => {
         const { channel, author } = message;
-        let mentioned = message.mentions.members?.first();
 
+        let mentioned = message.mentions.members?.first();
         if (!mentioned) {
             return channel.send({
                 files: [

@@ -19,8 +19,8 @@ const writeAndDelete = (
     user1: User | undefined,
     user2: User | undefined
 ) => {
+    // write
     image.write(filename, async () => {
-        // write
         await channel.send({
             embeds: [
                 Response(`${user1!.username} :heart: ${user2!.username}`, "", "SUCCESS").setImage(
