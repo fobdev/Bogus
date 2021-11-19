@@ -13,14 +13,18 @@ export const Avatar: Command = {
         if (!mentioned) {
             return channel.send({
                 files: [
-                    new MessageAttachment(author.displayAvatarURL({ size: 2048, format: "gif" })),
+                    new MessageAttachment(
+                        author.displayAvatarURL({ size: 2048, dynamic: true, format: "png" })
+                    ),
                 ],
             });
         }
 
         return channel.send({
             files: [
-                new MessageAttachment(mentioned.displayAvatarURL({ size: 2048, format: "gif" })),
+                new MessageAttachment(
+                    mentioned.displayAvatarURL({ size: 2048, dynamic: true, format: "png" })
+                ),
             ],
         });
     },
