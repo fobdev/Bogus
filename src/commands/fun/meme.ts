@@ -28,7 +28,15 @@ export const Meme: Command = {
         const canvas = createCanvas(width, height);
         const ctx = canvas.getContext("2d");
         await Canvas.registerFont("./Impact.ttf", { family: "Sans-Serif" });
-        const image = await Canvas.loadImage(attachment.map((element) => element.url)[0]);
+        let image;
+
+        try {
+            image = await Canvas.loadImage(attachment.map((element) => element.url)[0]);
+        } catch (error) {
+            return channel.send({
+                embeds: [Response("Error", "The file type is not supported.", "FAIL")],
+            });
+        }
 
         ctx.drawImage(image, 0, 0, width, height);
 
