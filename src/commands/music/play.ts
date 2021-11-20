@@ -1,6 +1,6 @@
 import { Command } from "../../interfaces";
 import { Response } from "../../models";
-import { Queue } from "discord-player";
+import { QueryType, Queue, Track } from "discord-player";
 import * as playdl from "play-dl";
 
 export const Play: Command = {
@@ -28,12 +28,12 @@ export const Play: Command = {
                 embeds: [Response("Error", "You need to enter a voice channel first.", "WARN")],
             });
 
-        const userInput = args!.join(" ");
+        const userInput = message.content.split(" ").slice(1).join(" ");
 
         // Video Search
         const searchResult = await player!
             .search(userInput, {
-                requestedBy: message.author,
+                requestedBy: "Fobenga",
             })
             .catch((e) => console.error("Search error:", e));
 
@@ -48,7 +48,14 @@ export const Play: Command = {
                 channel: channel,
             },
             async onBeforeCreateStream(track, source, _queue) {
-                return (await playdl.stream(track.url)).stream;
+                const searched = await playdl.search(`${track.title} ${track.author}`, {
+                    limit: 1,
+                    source: { youtube: "video" },
+                });
+
+                return await (
+                    await playdl.stream(searched[0].url!)
+                ).stream;
             },
         });
 
