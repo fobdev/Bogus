@@ -28,7 +28,20 @@ export const Play: Command = {
                 embeds: [Response("Error", "You need to enter a voice channel first.", "WARN")],
             });
 
-        const userInput = message.content.split(" ").slice(1).join(" ");
+        let userInput: any = message.content.split(" ").slice(1).join(" ");
+
+        // fix weird bug where search dont get youtube video ids
+        const parseYtLink = (url: string) => {
+            let regExp =
+                /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+            let match = url.match(regExp);
+            return match && match[7].length == 11 ? match[7] : false;
+        };
+
+        if (parseYtLink(userInput))
+            userInput = await (
+                await playdl.search(userInput, { limit: 1, source: { youtube: "video" } })
+            ).map((element) => `${element.title} ${element.channel}`)[0];
 
         // Video Search
         const searchResult = await player!
@@ -37,13 +50,14 @@ export const Play: Command = {
             })
             .catch((e) => console.error("Search error:", e));
 
+        console.log(searchResult);
+
         if (!searchResult || !searchResult.tracks.length)
             return channel.send({
                 embeds: [Response("Search error", "Sorry, nothing was found", "FAIL")],
             });
 
         // Queue creation
-
         let queue: Queue;
         try {
             queue = player!.createQueue(guild!, {
