@@ -15,3 +15,4 @@ export * from "./albumart";
 export * from "./earrape";
 export * from "./repeat";
 export * from "./autoplay";
+export * from "./seek";
