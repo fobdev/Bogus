@@ -39,26 +39,18 @@ export const Meme: Command = {
         // Gets from the image processing server
         const api = axios.create({ baseURL: "https://bogus-image-processing.herokuapp.com/" });
 
-        interface Content {
-            type: string;
-            data: Array<number>;
-        }
-        interface ResponseSchema {
-            image: Content;
-        }
-
         // input setting
         let topText = input.includes("/") ? input.split("/")[0].trimEnd() : input;
         let bottomText = input.includes("/") ? input.split("/")[1].trimStart() : " ";
 
         try {
             await api
-                .get<ResponseSchema>(`/${topText ? topText : " "}/${bottomText}/${imageURL}`, {
-                    responseType: "json",
+                .get(`/${topText ? topText : " "}/${bottomText}/${imageURL}`, {
+                    responseType: "arraybuffer",
                 })
                 .then((response) => {
                     return channel.send({
-                        files: [new MessageAttachment(Buffer.from(response.data.image.data))],
+                        files: [new MessageAttachment(response.data)],
                     });
                 });
         } catch (error) {
