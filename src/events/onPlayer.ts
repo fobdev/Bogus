@@ -32,7 +32,7 @@ export const onPlayer = async (postgres: PoolClient, player: Player) => {
     });
 
     player.on("trackAdd", async (queue: Queue, track: Track) => {
-        const prefix = getPrefix(postgres, queue.guild);
+        const prefix = (await getPrefix(postgres, queue.guild)).rows[0][0];
         const trackPosition = queue.getTrackPosition(track) + 1;
 
         // @ts-ignore
@@ -44,7 +44,9 @@ export const onPlayer = async (postgres: PoolClient, player: Player) => {
                     }`,
                     `${
                         trackPosition === 1
-                            ? "You can use ``" + `${prefix}skip` + "`` to play the track right now."
+                            ? "You can use ``" +
+                              `${await prefix}skip` +
+                              "`` to play the track right now."
                             : "You can use ``" +
                               `${prefix}jump ${trackPosition}` +
                               "`` to play the track right now."
@@ -60,7 +62,7 @@ export const onPlayer = async (postgres: PoolClient, player: Player) => {
     });
 
     player.on("tracksAdd", async (queue, tracks) => {
-        const prefix = getPrefix(postgres, queue.guild);
+        const prefix = (await getPrefix(postgres, queue.guild)).rows[0][0];
 
         // @ts-ignore
         return await queue.metadata?.channel.send({
