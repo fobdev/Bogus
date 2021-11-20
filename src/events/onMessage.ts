@@ -42,7 +42,7 @@ export const onMessage = async (
                         "pt-BR"
                     )} at ${new Date().toLocaleDateString("pt-BR")}]`
                 );
-                console.log(`Streaming to: [${player.queues.size}]`);
+                if (player.queues.size > 0) console.log(`Streaming to: [${player.queues.size}]`);
                 console.groupEnd();
 
                 return await Command.run(prefix, client, message, args, player, postgres);
