@@ -40,7 +40,7 @@ export const onPlayer = async (postgres: PoolClient, player: Player) => {
             embeds: [
                 Response(
                     `[${track.title}] added to the queue ${
-                        trackPosition === 1 ? `and playing next` : `at position [${trackPosition}]`
+                        trackPosition === 0 ? `and playing next` : `at position ${trackPosition}`
                     }`,
                     `${
                         trackPosition === 1
