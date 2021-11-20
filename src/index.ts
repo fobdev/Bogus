@@ -23,6 +23,9 @@ import HttpsProxyAgent from "https-proxy-agent";
             dlChunkSize: 0,
             requestOptions: {
                 agent,
+                headers: {
+                    Cookie: "SID=DgjQO5f-TxwqIDQc2MZgIvoBorFdPTbMkD_z567KH9l0n9AgqfFduYoJmcAWY7Y5lBnFuw.;HSID=ARs6cHabtXDtW3ZDP;SSID=A0Wcf5kOmyy5JfgbO",
+                },
             },
         },
     });
