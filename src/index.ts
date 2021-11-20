@@ -18,10 +18,6 @@ import { onGuildDelete, onGuildCreate, onPlayer, onMessage, onReady } from "./ev
             highWaterMark: 1024 * 1024 * 10,
             liveBuffer: 4000,
             dlChunkSize: 0,
-            requestOptions: {
-                maxRetries: 5,
-                maxReconnects: 5,
-            },
         },
     });
 
