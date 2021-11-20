@@ -2,6 +2,7 @@ import { Client as DiscordClient, Intents } from "discord.js";
 import { Player as PlayerClient } from "discord-player";
 import { Pool } from "pg";
 import { onGuildDelete, onGuildCreate, onPlayer, onMessage, onReady } from "./events";
+import HttpsProxyAgent from "https-proxy-agent";
 
 (async () => {
     const client = new DiscordClient({
@@ -12,12 +13,17 @@ import { onGuildDelete, onGuildCreate, onPlayer, onMessage, onReady } from "./ev
         ],
     });
 
+    const agent = HttpsProxyAgent("http://111.111.111.111:8080");
+
     const player = new PlayerClient(client, {
         ytdlOptions: {
             quality: "highestaudio",
             highWaterMark: 1024 * 1024 * 10,
             liveBuffer: 4000,
             dlChunkSize: 0,
+            requestOptions: {
+                agent,
+            },
         },
     });
 
