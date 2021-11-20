@@ -63,7 +63,7 @@ export const ImageSearch: Command = {
                     });
 
                     buttonsCollector.on("end", () => {
-                        try {
+                        if (!message.deleted)
                             msg.edit({
                                 embeds: [
                                     Response(
@@ -76,11 +76,6 @@ export const ImageSearch: Command = {
                                 ],
                                 components: [],
                             });
-                        } catch (error) {
-                            return console.error(
-                                `Collector tried to edit unexistent message: ${error}`
-                            );
-                        }
                     });
 
                     buttonsCollector.on("collect", (interaction) => {
@@ -99,20 +94,21 @@ export const ImageSearch: Command = {
                                 return;
                         }
 
-                        msg.edit({
-                            components: [
-                                new MessageActionRow().addComponents(prevButton, nextButton),
-                            ],
-                            embeds: [
-                                Response(
-                                    `Results for ${args?.join(" ")} ( ${iterator + 1} / ${
-                                        images.length
-                                    } )`,
-                                    "",
-                                    "SUCCESS"
-                                ).setImage(images[iterator].url),
-                            ],
-                        });
+                        if (!message.deleted)
+                            msg.edit({
+                                components: [
+                                    new MessageActionRow().addComponents(prevButton, nextButton),
+                                ],
+                                embeds: [
+                                    Response(
+                                        `Results for ${args?.join(" ")} ( ${iterator + 1} / ${
+                                            images.length
+                                        } )`,
+                                        "",
+                                        "SUCCESS"
+                                    ).setImage(images[iterator].url),
+                                ],
+                            });
                     });
                 });
         });

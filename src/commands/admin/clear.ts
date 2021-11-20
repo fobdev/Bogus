@@ -63,16 +63,20 @@ export const Clear: Command = {
                 components: [new MessageActionRow().addComponents(deleteButton)],
             })
             .then((msg) => {
-                msg.awaitMessageComponent({
-                    componentType: "BUTTON",
-                    filter: (filter) => filter.customId === deleteButton.customId,
-                })
-                    .then(() => {
-                        msg.delete().catch((e) => console.error(`${e}: Error deleting message`));
+                if (!msg.deleted)
+                    msg.awaitMessageComponent({
+                        componentType: "BUTTON",
+                        filter: (filter) => filter.customId === deleteButton.customId,
                     })
-                    .catch(() => {
-                        console.log("[COLLECTOR]: Button Collector Deleted");
-                    });
+                        .then(() => {
+                            if (!msg.deleted)
+                                msg.delete().catch((e) =>
+                                    console.error(`${e}: Error deleting message`)
+                                );
+                        })
+                        .catch(() => {
+                            console.log("[COLLECTOR]: Button Collector Deleted");
+                        });
             });
     },
 };
