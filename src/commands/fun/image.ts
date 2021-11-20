@@ -63,7 +63,7 @@ export const ImageSearch: Command = {
                     });
 
                     buttonsCollector.on("end", () => {
-                        if (msg)
+                        try {
                             msg.edit({
                                 embeds: [
                                     Response(
@@ -76,6 +76,11 @@ export const ImageSearch: Command = {
                                 ],
                                 components: [],
                             });
+                        } catch (error) {
+                            return console.error(
+                                `Collector tried to edit unexistent message: ${error}`
+                            );
+                        }
                     });
 
                     buttonsCollector.on("collect", (interaction) => {
