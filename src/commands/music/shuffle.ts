@@ -6,21 +6,9 @@ export const Shuffle: Command = {
     description: "Randomize all the tracks in the queue.",
     run: async (prefix, client, message, args, player) => {
         const { member, guild, channel } = message;
-
-        if (guild?.me?.voice.channelId && member?.voice.channelId !== guild.me.voice.channelId)
-            return channel.send({
-                embeds: [
-                    Response(
-                        "Unable to run command.",
-                        "The user is not in the same voice channel as the bot.",
-                        "FAIL"
-                    ),
-                ],
-            });
-
         const shufflingQueue = player?.getQueue(guild!.id);
 
-        if (!shufflingQueue) {
+        if (!shufflingQueue)
             return channel.send({
                 embeds: [
                     Response(
@@ -32,7 +20,17 @@ export const Shuffle: Command = {
                     ),
                 ],
             });
-        }
+
+        if (guild?.me?.voice.channelId && member?.voice.channelId !== guild.me.voice.channelId)
+            return channel.send({
+                embeds: [
+                    Response(
+                        "Unable to run command.",
+                        "The user is not in the same voice channel as the bot.",
+                        "FAIL"
+                    ),
+                ],
+            });
 
         try {
             shufflingQueue?.shuffle();

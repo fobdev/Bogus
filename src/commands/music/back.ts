@@ -6,6 +6,12 @@ export const Back: Command = {
     description: "Play the last played track again.",
     run: async (prefix, client, message, args, player) => {
         const { member, guild, channel } = message;
+        const backingQueue = player?.getQueue(guild!.id);
+
+        if (!backingQueue || !backingQueue.playing)
+            return channel.send({
+                embeds: [Response("Error", "There is nothing playing right now.", "FAIL")],
+            });
 
         if (guild?.me?.voice.channelId && member?.voice.channelId !== guild.me.voice.channelId)
             return channel.send({
@@ -16,13 +22,6 @@ export const Back: Command = {
                         "FAIL"
                     ),
                 ],
-            });
-
-        const backingQueue = player?.getQueue(guild!.id);
-
-        if (!backingQueue || !backingQueue.playing)
-            return channel.send({
-                embeds: [Response("Error", "There is nothing playing right now.", "FAIL")],
             });
 
         try {

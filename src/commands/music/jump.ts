@@ -7,18 +7,6 @@ export const Jump: Command = {
     description: "Jump to a specific track in the queue",
     run: async (prefix, client, message, args, player) => {
         const { member, guild, channel } = message;
-
-        if (guild?.me?.voice.channelId && member?.voice.channelId !== guild.me.voice.channelId)
-            return channel.send({
-                embeds: [
-                    Response(
-                        "Unable to run command.",
-                        "The user is not in the same voice channel as the bot.",
-                        "FAIL"
-                    ),
-                ],
-            });
-
         const jumpingQueue = player?.getQueue(guild!.id);
 
         if (!jumpingQueue)
@@ -30,6 +18,17 @@ export const Jump: Command = {
                             prefix +
                             "play`` with a Spotify or Youtube playlist to create a queue for this server.",
                         "WARN"
+                    ),
+                ],
+            });
+
+        if (guild?.me?.voice.channelId && member?.voice.channelId !== guild.me.voice.channelId)
+            return channel.send({
+                embeds: [
+                    Response(
+                        "Unable to run command.",
+                        "The user is not in the same voice channel as the bot.",
+                        "FAIL"
                     ),
                 ],
             });

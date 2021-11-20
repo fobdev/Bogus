@@ -7,18 +7,6 @@ export const Pause: Command = {
     description: "Pauses the current playing track.",
     run: async (prefix, client, message, args, player) => {
         const { member, guild, channel } = message;
-
-        if (guild?.me?.voice.channelId && member?.voice.channelId !== guild.me.voice.channelId)
-            return channel.send({
-                embeds: [
-                    Response(
-                        "Unable to run command.",
-                        "The user is not in the same voice channel as the bot.",
-                        "FAIL"
-                    ),
-                ],
-            });
-
         const pausingQueue = player?.getQueue(guild!.id);
 
         if (!pausingQueue || !pausingQueue.playing)
@@ -28,6 +16,17 @@ export const Pause: Command = {
                         "Nothing is playing right now.",
                         "Please play something before using this command",
                         "WARN"
+                    ),
+                ],
+            });
+
+        if (guild?.me?.voice.channelId && member?.voice.channelId !== guild.me.voice.channelId)
+            return channel.send({
+                embeds: [
+                    Response(
+                        "Unable to run command.",
+                        "The user is not in the same voice channel as the bot.",
+                        "FAIL"
                     ),
                 ],
             });

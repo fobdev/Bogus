@@ -6,18 +6,6 @@ export const PlayNext: Command = {
     description: "Search a track and play it as the next track in the queue.",
     run: async (prefix, client, message, args, player) => {
         const { member, guild, channel } = message;
-
-        if (guild?.me?.voice.channelId && member?.voice.channelId !== guild.me.voice.channelId)
-            return channel.send({
-                embeds: [
-                    Response(
-                        "Unable to run command.",
-                        "The user is not in the same voice channel as the bot.",
-                        "FAIL"
-                    ),
-                ],
-            });
-
         const insertingQueue = player?.getQueue(guild!.id);
 
         if (!insertingQueue)
@@ -28,6 +16,17 @@ export const PlayNext: Command = {
                         "You can create a queue using ``" +
                             `${prefix}play [Youtube / Spotify playlist or video]` +
                             "``",
+                        "FAIL"
+                    ),
+                ],
+            });
+
+        if (guild?.me?.voice.channelId && member?.voice.channelId !== guild.me.voice.channelId)
+            return channel.send({
+                embeds: [
+                    Response(
+                        "Unable to run command.",
+                        "The user is not in the same voice channel as the bot.",
                         "FAIL"
                     ),
                 ],
