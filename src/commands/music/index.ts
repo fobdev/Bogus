@@ -13,3 +13,5 @@ export * from "./back";
 export * from "./purge";
 export * from "./albumart";
 export * from "./earrape";
+export * from "./repeat";
+export * from "./autoplay";
