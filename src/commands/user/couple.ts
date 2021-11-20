@@ -1,41 +1,7 @@
 import { Command } from "../../interfaces";
 import { Response } from "../../models/";
-import {
-    DMChannel,
-    MessageAttachment,
-    NewsChannel,
-    PartialDMChannel,
-    TextChannel,
-    ThreadChannel,
-    User,
-} from "discord.js";
-import { unlink } from "fs/promises";
-import mergeimg from "merge-img";
-
-const writeAndDelete = (
-    channel: TextChannel | PartialDMChannel | DMChannel | NewsChannel | ThreadChannel,
-    image: any,
-    filename: string,
-    user1: User | undefined,
-    user2: User | undefined
-) => {
-    // write
-    image.write(filename, async () => {
-        await channel.send({
-            embeds: [
-                Response(`${user1!.username} :heart: ${user2!.username}`, "", "SUCCESS").setImage(
-                    `attachment://${filename}`
-                ),
-            ],
-            files: [new MessageAttachment(`./${filename}`)],
-        });
-
-        // delete
-        return unlink(`./${filename}`).catch((err) => {
-            if (err) return console.log(`[FILE ERROR] Error in deleting file ${filename}: ${err}`);
-        });
-    });
-};
+import { MessageAttachment } from "discord.js";
+import Canvas, { createCanvas } from "canvas";
 
 export const Couple: Command = {
     name: ["couple"],
@@ -43,8 +9,6 @@ export const Couple: Command = {
     description: "Connect the profile picture of two users.",
     run: async (prefix, client, message, args) => {
         const { channel, author, mentions } = message;
-        const fname = `couple_${message.id}.png`;
-
         if (!args![0])
             return channel.send({
                 embeds: [Response("Error", "Please quote at least one user.", "FAIL")],
@@ -53,27 +17,50 @@ export const Couple: Command = {
         const user1 = mentions.members?.toJSON()[0];
         const user2 = mentions.members?.toJSON()[1];
 
-        if (!user2)
-            try {
-                return await mergeimg([
-                    author.displayAvatarURL({ format: "jpg", size: 256 }),
-                    user1!.displayAvatarURL({ format: "jpg", size: 256 }),
-                ]).then((img) => {
-                    writeAndDelete(channel, img, fname, author, user1?.user);
-                });
-            } catch (error) {
-                console.error(error);
-            }
+        const canvas = createCanvas(512, 256);
+        const ctx = canvas.getContext("2d");
 
-        try {
-            return await mergeimg([
-                user1!.displayAvatarURL({ format: "jpg", size: 256 }),
-                user2!.displayAvatarURL({ format: "jpg", size: 256 }),
-            ]).then(async (img) => {
-                writeAndDelete(channel, img, fname, user1?.user, user2?.user);
+        const user1Image = await Canvas.loadImage(
+            user1!.displayAvatarURL({ format: "jpg", size: 256 })
+        );
+
+        if (!user2) {
+            const authorImage = await Canvas.loadImage(
+                author.displayAvatarURL({ format: "jpg", size: 256 })
+            );
+
+            ctx.drawImage(authorImage, 0, 0, authorImage.width, authorImage.height);
+            ctx.drawImage(user1Image, user1Image.width, 0, user1Image.width, user1Image.height);
+
+            const attach = new MessageAttachment(canvas.toBuffer(), "buffered.png");
+            return await channel.send({
+                embeds: [
+                    Response(
+                        `${author.username} :heart: ${user1!.displayName}`,
+                        "",
+                        "SUCCESS"
+                    ).setImage(`attachment://buffered.png`),
+                ],
+                files: [attach],
             });
-        } catch (error) {
-            console.error(error);
+        } else {
+            const user2Image = await Canvas.loadImage(
+                user2!.displayAvatarURL({ format: "jpg", size: 256 })
+            );
+            ctx.drawImage(user1Image, 0, 0, user1Image.width, user1Image.height);
+            ctx.drawImage(user2Image, user2Image.width, 0, user2Image.width, user2Image.height);
+
+            const attach = new MessageAttachment(canvas.toBuffer(), "buffered.png");
+            return await channel.send({
+                embeds: [
+                    Response(
+                        `${user1!.displayName} :heart: ${user2!.displayName}`,
+                        "",
+                        "SUCCESS"
+                    ).setImage(`attachment://buffered.png`),
+                ],
+                files: [attach],
+            });
         }
     },
 };
