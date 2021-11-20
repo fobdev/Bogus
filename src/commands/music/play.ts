@@ -33,7 +33,7 @@ export const Play: Command = {
         // Video Search
         const searchResult = await player!
             .search(userInput, {
-                requestedBy: "Fobenga",
+                requestedBy: message.author,
             })
             .catch((e) => console.error("Search error:", e));
 
