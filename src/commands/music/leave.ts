@@ -1,3 +1,4 @@
+import { QueueRepeatMode } from "discord-player";
 import { Command } from "../../interfaces";
 import { Response } from "../../models";
 
@@ -30,6 +31,7 @@ export const Leave: Command = {
                 ],
             });
 
+        leavingQueue.setRepeatMode(QueueRepeatMode.OFF);
         return leavingQueue.destroy(true);
     },
 };
