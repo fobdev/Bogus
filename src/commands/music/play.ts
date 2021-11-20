@@ -69,6 +69,11 @@ export const Play: Command = {
                         source: { youtube: "video" },
                     });
 
+                    if (track.url.includes("soundcloud"))
+                        return await (
+                            await playdl.stream(track.url!)
+                        ).stream;
+
                     return await (
                         await playdl.stream(searched[0].url!)
                     ).stream;
