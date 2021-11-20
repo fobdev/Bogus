@@ -1,7 +1,7 @@
-import { BufferResolvable, Collection, MessageAttachment, MessageEmbedImage } from "discord.js";
+import { Collection, MessageAttachment, MessageEmbedImage } from "discord.js";
 import { Response } from "../../models";
 import { Command } from "../../interfaces";
-import axios from "axios";
+import { api } from "../..";
 
 export const Meme: Command = {
     name: ["meme"],
@@ -35,9 +35,6 @@ export const Meme: Command = {
                 });
             }
         }
-
-        // Gets from the image processing server
-        const api = axios.create({ baseURL: "https://bogus-image-processing.herokuapp.com/" });
 
         // input setting
         let topText = input.includes("/") ? input.split("/")[0].trimEnd() : input;

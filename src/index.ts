@@ -3,6 +3,10 @@ import { Player as PlayerClient } from "discord-player";
 import { Pool } from "pg";
 import { onGuildDelete, onGuildCreate, onPlayer, onMessage, onReady } from "./events";
 import HttpsProxyAgent from "https-proxy-agent";
+import axios, { AxiosInstance } from "axios";
+
+// image processing server
+export let api: AxiosInstance;
 
 (async () => {
     const client = new DiscordClient({
@@ -51,6 +55,8 @@ import HttpsProxyAgent from "https-proxy-agent";
         "messageCreate",
         async (message) => await onMessage(client, player, postgres, message)
     );
+
+    api = await axios.create({ baseURL: "https://bogus-image-processing.herokuapp.com/" });
 
     await client.login(process.env.BOT_TOKEN);
 })();
