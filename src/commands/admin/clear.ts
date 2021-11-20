@@ -52,22 +52,20 @@ export const Clear: Command = {
                 "Note: messages older than 14 days can't be deleted by the bot."
             );
 
+        const deleteButton = new MessageButton()
+            .setCustomId(Math.random().toString())
+            .setLabel("Delete this message")
+            .setStyle("SECONDARY");
+
         return channel
             .send({
                 embeds: [return_embed],
-                components: [
-                    new MessageActionRow().addComponents(
-                        new MessageButton()
-                            .setCustomId("delete-message")
-                            .setLabel("Delete this message")
-                            .setStyle("SECONDARY")
-                    ),
-                ],
+                components: [new MessageActionRow().addComponents(deleteButton)],
             })
             .then((msg) => {
                 msg.awaitMessageComponent({
                     componentType: "BUTTON",
-                    filter: (filter) => filter.customId === "delete-message",
+                    filter: (filter) => filter.customId === deleteButton.customId,
                 })
                     .then(() => {
                         msg.delete().catch((e) => console.error(`${e}: Error deleting message`));

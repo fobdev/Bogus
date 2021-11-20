@@ -63,18 +63,19 @@ export const ImageSearch: Command = {
                     });
 
                     buttonsCollector.on("end", () => {
-                        msg.edit({
-                            embeds: [
-                                Response(
-                                    `Results for ${args?.join(" ")} ( ${iterator + 1} / ${
-                                        images.length
-                                    } )`,
-                                    "",
-                                    "SUCCESS"
-                                ).setImage(images[iterator].url),
-                            ],
-                            components: [],
-                        });
+                        if (msg)
+                            msg.edit({
+                                embeds: [
+                                    Response(
+                                        `Results for ${args?.join(" ")} ( ${iterator + 1} / ${
+                                            images.length
+                                        } )`,
+                                        "",
+                                        "SUCCESS"
+                                    ).setImage(images[iterator].url),
+                                ],
+                                components: [],
+                            });
                     });
 
                     buttonsCollector.on("collect", (interaction) => {
