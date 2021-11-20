@@ -64,19 +64,15 @@ export const Play: Command = {
                     channel: channel,
                 },
                 async onBeforeCreateStream(track, source, _queue) {
+                    if (track.url.includes("soundcloud"))
+                        return (await playdl.stream(track.url!)).stream;
+
                     const searched = await playdl.search(`${track.title} ${track.author}`, {
                         limit: 1,
-                        source: { youtube: "video" },
+                        source: { spotify: "track", youtube: "video" },
                     });
 
-                    if (track.url.includes("soundcloud"))
-                        return await (
-                            await playdl.stream(track.url!)
-                        ).stream;
-
-                    return await (
-                        await playdl.stream(searched[0].url!)
-                    ).stream;
+                    return (await playdl.stream(searched[0].url!)).stream;
                 },
             });
         } catch (error) {
