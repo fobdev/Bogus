@@ -6,9 +6,20 @@ export const Jump: Command = {
     arguments: ["number"],
     description: "Jump to a specific track in the queue",
     run: async (prefix, client, message, args, player) => {
-        const { guild, channel } = message;
+        const { member, guild, channel } = message;
 
-        let jumpingQueue = player?.getQueue(guild!.id);
+        if (guild?.me?.voice.channelId && member?.voice.channelId !== guild.me.voice.channelId)
+            return channel.send({
+                embeds: [
+                    Response(
+                        "Unable to run command.",
+                        "The user is not in the same voice channel as the bot.",
+                        "FAIL"
+                    ),
+                ],
+            });
+
+        const jumpingQueue = player?.getQueue(guild!.id);
 
         if (!jumpingQueue)
             return channel.send({

@@ -6,8 +6,21 @@ export const Skip: Command = {
     arguments: ["?", "amount"],
     description: "Skip the current track to the next track or to a specific track in the queue.",
     run: async (prefix, client, message, args, player) => {
-        const { guild, channel } = message;
+        const { member, guild, channel } = message;
+
+        if (guild?.me?.voice.channelId && member?.voice.channelId !== guild.me.voice.channelId)
+            return channel.send({
+                embeds: [
+                    Response(
+                        "Unable to run command.",
+                        "The user is not in the same voice channel as the bot.",
+                        "FAIL"
+                    ),
+                ],
+            });
+
         const skippingQueue = player?.getQueue(guild!.id);
+
         if (!skippingQueue)
             return channel.send({
                 embeds: [

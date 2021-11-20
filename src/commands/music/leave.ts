@@ -5,9 +5,21 @@ export const Leave: Command = {
     name: ["leave", "l"],
     description: "Leaves the voice channel and delete the server queue.",
     run: async (prefix, client, message, args, player) => {
-        const { channel, guild } = message;
+        const { member, channel, guild } = message;
+
+        if (guild?.me?.voice.channelId && member?.voice.channelId !== guild.me.voice.channelId)
+            return channel.send({
+                embeds: [
+                    Response(
+                        "Unable to run command.",
+                        "The user is not in the same voice channel as the bot.",
+                        "FAIL"
+                    ),
+                ],
+            });
 
         const leavingQueue = player?.getQueue(guild!.id);
+
         if (!leavingQueue)
             return channel.send({
                 embeds: [

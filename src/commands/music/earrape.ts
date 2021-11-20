@@ -5,7 +5,19 @@ export const Earrape: Command = {
     name: ["earrape"],
     description: "Increase the volume of the player by a lot, use it again to disable it.",
     run: async (prefix, client, message, args, player) => {
-        const { guild, channel } = message;
+        const { member, guild, channel } = message;
+
+        if (guild?.me?.voice.channelId && member?.voice.channelId !== guild.me.voice.channelId)
+            return channel.send({
+                embeds: [
+                    Response(
+                        "Unable to run command.",
+                        "The user is not in the same voice channel as the bot.",
+                        "FAIL"
+                    ),
+                ],
+            });
+
         const explodingQueue = player?.getQueue(guild!.id);
         const earrapeVolume = 100000;
         const defaultVolume = 100;
