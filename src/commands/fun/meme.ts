@@ -1,4 +1,4 @@
-import Canvas, { loadImage, createCanvas } from "canvas";
+import Canvas, { createCanvas } from "canvas";
 import { Collection, MessageAttachment, MessageEmbedImage } from "discord.js";
 import { Response } from "../../models";
 import { Command } from "../../interfaces";
