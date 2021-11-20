@@ -44,6 +44,7 @@ export const Play: Command = {
 
         // Queue creation
         const queue: Queue = player!.createQueue(guild!, {
+            initialVolume: 100,
             metadata: {
                 channel: channel,
             },

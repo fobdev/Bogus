@@ -6,7 +6,6 @@ import * as BotCommands from "./bot";
 import * as FunCommands from "./fun";
 import * as MusicCommands from "./music";
 import * as UserCommands from "./user";
-import * as SoundEffectsCommands from "./soundeffects";
 
 let getCollection = (collection: any) => {
     let commandsArray: Array<Command> = [];
@@ -26,5 +25,4 @@ export const CommandList: Array<Command> = [];
     CommandList.push(...getCollection(FunCommands));
     CommandList.push(...getCollection(MusicCommands));
     CommandList.push(...getCollection(UserCommands));
-    CommandList.push(...getCollection(SoundEffectsCommands));
 })();
