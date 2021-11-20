@@ -47,9 +47,11 @@ export const onPlayer = async (postgres: PoolClient, player: Player) => {
                             ? "You can use ``" +
                               `${await prefix}skip` +
                               "`` to play the track right now."
-                            : "You can use ``" +
+                            : trackPosition > 1
+                            ? "You can use ``" +
                               `${prefix}jump ${trackPosition}` +
                               "`` to play the track right now."
+                            : ""
                     }`,
                     "OTHER",
                     "PURPLE"
