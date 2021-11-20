@@ -7,6 +7,8 @@ export const Earrape: Command = {
     run: async (prefix, client, message, args, player) => {
         const { guild, channel } = message;
         const explodingQueue = player?.getQueue(guild!.id);
+        const earrapeVolume = 100000;
+        const defaultVolume = 100;
 
         if (!explodingQueue || !explodingQueue.playing)
             return channel.send({
@@ -14,16 +16,18 @@ export const Earrape: Command = {
             });
 
         explodingQueue.volume === 100
-            ? await explodingQueue.setVolume(100000)
-            : await explodingQueue.setVolume(100);
+            ? await explodingQueue.setVolume(earrapeVolume)
+            : await explodingQueue.setVolume(defaultVolume);
 
         return channel.send({
             embeds: [
                 Response(
-                    `Earrape is now ${explodingQueue.volume === 100 ? "Disabled" : "Enabled"}`,
-                    `Use ${prefix}earrape to ${
-                        explodingQueue.volume === 100 ? "enable" : "disable"
-                    } it.`,
+                    `Earrape is now ${
+                        explodingQueue.volume === defaultVolume ? "Disabled" : "Enabled"
+                    }`,
+                    explodingQueue.volume === earrapeVolume
+                        ? `Use ${prefix}earrape to disable it.`
+                        : "",
                     "OTHER",
                     "PURPLE"
                 ),
