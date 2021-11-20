@@ -50,8 +50,6 @@ export const Play: Command = {
             })
             .catch((e) => console.error("Search error:", e));
 
-        console.log(searchResult);
-
         if (!searchResult || !searchResult.tracks.length)
             return channel.send({
                 embeds: [Response("Search error", "Sorry, nothing was found", "FAIL")],
