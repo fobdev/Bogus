@@ -25,7 +25,7 @@ export const onPlayer = async (postgres: PoolClient, player: Player) => {
             "PURPLE"
         )
             .addField("Author:", track.author)
-            .addField("Duration:", track.duration, true)
+            .addField("Duration:", track.durationMS === 0 ? "Livestream" : track.duration, true)
             .addField("Added by:", `${track.requestedBy}`, true)
 
             .setThumbnail(track.thumbnail)
@@ -67,7 +67,11 @@ export const onPlayer = async (postgres: PoolClient, player: Player) => {
                     "OTHER",
                     "PURPLE"
                 )
-                    .addField("Duration:", track.duration, true)
+                    .addField(
+                        "Duration:",
+                        track.durationMS === 0 ? "Livestream" : track.duration,
+                        true
+                    )
                     .addField("Added by: ", `${track.requestedBy}`, true)
                     .setThumbnail(track.thumbnail),
             ],

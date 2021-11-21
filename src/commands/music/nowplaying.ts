@@ -44,7 +44,13 @@ export const NowPlaying: Command = {
                     "PURPLE"
                 )
                     .addField("Author:", currentTrack.author)
-                    .addField("Duration:", `(${time.current} / ${time.end})`, true)
+                    .addField(
+                        "Duration:",
+                        nowPlayingQueue.current.durationMS === 0
+                            ? "Livestream"
+                            : `(${time.current} / ${time.end})`,
+                        true
+                    )
                     .addField("Added by:", `${currentTrack.requestedBy}`, true)
 
                     .setThumbnail(currentTrack.thumbnail)
