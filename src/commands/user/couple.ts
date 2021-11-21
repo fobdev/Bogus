@@ -1,7 +1,7 @@
 import { Command } from "../../interfaces";
 import { Response } from "../../models/";
 import { MessageAttachment } from "discord.js";
-import Canvas, { createCanvas } from "canvas";
+import { api } from "../..";
 
 export const Couple: Command = {
     name: ["couple"],
@@ -17,50 +17,40 @@ export const Couple: Command = {
         const user1 = mentions.members?.toJSON()[0];
         const user2 = mentions.members?.toJSON()[1];
 
-        const canvas = createCanvas(512, 256);
-        const ctx = canvas.getContext("2d");
-
-        const user1Image = await Canvas.loadImage(
-            user1!.displayAvatarURL({ format: "jpg", size: 256 })
-        );
+        let requestString: string = "";
 
         if (!user2) {
-            const authorImage = await Canvas.loadImage(
-                author.displayAvatarURL({ format: "jpg", size: 256 })
-            );
-
-            ctx.drawImage(authorImage, 0, 0, authorImage.width, authorImage.height);
-            ctx.drawImage(user1Image, user1Image.width, 0, user1Image.width, user1Image.height);
-
-            const attach = new MessageAttachment(canvas.toBuffer(), "buffered.png");
-            return await channel.send({
-                embeds: [
-                    Response(
-                        `${author.username} :heart: ${user1!.displayName}`,
-                        "",
-                        "SUCCESS"
-                    ).setImage(`attachment://buffered.png`),
-                ],
-                files: [attach],
-            });
+            requestString = `/couple/?u1=${author.displayAvatarURL({
+                format: "jpg",
+                size: 256,
+            })}&u2=${user1?.displayAvatarURL({ format: "jpg", size: 256 })}`;
         } else {
-            const user2Image = await Canvas.loadImage(
-                user2!.displayAvatarURL({ format: "jpg", size: 256 })
-            );
-            ctx.drawImage(user1Image, 0, 0, user1Image.width, user1Image.height);
-            ctx.drawImage(user2Image, user2Image.width, 0, user2Image.width, user2Image.height);
+            requestString = `/couple/?u1=${user1?.displayAvatarURL({
+                format: "jpg",
+                size: 256,
+            })}&u2=${user2?.displayAvatarURL({ format: "jpg", size: 256 })}`;
+        }
 
-            const attach = new MessageAttachment(canvas.toBuffer(), "buffered.png");
-            return await channel.send({
-                embeds: [
-                    Response(
-                        `${user1!.displayName} :heart: ${user2!.displayName}`,
-                        "",
-                        "SUCCESS"
-                    ).setImage(`attachment://buffered.png`),
-                ],
-                files: [attach],
-            });
+        try {
+            await api
+                .get(encodeURI(requestString), { responseType: "arraybuffer" })
+                .then((response) => {
+                    return channel.send({
+                        embeds: [
+                            Response(
+                                `${user2 ? user1!.user.username : author.username} :heart: ${
+                                    user2 ? user2!.user.username : user1!.user.username
+                                }`,
+                                "",
+                                "SUCCESS"
+                            ).setImage(`attachment://image.png`),
+                        ],
+                        files: [new MessageAttachment(response.data, "image.png")],
+                    });
+                });
+        } catch (error: any) {
+            console.error(error.message);
+            return channel.send("Error with GET request from bogue-image-processing server.");
         }
     },
 };
