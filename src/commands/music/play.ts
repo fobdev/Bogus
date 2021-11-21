@@ -62,7 +62,7 @@ export const Play: Command = {
                     // spotify searching to youtube
                     if (userInput.includes("spotify"))
                         return await playdl
-                            .search(`${track.title} ${track.author} ${track.duration}`, {
+                            .search(`${track.title} ${track.author}`, {
                                 limit: 1,
                                 source: { youtube: "video" },
                             })
