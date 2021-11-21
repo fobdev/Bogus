@@ -39,7 +39,7 @@ export const Repeat: Command = {
         return await channel.send({
             embeds: [
                 Response(
-                    `Repeat is ${
+                    `Repeat is now ${
                         repeatingQueue.repeatMode === QueueRepeatMode.TRACK ? "ON." : `OFF.`
                     }`,
                     repeatingQueue.repeatMode === QueueRepeatMode.TRACK
