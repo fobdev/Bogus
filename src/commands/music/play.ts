@@ -66,10 +66,20 @@ export const Play: Command = {
                             source: { youtube: "video" },
                         })
                         .then(async (results) => {
-                            return (await playdl.stream(results[0].url)).stream;
+                            try {
+                                return (await playdl.stream(results[0].url)).stream;
+                            } catch (error: any) {
+                                console.error(error.message);
+                                return (await playdl.stream(results[0].url)).stream;
+                            }
                         });
 
-                return (await playdl.stream(track.url)).stream;
+                try {
+                    return (await playdl.stream(track.url)).stream;
+                } catch (error: any) {
+                    console.error(error.message);
+                    return (await playdl.stream(track.url)).stream;
+                }
             },
         });
 
