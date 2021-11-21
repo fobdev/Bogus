@@ -28,7 +28,7 @@ export const Play: Command = {
                 embeds: [Response("Error", "You need to enter a voice channel first.", "WARN")],
             });
 
-        let userInput: any = message.content.split(" ").slice(1).join(" ");
+        let userInput: string = message.content.split(" ").slice(1).join(" ");
 
         // fix weird bug where search dont get youtube video ids
         const parseYtLink = (url: string) => {
@@ -38,15 +38,11 @@ export const Play: Command = {
             return match && match[7].length == 11 ? match[7] : false;
         };
 
-        if (parseYtLink(userInput))
-            userInput = await (
-                await playdl.search(userInput, { limit: 1, source: { youtube: "video" } })
-            ).map((element) => `${element.title} ${element.channel}`)[0];
-
         // Video Search
         const searchResult = await player!
             .search(userInput, {
                 requestedBy: message.author,
+                searchEngine: parseYtLink(userInput) ? QueryType.YOUTUBE_SEARCH : QueryType.AUTO,
             })
             .catch((e) => console.error("Search error:", e));
 
@@ -64,15 +60,18 @@ export const Play: Command = {
                     channel: channel,
                 },
                 async onBeforeCreateStream(track, source, _queue) {
-                    if (track.url.includes("soundcloud"))
-                        return (await playdl.stream(track.url!)).stream;
+                    // spotify searching to youtube
+                    if (userInput.includes("spotify"))
+                        return await playdl
+                            .search(`${track.title} ${track.author} ${track.duration}`, {
+                                limit: 1,
+                                source: { youtube: "video" },
+                            })
+                            .then(async (results) => {
+                                return (await playdl.stream(results[0].id!)).stream;
+                            });
 
-                    const searched = await playdl.search(`${track.title} ${track.author}`, {
-                        limit: 1,
-                        source: { spotify: "track", youtube: "video" },
-                    });
-
-                    return (await playdl.stream(searched[0].url!)).stream;
+                    return (await playdl.stream(track.url)).stream;
                 },
             });
         } catch (error) {
@@ -86,7 +85,9 @@ export const Play: Command = {
                 await queue
                     .connect(member!.voice.channel!)
                     .then(() => {
-                        console.log("connected!");
+                        console.log(
+                            `[CONNECTION] Connected to voice channel [${queue.connection.channel.name}]`
+                        );
                     })
                     .catch((e: any) => {
                         player!.deleteQueue(guild!.id);
@@ -104,9 +105,19 @@ export const Play: Command = {
             });
         }
 
+        // enforces the search to give the exact same link as the input
+        let enforcedTrack: Track = searchResult.tracks[0];
+        for (let index = 0; index < searchResult.tracks.length; index++) {
+            if (searchResult.tracks[index].url === userInput) {
+                console.log("enforced search until layer " + index);
+                enforcedTrack = searchResult.tracks[index];
+                break;
+            }
+        }
+
         searchResult.playlist
             ? queue.addTracks(searchResult.tracks)
-            : queue.addTrack(searchResult.tracks[0]);
+            : queue.addTrack(enforcedTrack);
 
         if (!queue.playing) queue.play();
     },
