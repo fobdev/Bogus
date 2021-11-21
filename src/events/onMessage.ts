@@ -37,6 +37,10 @@ export const onMessage = async (
                 console.group();
                 console.log(`User: [${message.author.tag}]`);
                 console.log(`Serv: [${message.guild?.name}]`);
+
+                const chan: any = channel;
+                console.log(`Chan: [#${chan.name}]`);
+
                 console.log(
                     `Time: [${new Date().toLocaleTimeString(
                         "pt-BR"
