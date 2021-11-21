@@ -31,7 +31,8 @@ export const Leave: Command = {
                 ],
             });
 
+        leavingQueue.clear();
         leavingQueue.setRepeatMode(QueueRepeatMode.OFF);
-        return leavingQueue.destroy(true);
+        return leavingQueue.stop();
     },
 };
