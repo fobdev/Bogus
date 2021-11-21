@@ -55,7 +55,6 @@ export const Play: Command = {
         let queue: Queue;
         try {
             queue = player!.createQueue(guild!, {
-                initialVolume: 100,
                 metadata: {
                     channel: channel,
                 },
@@ -86,7 +85,7 @@ export const Play: Command = {
                     .connect(member!.voice.channel!)
                     .then(() => {
                         console.log(
-                            `[CONNECTION] Connected to voice channel [${queue.connection.channel.name}]`
+                            `[CONNECTION] Connected to voice channel [${queue.connection.channel.name}] at [${queue.guild.name}].`
                         );
                     })
                     .catch((e: any) => {
