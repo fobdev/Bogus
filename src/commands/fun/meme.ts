@@ -42,16 +42,21 @@ export const Meme: Command = {
 
         try {
             await api
-                .get(encodeURI(`/${topText ? topText : " "}/${bottomText}/${imageURL}`), {
-                    responseType: "arraybuffer",
-                })
+                .get(
+                    encodeURI(
+                        `/meme/?top=${topText ? topText : " "}&bottom=${bottomText}&url=${imageURL}`
+                    ),
+                    {
+                        responseType: "arraybuffer",
+                    }
+                )
                 .then((response) => {
                     return channel.send({
                         files: [new MessageAttachment(response.data)],
                     });
                 });
-        } catch (error) {
-            console.error(error);
+        } catch (error: any) {
+            console.error(error.message);
             return channel.send("Error with GET request from bogue-image-processing server.");
         }
     },
