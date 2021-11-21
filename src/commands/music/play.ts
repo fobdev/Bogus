@@ -42,11 +42,15 @@ export const Play: Command = {
         const searchResult = await player!
             .search(userInput, {
                 requestedBy: message.author,
-                searchEngine: parseYtLink(userInput) ? QueryType.YOUTUBE_SEARCH : QueryType.AUTO,
+                searchEngine: parseYtLink(userInput)
+                    ? QueryType.YOUTUBE_SEARCH
+                    : userInput.includes("spotify") && userInput.includes("track")
+                    ? QueryType.SPOTIFY_SONG
+                    : QueryType.AUTO,
             })
             .catch((e) => console.error("Search error:", e));
 
-        if (!searchResult || !searchResult.tracks.length)
+        if (!searchResult || searchResult.tracks.length === 0)
             return channel.send({
                 embeds: [Response("Search error", "Sorry, nothing was found", "FAIL")],
             });
