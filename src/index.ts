@@ -2,7 +2,6 @@ import { Client as DiscordClient, Intents } from "discord.js";
 import { Player as PlayerClient } from "discord-player";
 import { Pool } from "pg";
 import { onGuildDelete, onGuildCreate, onPlayer, onMessage, onReady } from "./events";
-import HttpsProxyAgent from "https-proxy-agent";
 import axios, { AxiosInstance } from "axios";
 
 // image processing server
@@ -17,22 +16,7 @@ export let api: AxiosInstance;
         ],
     });
 
-    const agent = HttpsProxyAgent("http://111.111.111.111:8080");
-
-    const player = new PlayerClient(client, {
-        ytdlOptions: {
-            quality: "highestaudio",
-            highWaterMark: 1024 * 1024 * 10,
-            liveBuffer: 4000,
-            dlChunkSize: 0,
-            requestOptions: {
-                agent,
-                headers: {
-                    Cookie: "SID=DgjQO5f-TxwqIDQc2MZgIvoBorFdPTbMkD_z567KH9l0n9AgqfFduYoJmcAWY7Y5lBnFuw.;HSID=ARs6cHabtXDtW3ZDP;SSID=A0Wcf5kOmyy5JfgbO",
-                },
-            },
-        },
-    });
+    const player = new PlayerClient(client);
 
     const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
