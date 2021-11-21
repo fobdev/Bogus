@@ -9,7 +9,7 @@ export const Couple: Command = {
     description: "Connect the profile picture of two users.",
     run: async (prefix, client, message, args) => {
         const { channel, author, mentions } = message;
-        if (!args![0])
+        if (args?.length === 0)
             return channel.send({
                 embeds: [Response("Error", "Please quote at least one user.", "FAIL")],
             });
@@ -17,23 +17,28 @@ export const Couple: Command = {
         const user1 = mentions.members?.toJSON()[0];
         const user2 = mentions.members?.toJSON()[1];
 
-        let requestString: string = "";
-
-        if (!user2) {
-            requestString = `/couple/?u1=${author.displayAvatarURL({
-                format: "jpg",
-                size: 256,
-            })}&u2=${user1?.displayAvatarURL({ format: "jpg", size: 256 })}`;
-        } else {
-            requestString = `/couple/?u1=${user1?.displayAvatarURL({
-                format: "jpg",
-                size: 256,
-            })}&u2=${user2?.displayAvatarURL({ format: "jpg", size: 256 })}`;
-        }
-
         try {
             await api
-                .get(encodeURI(requestString), { responseType: "arraybuffer" })
+                .get(
+                    encodeURI(
+                        `/couple/?u1=${
+                            user2
+                                ? user1!.displayAvatarURL({
+                                      format: "jpg",
+                                      size: 256,
+                                  })
+                                : author.displayAvatarURL({
+                                      format: "jpg",
+                                      size: 256,
+                                  })
+                        }&u2=${
+                            user2
+                                ? user2.displayAvatarURL({ format: "jpg", size: 256 })
+                                : user1!.displayAvatarURL({ format: "jpg", size: 256 })
+                        }`
+                    ),
+                    { responseType: "arraybuffer" }
+                )
                 .then((response) => {
                     return channel.send({
                         embeds: [
