@@ -42,7 +42,7 @@ export const Meme: Command = {
 
         try {
             await api
-                .get(`/${topText ? topText : " "}/${bottomText}/${imageURL}`, {
+                .get(encodeURI(`/${topText ? topText : " "}/${bottomText}/${imageURL}`), {
                     responseType: "arraybuffer",
                 })
                 .then((response) => {
