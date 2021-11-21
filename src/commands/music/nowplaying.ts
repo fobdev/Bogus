@@ -1,3 +1,4 @@
+import { QueueRepeatMode } from "discord-player";
 import { Command } from "../../interfaces";
 import { Response } from "../../models";
 
@@ -27,7 +28,15 @@ export const NowPlaying: Command = {
         return channel.send({
             embeds: [
                 Response(
-                    `:musical_note: Now Playing: **${currentTrack.title}**`,
+                    `:musical_note: ${
+                        nowPlayingQueue.repeatMode === QueueRepeatMode.TRACK
+                            ? ":repeat:"
+                            : ":arrow_forward:"
+                    } Now ${
+                        nowPlayingQueue.repeatMode === QueueRepeatMode.TRACK
+                            ? "Repeating"
+                            : "Playing"
+                    }: **${currentTrack.title}**`,
 
                     // @ts-ignore
                     `Requested in ${nowPlayingQueue.metadata?.channel}.`,
