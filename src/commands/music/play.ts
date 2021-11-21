@@ -60,7 +60,7 @@ export const Play: Command = {
                 },
                 async onBeforeCreateStream(track, source, _queue) {
                     // spotify searching to youtube
-                    if (userInput.includes("spotify"))
+                    if (track.url.includes("spotify"))
                         return await playdl
                             .search(`${track.title} ${track.author}`, {
                                 limit: 1,
