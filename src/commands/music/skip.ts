@@ -34,7 +34,7 @@ export const Skip: Command = {
         if (args![0]) {
             try {
                 const skipAmount = parseInt(args![0]);
-                if (skipAmount < skippingQueue.tracks.length && skipAmount > 0) {
+                if (skipAmount < skippingQueue.tracks.length + 1 && skipAmount > 0) {
                     skippingQueue?.skipTo(skipAmount - 1);
                     return channel.send({
                         embeds: [
