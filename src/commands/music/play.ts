@@ -53,30 +53,25 @@ export const Play: Command = {
 
         // Queue creation
         let queue: Queue;
-        try {
-            queue = player!.createQueue(guild!, {
-                metadata: {
-                    channel: channel,
-                },
-                async onBeforeCreateStream(track, source, _queue) {
-                    // spotify searching to youtube
-                    if (track.url.includes("spotify"))
-                        return await playdl
-                            .search(`${track.title} ${track.author}`, {
-                                limit: 1,
-                                source: { youtube: "video" },
-                            })
-                            .then(async (results) => {
-                                return (await playdl.stream(results[0].url)).stream;
-                            });
+        queue = player!.createQueue(guild!, {
+            metadata: {
+                channel: channel,
+            },
+            async onBeforeCreateStream(track, source, _queue) {
+                // spotify searching to youtube
+                if (track.url.includes("spotify"))
+                    return await playdl
+                        .search(`${track.title} ${track.author}`, {
+                            limit: 1,
+                            source: { youtube: "video" },
+                        })
+                        .then(async (results) => {
+                            return (await playdl.stream(results[0].url)).stream;
+                        });
 
-                    return (await playdl.stream(track.url)).stream;
-                },
-            });
-        } catch (error) {
-            console.error(error);
-            return channel.send("Please try again.");
-        }
+                return (await playdl.stream(track.url)).stream;
+            },
+        });
 
         // If no connection, connect to voide channel. Otherwise, add track to queue.
         try {
