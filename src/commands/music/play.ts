@@ -44,7 +44,7 @@ export const Play: Command = {
                 requestedBy: message.author,
                 searchEngine: parseYtLink(userInput)
                     ? QueryType.YOUTUBE_SEARCH
-                    : userInput.includes("spotify") && userInput.includes("track")
+                    : userInput.match(/^(?:spotify:|https:\/\/[a-z]+\.spotify\.com\/(track\/))(.*)/)
                     ? QueryType.SPOTIFY_SONG
                     : QueryType.AUTO,
             })
