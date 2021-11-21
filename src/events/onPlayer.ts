@@ -5,6 +5,13 @@ import { PoolClient } from "pg";
 
 export const onPlayer = async (postgres: PoolClient, player: Player) => {
     player.on("trackStart", async (queue, track) => {
+        const membercount = queue.connection.channel.members.size - 1;
+        console.log(
+            `[CONNECTION] Playing [${track.title}] to [${queue.connection.channel.name}] at [${
+                queue.guild.name
+            }] to ${membercount} ${membercount > 1 ? "members" : "member"}.`
+        );
+
         const responseEmbed = Response(
             `:musical_note: Now Playing: **${track.title}**`,
 
@@ -109,6 +116,10 @@ export const onPlayer = async (postgres: PoolClient, player: Player) => {
     });
 
     player.on("queueEnd", async (queue: Queue) => {
+        console.log(
+            `[CONNECTION] Left voice channel [${queue.connection.channel.name}] at [${queue.guild.name}].`
+        );
+
         // @ts-ignore
         return await queue.metadata?.channel.send({
             embeds: [Response("I'm done.", "Leaving voice channel", "SUCCESS")],
