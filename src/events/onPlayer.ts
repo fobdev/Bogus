@@ -1,4 +1,4 @@
-import { Player, Queue, Track } from "discord-player";
+import { Player, Queue, QueueRepeatMode, Track } from "discord-player";
 import { getPrefix } from "../db";
 import { Response } from "../models";
 import { PoolClient } from "pg";
@@ -13,7 +13,11 @@ export const onPlayer = async (postgres: PoolClient, player: Player) => {
         );
 
         const responseEmbed = Response(
-            `:musical_note: Now Playing: **${track.title}**`,
+            `:musical_note: ${
+                queue.repeatMode === QueueRepeatMode.TRACK ? ":repeat:" : ":arrow_forward:"
+            } Now ${queue.repeatMode === QueueRepeatMode.TRACK ? "Repeating" : "Playing"}: **${
+                track.title
+            }**`,
 
             // @ts-ignore
             `Requested in ${queue.metadata?.channel}.`,
