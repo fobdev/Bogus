@@ -8,37 +8,28 @@ export const Clear: Command = {
     arguments: ["amount"],
     description: "Clear a specific amount of messages from the channel",
     run: async (prefix, client, message, args) => {
-        let { channel } = message;
-        let amount: number;
+        const { channel, member } = message;
+        if (channel.type === "DM") return;
 
-        if (args?.length! > 0) amount = parseInt(args![0]);
-        else return channel.send("Please input a valid number");
-
-        // requirements
-        if (channel.type == "DM") return;
-        if (!message.member?.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES))
+        if (member!.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES))
             return channel.send("The user does not have permission to delete messages.");
-        if (amount > 100)
+
+        if (args?.length === 0 || parseInt(args![0]) > 100 || parseInt(args![0]) < 1)
             return channel.send({
-                embeds: [
-                    Response(
-                        "Error deleting messages.",
-                        "You can only delete a **maximum of 100 messages** at a time.",
-                        "FAIL"
-                    ),
-                ],
+                embeds: [Response("Error", "Must input a number between 1 and 100", "FAIL")],
             });
 
-        // deletes the command message then bulk delete.
-        let amount_deleted: number = 0;
+        const amount = parseInt(args![0]);
+
+        let amount_deleted = 0;
         try {
             message.delete();
-            await channel.bulkDelete(amount, true).then(async (message) => {
-                amount_deleted = message.size;
+            await channel.bulkDelete(amount, true).then(async (messages) => {
+                amount_deleted = messages.size;
             });
-        } catch (e: any) {
-            console.error(`[CLEAR] Error deleting messages: ${e.message}`);
-            return onError(message, e);
+        } catch (error: any) {
+            console.error(`[CLEAR] Error deleting messages: ${error.message}`);
+            return onError(message, error);
         }
 
         let return_embed = Response(
