@@ -77,9 +77,13 @@ export const Play: Command = {
                                 return (await playdl.stream(results[0].url)).stream;
                             }
                         });
-
                 try {
-                    return (await playdl.stream(track.url)).stream;
+                    return (
+                        await playdl.stream(
+                            // remove parameters other than video id
+                            track.url.includes("&") ? track.url.split("&")[0] : track.url
+                        )
+                    ).stream;
                 } catch (error: any) {
                     console.error(error.message);
                     return (await playdl.stream(track.url)).stream;
