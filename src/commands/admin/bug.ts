@@ -24,6 +24,16 @@ export const Bug: Command = {
                     .addField("Guild", `${guild?.name}`, true)
                     .setTimestamp(Date.now()),
             ],
+        }).then((msg) => {
+            return channel.send({
+                embeds: [
+                    Response(
+                        "Message sent to the developer",
+                        "Thanks for your support!",
+                        "SUCCESS"
+                    ).setThumbnail(client.user!.displayAvatarURL()),
+                ],
+            });
         });
     },
 };
