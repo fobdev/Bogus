@@ -29,6 +29,7 @@ export const Queue: Command = {
             });
 
             const pageSize = 15;
+            const displayButtons = queueStringArray.length > pageSize;
             let page = 0;
             let responseQueue = Response(
                 `Queue of **${listingQueue.guild.name}**`,
@@ -40,7 +41,11 @@ export const Queue: Command = {
                     `Queue size: ${queueStringArray.length} tracks | Total queue time: ${ms(
                         listingQueue.totalTime,
                         { long: true }
-                    )}\nThe buttons in this message will be removed in 30s if without interactions.`
+                    )} ${
+                        displayButtons
+                            ? "\nThe buttons in this message will be removed in 30s if without interactions."
+                            : ""
+                    }`
                 )
                 .setThumbnail(nextInQueue.thumbnail)
                 .addField(
@@ -66,7 +71,7 @@ export const Queue: Command = {
                 .setLabel("Scroll Down")
                 .setStyle("SECONDARY");
 
-            if (queueStringArray.length > pageSize)
+            if (displayButtons)
                 sendObject.components = [
                     new MessageActionRow().addComponents(prevButton, nextButton),
                 ];
