@@ -20,6 +20,7 @@ A automation service for the Discord Client, with music support for voice channe
  - Open the project in [VS Code](https://code.visualstudio.com/): ``code .``
  - Create a root level ``.env`` with the following variables:
  ```
+ DEVELOPER_ID=<YOUR-DISCORD-ID>
  BOT_TOKEN=<YOUR-BOT-TOKEN>
  DATABASE_URL=<POSTGRESQL-DATABASE-URL>
  GOOGLE_API_KEY=<GOOGLE-API-KEY>
