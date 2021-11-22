@@ -55,7 +55,7 @@ export const Couple: Command = {
                 });
         } catch (error: any) {
             console.error(error.message);
-            return channel.send("Error with GET request from bogue-image-processing server.");
+            return channel.send(`Error with GET request from bogue-image-processing server: ${error.message}`);
         }
     },
 };
