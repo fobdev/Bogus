@@ -1,3 +1,4 @@
+import { Permissions } from "discord.js";
 import { onError } from "../../events";
 import { Command } from "../../interfaces";
 import { Response } from "../../models";
@@ -9,7 +10,7 @@ export const Ban: Command = {
     run: async (prefix, client, message, args) => {
         let { channel, author, member, mentions } = message;
 
-        if (!member?.permissions.has("BAN_MEMBERS")) {
+        if (!member?.permissions.has(Permissions.FLAGS.BAN_MEMBERS)) {
             return channel.send({
                 embeds: [
                     Response(

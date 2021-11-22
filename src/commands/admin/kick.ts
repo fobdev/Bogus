@@ -1,6 +1,7 @@
 import { Command } from "../../interfaces";
 import { Response } from "../../models";
 import { onError } from "../../events";
+import { Permissions } from "discord.js";
 
 export const Kick: Command = {
     name: ["kick"],
@@ -8,7 +9,7 @@ export const Kick: Command = {
     description: "Kick a user from the server.",
     run: async (prefix, client, message) => {
         let { channel, author, member } = message;
-        if (!member?.permissions.has("KICK_MEMBERS")) {
+        if (!member?.permissions.has(Permissions.FLAGS.KICK_MEMBERS)) {
             return channel.send({
                 embeds: [
                     Response(
