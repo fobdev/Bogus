@@ -18,16 +18,16 @@ export const AlbumArt: Command = {
                     ),
                 ],
             });
-        else {
-            return channel.send({
-                embeds: [
-                    Response(
-                        `Album art of ${displayingQueue.current.title}`,
-                        "",
-                        "SUCCESS"
-                    ).setImage(displayingQueue.current.thumbnail),
-                ],
-            });
-        }
+
+        if (!displayingQueue.current.thumbnail)
+            return channel.send("Could not get the album art for this track.");
+
+        return channel.send({
+            embeds: [
+                Response(`Album art of ${displayingQueue.current.title}`, "", "SUCCESS").setImage(
+                    displayingQueue.current.thumbnail
+                ),
+            ],
+        });
     },
 };
