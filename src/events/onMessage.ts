@@ -14,7 +14,7 @@ export const onMessage = async (
     let { author, channel } = message;
     const content = message.content.toLowerCase();
 
-    const prefix = (await getPrefix(postgres, message.guild!)).rows[0][0];
+    const prefix = await getPrefix(postgres, message.guild!);
 
     // prefix help for when forgetting it
     if (prefix !== ">" && content.startsWith(">prefix"))
