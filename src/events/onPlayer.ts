@@ -80,13 +80,23 @@ export const onPlayer = async (postgres: PoolClient, player: Player) => {
 
     player.on("tracksAdd", async (queue, tracks) => {
         const prefix = await getPrefix(postgres, queue.guild);
+        const firstPosition = queue.getTrackPosition(tracks[0]) + 1;
 
         // @ts-ignore
         return await queue.metadata?.channel.send({
             embeds: [
                 Response(
                     `${tracks.length} tracks added to the queue.`,
-                    "Use ``" + `${prefix}queue` + "`` to see the result.",
+                    "Use ``" +
+                        `${prefix}queue` +
+                        "`` to see the result." +
+                        `${
+                            firstPosition !== 0
+                                ? "\nOr use ``" +
+                                  `${prefix}skip ${firstPosition}` +
+                                  "`` to go straight to the first track in this playlist."
+                                : ""
+                        }`,
                     "OTHER",
                     "PURPLE"
                 )
