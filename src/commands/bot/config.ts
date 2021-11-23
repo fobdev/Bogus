@@ -1,5 +1,5 @@
 import { Prefix } from ".";
-import { getGlobalResponse, getLocale, getPrefix, setGlobalResponse, setLocale } from "../../db";
+import { getResponse, getLocale, getPrefix, setResponse, setLocale } from "../../db";
 import { Command } from "../../interfaces";
 import { Response } from "../../models";
 
@@ -30,7 +30,7 @@ export const Config: Command = {
                         )
                         .addField(
                             ":small_blue_diamond: response",
-                            `Sets if the bot will respond when someone says anything that contains 'bog' in a text channel.\nNote: The bot will only respond in Brazilian Portuguese.\n**Values: true | false\nCurrent: ${await getGlobalResponse(
+                            `Sets if the bot will respond when someone says anything that contains 'bog' in a text channel.\nNote: The bot will only respond in Brazilian Portuguese.\n**Values: true | false\nCurrent: ${await getResponse(
                                 postgres!,
                                 guild!
                             )}**`,
@@ -89,8 +89,8 @@ export const Config: Command = {
             case "response" || "res": {
                 switch (args![1]) {
                     case "true": {
-                        if ((await getGlobalResponse(postgres!, guild!)) !== true)
-                            return await setGlobalResponse(postgres!, guild!, true).then(() => {
+                        if ((await getResponse(postgres!, guild!)) !== true)
+                            return await setResponse(postgres!, guild!, true).then(() => {
                                 channel.send(
                                     `The bot will now respond when someone says 'bog' in a text channel.`
                                 );
@@ -99,8 +99,8 @@ export const Config: Command = {
                         return channel.send(`The bot is already responding to 'bog'.`);
                     }
                     case "false": {
-                        if ((await getGlobalResponse(postgres!, guild!)) !== false)
-                            return await setGlobalResponse(postgres!, guild!, false).then(() => {
+                        if ((await getResponse(postgres!, guild!)) !== false)
+                            return await setResponse(postgres!, guild!, false).then(() => {
                                 channel.send(`The bot is no longer responding to 'bog'.`);
                             });
                         return channel.send(`The bot already is not responding to 'bog'`);

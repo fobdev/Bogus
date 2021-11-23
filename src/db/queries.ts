@@ -39,19 +39,19 @@ export const setLocale = (postgres: PostgresClient, guild: Guild, newLocale: str
     return postgres.query(`UPDATE guilds SET locale='${newLocale}' WHERE id=${guild.id}`);
 };
 
-export const getGlobalResponse = (postgres: PostgresClient, guild: Guild) => {
+export const getResponse = (postgres: PostgresClient, guild: Guild) => {
     return postgres
         .query({
             rowMode: "array",
-            text: `SELECT global_response FROM guilds WHERE id=${guild.id}`,
+            text: `SELECT response FROM guilds WHERE id=${guild.id}`,
         })
         .then((response) => {
             return response.rows[0][0];
         });
 };
 
-export const setGlobalResponse = (postgres: PostgresClient, guild: Guild, newResponse: boolean) => {
+export const setResponse = (postgres: PostgresClient, guild: Guild, newResponse: boolean) => {
     return postgres.query(
-        `UPDATE guilds SET global_response='${newResponse}' WHERE id=${guild.id}`
+        `UPDATE guilds SET response='${newResponse}' WHERE id=${guild.id}`
     );
 };
