@@ -29,8 +29,7 @@ export const RussianRoulette: Command = {
                 kickableMembers.push(currentMember);
         }
 
-        if (kickableMembers.length === 0)
-            return channel.send("No members can be kicked in this guild right now.");
+        if (kickableMembers.length === 0) return channel.send("No members to be kicked right now.");
 
         return await kickableMembers[Chance().integer({ min: 0, max: kickableMembers.length - 1 })]
             .kick("Caught by the russian roulette.")
