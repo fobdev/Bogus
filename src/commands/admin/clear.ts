@@ -11,7 +11,7 @@ export const Clear: Command = {
         const { channel, member } = message;
         if (channel.type === "DM") return;
 
-        if (member!.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES))
+        if (!member!.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES))
             return channel.send("The user does not have permission to delete messages.");
 
         if (args?.length === 0 || parseInt(args![0]) > 100 || parseInt(args![0]) < 1)
