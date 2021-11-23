@@ -29,7 +29,11 @@ export const Clear: Command = {
             });
         } catch (error: any) {
             console.error(`[CLEAR] Error deleting messages: ${error.message}`);
-            return onError(message, error);
+            return channel.send({
+                embeds: [
+                    Response("Error", "You need to input a valid number of messages.", "FAIL"),
+                ],
+            });
         }
 
         let return_embed = Response(
