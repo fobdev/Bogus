@@ -1,5 +1,4 @@
 import { MessageActionRow, MessageButton, Permissions } from "discord.js";
-import { onError } from "../../events";
 import { Command } from "../../interfaces";
 import { Response } from "../../models";
 
