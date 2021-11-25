@@ -9,13 +9,15 @@ export const Couple: Command = {
     description: "Connect the profile picture of two users.",
     run: async (prefix, client, message, args) => {
         const { channel, author, mentions } = message;
-        if (args?.length === 0)
+        const user1 = mentions.members?.toJSON()[0];
+        const user2 = mentions.members?.toJSON()[1];
+
+        if (!user1)
             return channel.send({
                 embeds: [Response("Error", "Please quote at least one user.", "FAIL")],
             });
 
-        const user1 = mentions.members?.toJSON()[0];
-        const user2 = mentions.members?.toJSON()[1];
+        const loadmsg = await channel.send({ content: "Loading..." });
 
         try {
             await api
@@ -40,7 +42,8 @@ export const Couple: Command = {
                     { responseType: "arraybuffer" }
                 )
                 .then((response) => {
-                    return channel.send({
+                    return loadmsg.edit({
+                        content: null,
                         embeds: [
                             Response(
                                 `${user2 ? user1!.user.username : author.username} :heart: ${
@@ -55,7 +58,9 @@ export const Couple: Command = {
                 });
         } catch (error: any) {
             console.error(error.message);
-            return channel.send(`Error with GET request from bogue-image-processing server: ${error.message}`);
+            return loadmsg.edit({
+                content: `Error with GET request from bogue-image-processing server: ${error.message}`,
+            });
         }
     },
 };
