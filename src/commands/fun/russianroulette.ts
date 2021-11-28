@@ -50,8 +50,8 @@ export const RussianRoulette: Command = {
                         )
                             .setThumbnail(member.displayAvatarURL())
                             .setFooter(
-                                `Command called by ${message.author.tag}`,
-                                message.author.displayAvatarURL()
+                                `Command called by ${author.tag}`,
+                                author.displayAvatarURL()
                             ),
                     ],
                 });
