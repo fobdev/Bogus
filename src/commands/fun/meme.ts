@@ -16,23 +16,50 @@ export const Meme: Command = {
         let width: number | undefined;
         let height: number | undefined;
         let imageURL;
+
         try {
-            attachment = await (await message.fetchReference()).embeds[0].image;
-            width = attachment!.width;
-            height = attachment!.height;
-            imageURL = attachment?.url;
+            // check if the sent message contains a image
+            attachment = await message.attachments;
+            width = attachment!.map((element) => element.width)[0]!;
+            height = attachment!.map((element) => element.height)[0]!;
+            imageURL = attachment!.map((element) => element.url)[0]!;
+            const isImage = attachment!
+                .map((element) => element.contentType)![0]
+                ?.includes("image");
+
+            if (!imageURL || !isImage) throw new Error();
         } catch (error) {
             try {
-                attachment = await (await message.fetchReference()).attachments;
-                width = attachment!.map((element) => element.width)[0]!;
-                height = attachment!.map((element) => element.height)[0]!;
-                imageURL = attachment!.map((element) => element.url)[0];
+                // check if the replied message have a embed with image, gets first one
+                attachment = await (await message.fetchReference()).embeds[0].image;
+                width = attachment!.width;
+                height = attachment!.height;
+                imageURL = attachment!.url;
 
-                if (attachment.size === 0) throw new Error();
+                if (!imageURL) throw new Error();
             } catch (error) {
-                return channel.send({
-                    embeds: [Response("Error", "You need to reply to an image.", "FAIL")],
-                });
+                try {
+                    // checks if the replied message have a attachment image, gets first one
+                    attachment = await (await message.fetchReference()).attachments;
+                    width = attachment!.map((element) => element.width)[0]!;
+                    height = attachment!.map((element) => element.height)[0]!;
+                    imageURL = attachment!.map((element) => element.url)[0]!;
+                    const isImage = attachment!
+                        .map((element) => element.contentType)![0]
+                        ?.includes("image");
+
+                    if (attachment.size === 0 || !imageURL || !isImage) throw new Error();
+                } catch (error) {
+                    return channel.send({
+                        embeds: [
+                            Response(
+                                "Error",
+                                "You need to reply to or send a image or gif.",
+                                "FAIL"
+                            ),
+                        ],
+                    });
+                }
             }
         }
 
