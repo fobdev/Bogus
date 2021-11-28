@@ -199,9 +199,9 @@
     form-data "^3.0.0"
 
 "@types/node@*", "@types/node@^16.7.11":
-  version "16.11.9"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.11.9.tgz#879be3ad7af29f4c1a5c433421bf99fab7047185"
-  integrity sha512-MKmdASMf3LtPzwLyRrFjtFFZ48cMf8jmX5VRYrDQiJa8Ybu5VAmkqBWqKU8fdCwD8ysw4mQ9nrEHvzg6gunR7A==
+  version "16.11.10"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.11.10.tgz#2e3ad0a680d96367103d3e670d41c2fed3da61ae"
+  integrity sha512-3aRnHa1KlOEEhJ6+CvyHKK5vE9BcLGjtUpwvqYLRvYNQKMfabu3BwfJaA/SLW8dxe28LsNDjtHwePTuzn3gmOA==
 
 "@types/pg@^8.6.1":
   version "8.6.1"
@@ -1413,9 +1413,9 @@ picomatch@^2.0.4, picomatch@^2.2.1:
   integrity sha512-lY1Q/PiJGC2zOv/z391WOTD+Z02bCgsFfvxoXXf6h7kv9o+WmsmzYqrAwY63sNgOxE4xEdq0WyUnXfKeBrSvYw==
 
 play-dl@^1.3.1:
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/play-dl/-/play-dl-1.3.2.tgz#8e1d48e4b7f456dd89fe69b142e51bd1449a0d55"
-  integrity sha512-RbpCX4MzB7gVasw4TiLbWMKcjHCCY1MyJviugcXcvoDWoRRf+iaPo7F+wpLS1FgiWP1iSqvhOSW3AIl/JR1Fbg==
+  version "1.3.6"
+  resolved "https://registry.yarnpkg.com/play-dl/-/play-dl-1.3.6.tgz#765b58371b122a013abd63cc87deec05c39fb436"
+  integrity sha512-ar6AbEcC6n9I63i01h0myC51oICgSmffrwFGaWHBV+vPhk+KYd4ozq8lzKWVpgjs10mGY2Xnr9u198uzhbUlJA==
 
 postgres-array@~2.0.0:
   version "2.0.0"
@@ -1922,14 +1922,14 @@ wrappy@1:
   integrity sha1-tSQ9jz7BqjXxNkYFvA0QNuMKtp8=
 
 ws@^7.4.4, ws@^7.4.6:
-  version "7.5.5"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-7.5.5.tgz#8b4bc4af518cfabd0473ae4f99144287b33eb881"
-  integrity sha512-BAkMFcAzl8as1G/hArkxOxq3G7pjUqQ3gzYbLL0/5zNkph70e+lCoxBGnm6AW1+/aiNeV4fnKqZ8m4GZewmH2w==
+  version "7.5.6"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-7.5.6.tgz#e59fc509fb15ddfb65487ee9765c5a51dec5fe7b"
+  integrity sha512-6GLgCqo2cy2A2rjCNFlxQS6ZljG/coZfZXclldI8FB/1G3CCI36Zd8xy2HrFVACi8tfk5XrgLQEk+P0Tnz9UcA==
 
 ws@^8.2.3:
-  version "8.2.3"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-8.2.3.tgz#63a56456db1b04367d0b721a0b80cae6d8becbba"
-  integrity sha512-wBuoj1BDpC6ZQ1B7DWQBYVLphPWkm8i9Y0/3YdHjHKHiohOJ1ws+3OccDWtH+PoC9DZD5WOTrJvNbWvjS6JWaA==
+  version "8.3.0"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-8.3.0.tgz#7185e252c8973a60d57170175ff55fdbd116070d"
+  integrity sha512-Gs5EZtpqZzLvmIM59w4igITU57lrtYVFneaa434VROv4thzJyV6UjIL3D42lslWlI+D4KzLYnxSwtfuiO79sNw==
 
 xml-name-validator@^3.0.0:
   version "3.0.0"

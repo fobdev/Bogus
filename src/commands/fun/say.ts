@@ -1,5 +1,4 @@
 import { Command } from "../../interfaces";
-import { Response } from "../../models";
 export const Say: Command = {
     name: ["say"],
     arguments: ["message"],

@@ -16,7 +16,7 @@ A automation service for the Discord Client, with music support for voice channe
 ## Local Build Instructions
  - Clone the project: ``git clone https://github.com/fobdev/Bogus.git``
  - Move to the project folder: ``cd Bogus``
- - Install dependencies: ``npm ci``
+ - Install dependencies: ``yarn install``
  - Open the project in [VS Code](https://code.visualstudio.com/): ``code .``
  - Create a root level ``.env`` with the following variables:
  ```
@@ -26,4 +26,4 @@ A automation service for the Discord Client, with music support for voice channe
  GOOGLE_API_KEY=<GOOGLE-API-KEY>
  GOOGLE_CUSTOM_SEARCH_ENGINE_ID=<CSE-ID>
  ```
- - Run the local client in dev mode with Typescript: ``npm run dev``
+ - Run the local client in dev mode with Typescript: ``yarn run dev``
