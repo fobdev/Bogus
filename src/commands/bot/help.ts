@@ -1,11 +1,22 @@
-import { MessageEmbed } from "discord.js";
+import {
+    Emoji,
+    MessageActionRow,
+    MessageButton,
+    MessageEmbed,
+    MessageSelectMenu,
+} from "discord.js";
 import { Command } from "../../interfaces";
 import { Response } from "../../models";
 import { CommandList } from "../_CommandList";
 import { readdir } from "fs/promises";
 
 // FS to get the outside dependencies
-const getCommandsFrom = async (folder: string, embed: MessageEmbed) => {
+const getCommandsFrom = async (
+    prefix: string,
+    emoji: string,
+    folder: string,
+    embed: MessageEmbed
+) => {
     let commandsArray: Array<string> = [];
 
     try {
@@ -20,8 +31,11 @@ const getCommandsFrom = async (folder: string, embed: MessageEmbed) => {
     }
 
     return embed.addField(
-        `${folder.toUpperCase()} Commands`,
-        "``[" + commandsArray.join("]`` ``[") + "]``"
+        `${emoji} ${folder.toUpperCase()} Commands ${
+            folder.includes("music") ? `[${prefix}play]` : ""
+        }`,
+        "``" + commandsArray.join("`` | ``") + "``",
+        true
     );
 };
 
@@ -43,14 +57,14 @@ export const Help: Command = {
 
                                 finalString +=
                                     "```" +
-                                    `${prefix}${element} [${Command.arguments
+                                    `${prefix}${element} ${Command.arguments
                                         ?.slice(1)
-                                        .join("], [")}]\n` +
+                                        .join(" | ")}\n` +
                                     "```";
                             } else
                                 finalString +=
                                     "```" +
-                                    `${prefix}${element} [${Command.arguments?.join("], [")}]\n` +
+                                    `${prefix}${element} ${Command.arguments?.join(" | ")}\n` +
                                     "```";
                         } else finalString += "```" + `${prefix}${element}\n` + "```";
                     });
@@ -69,27 +83,45 @@ export const Help: Command = {
                     });
             }
 
+        const fob = client.users.cache.map((u) => (u.id === "244270921286811648" ? u : null))[1];
         let generatedResponse = Response(
-            `${client.user?.username.toUpperCase()} Commands List (beta)`,
+            `${client.user?.username.toUpperCase()} Commands List`,
             `This is a complete list of all the commands available from ${client.user?.username}\n` +
-                "**Commands can be accessed using the prefix ``" +
+                "**:arrow_right: Commands can be accessed using the prefix ``" +
                 prefix +
-                "``**",
+                "``\n:arrow_right: Change the bot prefix using ``" +
+                `${prefix}prefix [new prefix]` +
+                "``\n:arrow_right: Use ``" +
+                `${prefix}help [command]` +
+                "`` to help from a specific command.**",
             "SUCCESS"
         )
             .setFooter(
-                `You can also use ${prefix}help [command] to see help from a specific command.`
+                `Developed by ${fob?.tag} | https://github.com/fobdev/`,
+                fob?.displayAvatarURL()
             )
             .setThumbnail(client.user?.avatarURL({ size: 2048 })!);
 
-        await getCommandsFrom("admin", generatedResponse);
-        await getCommandsFrom("bot", generatedResponse);
-        await getCommandsFrom("user", generatedResponse);
-        await getCommandsFrom("fun", generatedResponse);
-        await getCommandsFrom("music", generatedResponse);
+        await getCommandsFrom(prefix, ":shield:", "admin", generatedResponse);
+        await getCommandsFrom(prefix, ":robot:", "bot", generatedResponse);
+        await getCommandsFrom(prefix, ":person_bald:", "user", generatedResponse);
+        await getCommandsFrom(prefix, ":partying_face:", "fun", generatedResponse);
+        await getCommandsFrom(prefix, ":musical_note:", "music", generatedResponse);
 
         return channel.send({
             embeds: [generatedResponse],
+            components: [
+                new MessageActionRow().addComponents(
+                    new MessageButton()
+                        .setLabel("Discord Bot Listing")
+                        .setURL("https://top.gg/bot/506663588119969812")
+                        .setStyle("LINK"),
+                    new MessageButton()
+                        .setLabel("Source Code")
+                        .setURL("https://github.com/fobdev/Bogus")
+                        .setStyle("LINK")
+                ),
+            ],
         });
     },
 };
