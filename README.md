@@ -18,12 +18,5 @@ A automation service for the Discord Client, with music support for voice channe
  - Move to the project folder: ``cd Bogus``
  - Install dependencies: ``yarn install``
  - Open the project in [VS Code](https://code.visualstudio.com/): ``code .``
- - Create a root level ``.env`` with the following variables:
- ```
- DEVELOPER_ID=<YOUR-DISCORD-ID>
- BOT_TOKEN=<YOUR-BOT-TOKEN>
- DATABASE_URL=<POSTGRESQL-DATABASE-URL>
- GOOGLE_API_KEY=<GOOGLE-API-KEY>
- GOOGLE_CUSTOM_SEARCH_ENGINE_ID=<CSE-ID>
- ```
+ - Edit the ``.env`` with the listed variables.
  - Run the local client in dev mode with Typescript: ``yarn run dev``
