@@ -31,7 +31,7 @@ export const RussianRoulette: Command = {
                 embeds: [
                     Response(
                         "No members to be kicked.",
-                        "From all the members from this guild, no one looks like can be kicked by me.",
+                        "From all the members from this guild, looks like no one can be kicked by me.",
                         "FAIL"
                     ),
                 ],
