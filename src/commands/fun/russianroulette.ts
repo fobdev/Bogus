@@ -25,7 +25,11 @@ export const RussianRoulette: Command = {
         const kickableMembers: Array<GuildMember> = [];
         for (let index = 0; index < memberlist!.size; index++) {
             const currentMember = memberlist?.at(index);
-            if (currentMember?.kickable) kickableMembers.push(currentMember);
+            if (
+                !currentMember?.permissions.has(Permissions.FLAGS.ADMINISTRATOR) &&
+                currentMember?.presence?.status !== "offline"
+            )
+                kickableMembers.push(currentMember!);
         }
 
         console.log(kickableMembers);
