@@ -83,7 +83,7 @@ export const Help: Command = {
                     });
             }
 
-        const fob = client.users.cache.map((u) => (u.id === "244270921286811648" ? u : null))[1];
+        const fob = client.users.cache.map((u) => (u.id === "244270921286811648" ? u : null))[0];
         let generatedResponse = Response(
             `${client.user?.username.toUpperCase()} Commands List`,
             `This is a complete list of all the commands available from ${client.user?.username}\n` +
@@ -97,7 +97,7 @@ export const Help: Command = {
             "SUCCESS"
         )
             .setFooter(
-                `Developed by ${fob?.tag} | https://github.com/fobdev/`,
+                `Developed by ${fob!.tag} | https://github.com/fobdev/`,
                 fob?.displayAvatarURL()
             )
             .setThumbnail(client.user?.avatarURL({ size: 2048 })!);
