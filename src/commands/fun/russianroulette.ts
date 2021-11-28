@@ -26,6 +26,17 @@ export const RussianRoulette: Command = {
             if (member.kickable) kickableMembers.push(member);
         });
 
+        if (kickableMembers.length === 0)
+            return channel.send({
+                embeds: [
+                    Response(
+                        "No members to be kicked.",
+                        "From all the members from this guild, no one looks like can be kicked by me.",
+                        "FAIL"
+                    ),
+                ],
+            });
+
         return await kickableMembers[Chance().integer({ min: 0, max: kickableMembers.length - 1 })]
             .kick("Caught by the russian roulette.")
             .then((member) => {
@@ -33,7 +44,7 @@ export const RussianRoulette: Command = {
                     embeds: [
                         Response(
                             `${member.user.tag} :gun: kicked by the russian roulette.`,
-                            `${member.user.tag} got caught and was kicked from the server.`,
+                            `${member.user} got caught and was kicked from the server.`,
                             "OTHER",
                             "GOLD"
                         )
