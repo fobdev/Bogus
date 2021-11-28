@@ -1,4 +1,4 @@
-import { GuildMember, Permissions } from "discord.js";
+import { GuildMember, Permissions, Presence } from "discord.js";
 import { Command } from "../../interfaces";
 import { Response } from "../../models";
 import { Chance } from "chance";
@@ -21,25 +21,26 @@ export const RussianRoulette: Command = {
                 ],
             });
 
-        const memberlist = guild?.members.cache;
         const kickableMembers: Array<GuildMember> = [];
-        for (let index = 0; index < memberlist!.size; index++) {
-            const currentMember = memberlist?.at(index);
-            if (
-                !currentMember?.permissions.has(Permissions.FLAGS.ADMINISTRATOR) &&
-                currentMember?.presence?.status !== "offline"
-            )
-                kickableMembers.push(currentMember!);
-        }
-
-        console.log(kickableMembers);
-
-        if (kickableMembers.length === 0) return channel.send("No members to be kicked right now.");
+        await (await guild?.members.list({ limit: 1000 }))!.map((member) => {
+            if (member.kickable) kickableMembers.push(member);
+        });
 
         return await kickableMembers[Chance().integer({ min: 0, max: kickableMembers.length - 1 })]
             .kick("Caught by the russian roulette.")
             .then((member) => {
-                return channel.send(`${member} has been caught by the russian roulette.`);
+                return channel.send({
+                    embeds: [
+                        Response(
+                            `${member.user.tag} :gun: kicked by the russian roulette.`,
+                            `${member.user.tag} got caught and was kicked from the server.`,
+                            "OTHER",
+                            "GOLD"
+                        )
+                            .setThumbnail(member.displayAvatarURL())
+                            .setFooter(`Command called by ${message.author.tag}`),
+                    ],
+                });
             });
     },
 };
