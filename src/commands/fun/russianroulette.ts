@@ -38,7 +38,10 @@ export const RussianRoulette: Command = {
                             "GOLD"
                         )
                             .setThumbnail(member.displayAvatarURL())
-                            .setFooter(`Command called by ${message.author.tag}`),
+                            .setFooter(
+                                `Command called by ${message.author.tag}`,
+                                message.author.displayAvatarURL()
+                            ),
                     ],
                 });
             });
