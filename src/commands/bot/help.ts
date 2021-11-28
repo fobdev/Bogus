@@ -31,7 +31,7 @@ const getCommandsFrom = async (
     }
 
     return embed.addField(
-        `${emoji} ${folder.toUpperCase()} Commands ${
+        `${emoji} ${folder.at(0)?.toUpperCase() + folder.slice(1)} ${
             folder.includes("music") ? `[${prefix}play]` : ""
         }`,
         "``" + commandsArray.join("`` | ``") + "``",
@@ -87,13 +87,13 @@ export const Help: Command = {
         let generatedResponse = Response(
             `${client.user?.username.toUpperCase()} Commands List`,
             `This is a complete list of all the commands available from ${client.user?.username}\n` +
-                "**:arrow_right: Commands can be accessed using the prefix ``" +
+                "**:blue_circle: Useful info:\n:arrow_right: Server prefix: ``" +
                 prefix +
-                "``\n:arrow_right: Change the bot prefix using ``" +
+                "``\n:arrow_right: Change prefix: ``" +
                 `${prefix}prefix [new prefix]` +
-                "``\n:arrow_right: Use ``" +
+                "``\n:arrow_right: Help from command: ``" +
                 `${prefix}help [command]` +
-                "`` to help from a specific command.**",
+                "``**",
             "SUCCESS"
         )
             .setFooter(
