@@ -57,14 +57,14 @@ export const Help: Command = {
 
                                 finalString +=
                                     "```" +
-                                    `${prefix}${element} ${Command.arguments
+                                    `${prefix}${element} [${Command.arguments
                                         ?.slice(1)
-                                        .join(" | ")}\n` +
+                                        .join("], [")}]\n` +
                                     "```";
                             } else
                                 finalString +=
                                     "```" +
-                                    `${prefix}${element} ${Command.arguments?.join(" | ")}\n` +
+                                    `${prefix}${element} [${Command.arguments?.join("], [")}]\n` +
                                     "```";
                         } else finalString += "```" + `${prefix}${element}\n` + "```";
                     });
