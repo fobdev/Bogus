@@ -11,7 +11,7 @@
         "build": "tsc",
         "dev": "ts-node-dev -r dotenv/config src/index.ts",
         "start": "node prod/index.js",
-        "postinstall": "node -e \"require('fs').rename('.env.preset', '.env', (err) => {if(err) console.error('no preset')})\" && npm run build"
+        "postinstall": "node -e \"require('fs').rename('.env.example', '.env', (err) => {if(err) console.error('no example')})\" && npm run build"
     },
     "author": "Fobenga",
     "license": "ISC",
